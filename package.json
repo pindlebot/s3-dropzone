@@ -8,14 +8,12 @@
     "build": "babel src -d lib"
   },
   "dependencies": {
-    "append-stylesheet": "^0.0.1",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "lodash.pick": "^4.4.0",
     "react-dropzone": "^4.2.9",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
@@ -23,7 +21,7 @@
     "parcel-bundler": "^1.6.2"
   },
   "peerDependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react": "*",
+    "react-dom": "*"
   }
 }
