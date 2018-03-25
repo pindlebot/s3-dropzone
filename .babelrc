@@ -1,0 +1,15 @@
+{
+  "presets": [
+    ["env", {
+      "targest": {
+        "browsers": "last 2 Chrome versions"
+      }
+    }],
+    "react"
+  ],
+  "plugins": [
+    "transform-runtime",
+    "transform-object-rest-spread",
+    "transform-class-properties"
+  ]
+}
