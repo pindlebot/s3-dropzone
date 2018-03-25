@@ -1,0 +1,6 @@
+src
+store
+test
+.babelrc
+.DS_Store
+.env

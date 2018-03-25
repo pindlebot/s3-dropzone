@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel test/index.html"
+    "dev": "parcel test/index.html",
+    "build": "babel src -d lib"
   },
   "dependencies": {
     "append-stylesheet": "^0.0.1",

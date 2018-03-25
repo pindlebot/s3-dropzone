@@ -21,7 +21,7 @@ class S3Dropzone extends React.Component {
 
   onDrop = () => {
     this.setState({ loading: true }, () => {
-      this.props.onDrop(true)
+      this.props.onDrop(this.state)
     })
   }
 
@@ -36,7 +36,6 @@ class S3Dropzone extends React.Component {
   }
 
   componentDidMount = () => {
-    console.log('Component did mount')
     if (!document.getElementById('spinnerStyles')) {
       let style = document.createElement('style')
       style.id = 'spinnerStyles'
@@ -44,7 +43,7 @@ class S3Dropzone extends React.Component {
       document.querySelector('head').append(style)
     }
     
-    if (this.props.uploads && !this.state.uploads.length) {
+    if (this.props.uploads) {
       this.setState({ uploads: this.props.uploads })
     }
   }
