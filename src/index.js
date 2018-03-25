@@ -55,7 +55,8 @@ class S3Dropzone extends React.Component {
         img={{...upload, ...Thumbnail.defaultProps.img}}
         figure={{
           width: `calc(${100 / uploads.length}% - 10px)`,
-          margin: '0'
+          margin: '0',
+          overflow: 'hidden'
         }}
       />
     )
@@ -71,6 +72,7 @@ class S3Dropzone extends React.Component {
       onUpload,
       getPayload,
       container,
+      buttonContainer,
       ...rest
     } = this.props
     console.log(this.props)
@@ -80,17 +82,16 @@ class S3Dropzone extends React.Component {
       width: '100%',
       height: '100%',
       flexWrap: 'wrap',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      flexBasis: '60%'
     }
     return (
       <Dropzone onDrop={this.onDrop} {...rest}>
-        <div {...container}>
           {loading
             ? spinner
             : <div style={style}>{this.renderThumbnails()}</div>
           }
-          <div style={{flexBasis: '20%'}}><Button /></div>
-        </div>
+          <div {...buttonContainer}><Button /></div>
       </Dropzone>
     )
   }
@@ -101,19 +102,21 @@ S3Dropzone.defaultProps = {
   style: {
     width: '50vw',
     height: '50vh',
-    border: '2px dashed #ddd',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#f7f7f7',
+    boxShadow: 'inset 0 0 1px #ddd, 0 2px 4px #e6e6e6',
+    transition: 'all 0.2s ease-in-out',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    padding: '40px'
   },
-  container: {
+  buttonContainer: {
     style: {
-      width: '100%',
-      height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      boxSizing: 'border-box',
-      padding: '40px',
+      justifyContent: 'flex-end'
     }
   },
   thumbnail: undefined,

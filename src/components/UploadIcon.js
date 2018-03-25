@@ -31,7 +31,7 @@ let UploadIcon = props => (
 UploadIcon.defaultProps = {
   width: 32,
   height: 32,
-  fill: '#555'
+  fill: '#fff'
 }
 
 export default UploadIcon
