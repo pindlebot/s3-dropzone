@@ -1,5 +1,5 @@
 export default `
-.s3-dropzone-figure:hover {
+.s3-dropzone figure:hover {
   transform: translateY(-2px);
 }
 

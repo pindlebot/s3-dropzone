@@ -1,129 +1,110 @@
 import React from 'react'
-import Dropzone from 'react-dropzone'
-import 'whatwg-fetch'
-import sheet from './stylesheet'
-import withStore from './store/withStore'
-import SpinnerComponent from './components/SpinnerComponent'
-import Button from './components/Button'
 import Thumbnail from './components/Thumbnail'
+import Button from './components/Button'
+import SpinnerComponent from './components/SpinnerComponent'
+import Dropzone from './components/Dropzone';
+import sheet from './stylesheet'
 
 class S3Dropzone extends React.Component {
+
+  state = {
+    loading: false,
+    uploads: [],
+    error: []
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.uploads) {
+      this.setState({ uploads: uploads })
+    }
+  }
+
+  onDrop = () => {
+    this.setState({ loading: true }, () => {
+      this.props.onDrop(true)
+    })
+  }
+
+  done = (error, uploads) => {
+    this.setState({ 
+      loading: false,
+      uploads: [...this.state.uploads].concat(uploads),
+      error: error
+    }, () => {
+      this.props.done(error, uploads)
+    })
+  }
+
   componentDidMount = () => {
+    console.log('Component did mount')
     if (!document.getElementById('spinnerStyles')) {
       let style = document.createElement('style')
       style.id = 'spinnerStyles'
       style.innerHTML = sheet
       document.querySelector('head').append(style)
     }
-  }
-
-  onDrop = async (files) => {
-    this.props.store.update('plant', { loading: true })
-    let error = []
-    let uploads = []
-    for (let file of files) {
-      let payload = await this.props.getPayload(file)
-      let formData = new window.FormData()
-      for (let field in payload.fields) {
-        formData.append(field, payload.fields[field])
-      }
-      formData.append('file', file)
-      try {
-        let upload = await fetch(payload.url, {
-          method: 'POST',
-          body: formData,
-          ...this.props.postParams
-        })
-        uploads.push({ upload, file })
-      } catch (err) {
-        error.push(err)
-      }
+    
+    if (this.props.uploads && !this.state.uploads.length) {
+      this.setState({ uploads: this.props.uploads })
     }
-    if (!error.length) error = null
-    this.props.onUpload(error, uploads)
-    console.log('uploads', uploads)
-    this.props.store.update('plant', { uploads, loading: false })
   }
 
   renderThumbnails = () => {
-    const {
-      uploads,
-      thumbnail
-    } = this.props
+    const { uploads } = this.state
     return uploads.map((upload, i) =>
       <Thumbnail
+        key={i}
         img={{...upload, ...Thumbnail.defaultProps.img}}
-        figure={{
-          width: `calc(${100 / uploads.length}% - 10px)`,
-          margin: '0',
-          overflow: 'hidden'
-        }}
       />
     )
   }
 
-  render () {
+  render() {
     const {
-      uploads,
-      loading,
+      thumbnailsContainer,
+      onDrop,
+      done,
       spinner,
-      thumbnail,
-      postParams,
-      onUpload,
-      getPayload,
-      container,
-      buttonContainer,
+      uploads,
       ...rest
     } = this.props
-    console.log(this.props)
-    const style = {
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100%',
-      height: '100%',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between',
-      flexBasis: '60%'
-    }
+    const { loading } = this.state
     return (
-      <Dropzone onDrop={this.onDrop} {...rest}>
+      <Dropzone
+        {...rest}
+        >
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%'
+        }}>
           {loading
-            ? spinner
-            : <div style={style}>{this.renderThumbnails()}</div>
+            ? <SpinnerComponent />
+            : <div {...thumbnailsContainer}>{this.renderThumbnails()}</div>
           }
-          <div {...buttonContainer}><Button /></div>
+          <Button />
+        </div>
       </Dropzone>
     )
   }
 }
 
 S3Dropzone.defaultProps = {
-  postParams: {},
-  style: {
-    width: '50vw',
-    height: '50vh',
-    backgroundColor: '#f7f7f7',
-    boxShadow: 'inset 0 0 1px #ddd, 0 2px 4px #e6e6e6',
-    transition: 'all 0.2s ease-in-out',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-    padding: '40px'
-  },
-  buttonContainer: {
+  thumbnailsContainer: {
     style: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-end'
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(25%, 1fr))',
+      gridAutoRows: '150px',
+      overflow: 'scroll',
+      gridGap: '10px 10px',
+      marginBottom: '5%'
     }
   },
-  thumbnail: undefined,
-  spinner: props => <SpinnerComponent />,
-  loading: false,
-  uploads: [],
-  onUpload: () => {}
+  done: () => {},
+  onDrop: () => {},
 }
 
 export default S3Dropzone

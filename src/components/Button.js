@@ -37,7 +37,7 @@ Button.defaultProps = {
       background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
       color: 'white',
       width: '180px',
-      '-webkitFontSmoothing': 'antialiased',
+      WebkitFontSmoothing: 'antialiased',
       transition: 'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
       boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .30)',
       lineHeight: '1.4em',
