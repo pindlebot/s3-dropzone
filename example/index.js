@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { S3Dropzone } from '../src'
 import 'whatwg-fetch'
+import '../src/style.css'
 
 const BASE_URI = 'http://nootacademy.com'
 

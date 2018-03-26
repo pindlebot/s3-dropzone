@@ -29,6 +29,18 @@ class S3Dropzone extends React.Component {
     if (this.props.uploads) {
       this.setState({ uploads: this.props.uploads })
     }
+
+    setTimeout(() => { window.addEventListener('click', this.onWindowClick) })
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.onWindowClick);
+  }
+
+  onWindowClick = () => {
+    if (this.state.view) {
+      this.setState({ view: undefined })
+    }
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -90,6 +102,10 @@ class S3Dropzone extends React.Component {
       ...rest
     } = this.props
     const { loading } = this.state
+    const dropzoneContentStyles = {
+      ...theme.content,
+      border: this.state.drag ? 0 : (theme.content.border || 0)
+    }
     if (this.state.view) {
       return (
         <Uploads 
@@ -105,15 +121,16 @@ class S3Dropzone extends React.Component {
     return (
       <Dropzone
         {...rest}
-        onDragEnter={this.onDragStart}
-        onDragLeave={this.onDragEnd}
-        className={this.state.drag ? 'drag' : undefined}
-        draggable='true'
-        theme={theme}
-        onAttachmentMount={this.onAttachmentMount}
+          onDragEnter={this.onDragStart}
+          onDragLeave={this.onDragEnd}
+          className={this.state.drag ? 'drag' : undefined}
+          draggable='true'
+          theme={theme}
+          onAttachmentMount={this.onAttachmentMount}
         >
-        <div 
-          style={theme.content}>
+        <div
+          className='s3-dropzone-content'
+          style={dropzoneContentStyles}>
           <Uploads 
             {...this.props}
             uploads={this.state.uploads}
@@ -122,13 +139,7 @@ class S3Dropzone extends React.Component {
             onClick={this.onClick}
             view={this.state.view}
           />
-          <div style={{
-            display: 'flex',
-            flexBasis: '20%',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}>
+          <div className='s3-dropzone-button-container'>
             <Button theme={theme} />
           </div>
         </div>

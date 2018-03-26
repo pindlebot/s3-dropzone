@@ -21,7 +21,9 @@ function Uploads(props) {
   }
   
   return (
-    <div style={{...props.theme.uploads, opacity: drag ? 0.5 : 1.0}}>
+    <div
+      className='s3-dropzone-uploads'
+      style={{...props.theme.uploads, opacity: drag ? 0.5 : 1.0}}>
     {_uploads.map((upload, i) => {
       const { loading, ...rest } = upload
       return (<Thumbnail

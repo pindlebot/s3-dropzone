@@ -8,6 +8,7 @@ const SvgIcon = props => {
   } = props
   return (
     <svg
+      className='s3-dropzone-svg-icon'
       focusable='false'
       aria-hidden={titleAccess ? 'false' : 'true'}
       {...other}>

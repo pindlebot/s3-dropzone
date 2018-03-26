@@ -83,6 +83,7 @@ class Thumbnail extends React.Component {
           {...this.props.img} 
           style={styles}
           ref={ref => { this.ref = ref }}
+          className='s3-dropzone-img'
         />
         <ThumbnailOverlay
           hover={hover}
@@ -94,7 +95,6 @@ class Thumbnail extends React.Component {
         <Spinner
           theme={this.props.theme}
           style={{
-            ...this.props.theme.spinnerContainer,
             display: this.props.loading ? 'flex' : 'none'
           }}
         />
