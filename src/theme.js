@@ -12,19 +12,38 @@ export default {
     height: '200px',
     width: '150px'
   },
+  thumbnailOverlay: {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'none',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: '5%',
+    alignItems: 'center',
+    width: '100%',
+    position: 'absolute',
+    color: '#fff',
+    boxSizing: 'border-box',
+  },
   img: {
     boxShadow: '0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3)',
     width: '100%',
-    objectFit: 'scale-down'
+    height: '100%',
+    objectFit: 'cover'
   },
   figure: {
     margin: '0',
-    overflow: 'hidden',
-    position: 'relative'
+    position: 'relative',
   },
   spinnerContainer: {
-    //transform: 'translateY(-75px)',
-    //position: 'absolute'
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   spinner: {
     width: '18px',
@@ -75,12 +94,12 @@ export default {
     fontWeight: 500,
   },
   uploads: {
+    flexBasis: '80%',
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(25%, 1fr))',
-    gridAutoRows: '150px',
+    gridTemplateColumns: '1fr 1fr 1fr',
+    gridTemplateRows: 'repeat(2, calc(50% - 10px))',
     overflow: 'scroll',
     gridGap: '10px 10px',
-    marginBottom: '5%',
     width: '100%'
   },
   uploadIcon: {

@@ -2,16 +2,13 @@ import React from 'react'
 import Spinner from './SpinnerComponent'
 import DeleteIcon from './icons/Delete'
 import PageViewIcon from './icons/PageView'
+import CloseIcon from './icons/Close'
 
 const IconButton = props => (
   <div style={{
     margin: '5px',
-    //width: '25px',
-    //height: '25px',
-    //padding: '2px',
-    //boxSizing: 'border-box'
   }}
-    onClick={evt => props.onClick(evt, props.name)}
+    onClick={evt => props.onClick(evt, props.name, props.index)}
   >
     {props.children}
   </div>
@@ -19,32 +16,32 @@ const IconButton = props => (
 const ThumbnailOverlay = props => (
   <div
     style={{
-      top: 0,
-      left: 0,
-      right: 0,
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      padding: '5%',
-      alignItems: 'center',
-      width: '100%',
-      position: 'absolute',
-      color: '#fff',
-      boxSizing: 'border-box',
-      height: (props.img && props.img.height) || '100%'
+      ...props.theme.thumbnailOverlay,
+      display: (props.hover || props.view) ? 'flex' : 'none'
     }}
-    className='thumbnail-overlay-icon'
+    className='s3-dropzone-thumbnail-overlay'
   >
+    {props.view ?
     <IconButton 
       onClick={props.onClick}
-      name='view'>
-      <PageViewIcon />
-    </IconButton>
-    <IconButton 
-      onClick={props.onClick}
-      name='delete'>
-      <DeleteIcon />
-    </IconButton>
+      index={props.index}
+      name='close'>
+      <CloseIcon />
+    </IconButton> :
+    <React.Fragment>
+      <IconButton 
+        onClick={props.onClick}
+        index={props.index}
+        name='view'>
+        <PageViewIcon />
+      </IconButton>
+      <IconButton 
+        onClick={props.onClick}
+        index={props.index}
+        name='delete'>
+        <DeleteIcon />
+      </IconButton>
+    </React.Fragment>}
   </div>
 )
 
@@ -60,11 +57,6 @@ class Thumbnail extends React.Component {
   onMouseLeave = () => {
     this.setState({ hover: false})
   }
-  
-  onClick = (evt, type) => {
-    evt.preventDefault()
-    console.log(type)
-  }
 
   preventBubbles = (evt) => {
     evt.preventDefault()
@@ -72,14 +64,10 @@ class Thumbnail extends React.Component {
   }
 
   render () {
-    const {
-      placeholder,
-      ...rest
-    } = this.props.img
     const { hover } = this.state
     const styles = {
       ...this.props.theme.img,
-      filter: this.props.img.placeholder 
+      filter: this.props.loading
         ? 'blur(1px)'
         : 'none'
     }
@@ -89,26 +77,35 @@ class Thumbnail extends React.Component {
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.preventBubbles}
+        className='s3-dropzone-thumbnail'
       >
         <img
-          {...rest} 
+          {...this.props.img} 
           style={styles}
           ref={ref => { this.ref = ref }}
         />
-        {hover && <ThumbnailOverlay
-              hover={hover}
-              img={this.ref}
-              onClick={this.onClick}
-            />
-         }
-        {placeholder && <Spinner theme={this.props.theme} />}
+        <ThumbnailOverlay
+          hover={hover}
+          onClick={this.props.onClick}
+          index={this.props.index}
+          theme={this.props.theme}
+          view={this.props.view}
+        />
+        <Spinner
+          theme={this.props.theme}
+          style={{
+            ...this.props.theme.spinnerContainer,
+            display: this.props.loading ? 'flex' : 'none'
+          }}
+        />
       </figure>
     )
   }
 }
 
 Thumbnail.defaultProps = {
-  img: {}
+  img: {},
+  loading: false
 }
 
 export default Thumbnail

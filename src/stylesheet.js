@@ -12,13 +12,13 @@ export default `
   filter: grayscale(100%)
 }
 
-.thumbnail-overlay-icon svg {
+.s3-dropzone-thumbnail-overlay svg {
   padding: 2px;
   border: 0.5px solid transparent;
   opacity: 0.6;
 }
 
-.thumbnail-overlay-icon svg:hover {
+.s3-dropzone-thumbnail-overlay svg:hover {
   opacity: 1;
   border: 0.5px solid #fff;
 }

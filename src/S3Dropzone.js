@@ -14,35 +14,8 @@ class S3Dropzone extends React.Component {
     loading: false,
     uploads: [],
     error: [],
-    drag: false
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.uploads) {
-      this.setState({ uploads: uploads })
-    }
-  }
-
-  callback = (src) => {
-    console.log(src)
-  }
-
-  onAttachmentMount = (previews) => {
-    console.log(previews)
-    const uploads = [...this.state.uploads].concat(previews)
-    this.setState({ uploads, drag: false }, () => {
-      console.log(this.state)
-      this.props.onDrop(previews)
-    })
-  }
-
-  done = (error, uploads) => {
-    this.setState({ 
-      uploads: [...this.state.uploads].concat(uploads),
-      error: error
-    }, () => {
-      this.props.done(error, uploads)
-    })
+    drag: false,
+    view: undefined
   }
 
   componentDidMount = () => {
@@ -58,8 +31,48 @@ class S3Dropzone extends React.Component {
     }
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.uploads) {
+      this.setState({ uploads: uploads })
+    }
+  }
+
+  onClick = (evt, type, index) => {
+    evt.preventDefault()
+    switch (type) {
+      case 'delete':
+        let uploads = [...this.state.uploads]
+        uploads.splice(index, 1)
+        this.setState({ uploads })
+        break
+      case 'view':
+        this.setState({ view: this.state.uploads[index] })
+        break
+      case 'close':
+        this.setState({ view: undefined })
+        break
+      default:
+    }
+  }
+
+  onAttachmentMount = (previews) => {
+    const uploads = [...this.state.uploads].concat(previews)
+    this.setState({ uploads, drag: false }, () => {
+      this.props.onDrop(previews)
+    })
+  }
+
+  done = (error, uploads) => {
+    this.setState({ 
+      uploads: [...this.state.uploads]
+        .map(u => ({ ...u, loading: false })),
+      error: error
+    }, () => {
+      this.props.done(error, uploads)
+    })
+  }
+
   onDragStart = (evt) => {
-    console.log(evt)
     this.setState({ drag: true })
   }
 
@@ -77,6 +90,18 @@ class S3Dropzone extends React.Component {
       ...rest
     } = this.props
     const { loading } = this.state
+    if (this.state.view) {
+      return (
+        <Uploads 
+          {...this.props}
+          uploads={this.state.uploads}
+          drag={this.state.drag}
+          theme={theme}
+          onClick={this.onClick}
+          view={this.state.view}
+        />
+      )
+    }
     return (
       <Dropzone
         {...rest}
@@ -88,13 +113,24 @@ class S3Dropzone extends React.Component {
         onAttachmentMount={this.onAttachmentMount}
         >
         <div 
-        style={theme.content}>
+          style={theme.content}>
           <Uploads 
             {...this.props}
             uploads={this.state.uploads}
             drag={this.state.drag}
-            theme={theme} />
-          <Button theme={theme} />
+            theme={theme}
+            onClick={this.onClick}
+            view={this.state.view}
+          />
+          <div style={{
+            display: 'flex',
+            flexBasis: '20%',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}>
+            <Button theme={theme} />
+          </div>
         </div>
       </Dropzone>
     )

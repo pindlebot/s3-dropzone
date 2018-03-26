@@ -9,7 +9,7 @@ class BaseDropzone extends React.Component {
       let reader  = new FileReader()
 
       reader.addEventListener('load', function () {
-        resolve({ src: reader.result, placeholder: true })
+        resolve({ src: reader.result, loading: true })
       }, false)
 
 
@@ -23,7 +23,6 @@ class BaseDropzone extends React.Component {
   }
 
   onDrop = async (files) => {
-    console.log(files)
     await this.getPreview(files)
     let error = []
     let uploads = []
@@ -66,7 +65,6 @@ class BaseDropzone extends React.Component {
     if (classNameProp) {
       classNames.push(classNameProp)
     }
-    console.log('dropzone-props', this.props)
     return (
       <ReactDropzone 
        className={classNames.join(' ')} 

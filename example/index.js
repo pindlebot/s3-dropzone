@@ -29,8 +29,8 @@ class App extends React.Component {
       <div 
       className='container'
       style={{
-        margin: '0 auto',
-        transform: 'translateY(25%)'
+        maxWidth: '660px',
+        margin: '15vh auto'
       }}>
         <S3Dropzone
           getPayload={file => {
