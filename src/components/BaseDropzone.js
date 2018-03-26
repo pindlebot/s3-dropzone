@@ -85,6 +85,7 @@ class BaseDropzone extends React.Component {
       interceptor,
       ...rest
     } = this.props
+    console.log(this.props)
     const classNames = ['s3-dropzone']
     if (classNameProp) {
       classNames.push(classNameProp)

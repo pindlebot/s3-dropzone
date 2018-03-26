@@ -36,9 +36,9 @@ class App extends React.Component {
     return (
       <div 
         style={{
-          maxWidth: '500px',
-          margin: '15vh auto',
-          height: '400px'
+          maxWidth: '600px',
+          margin: '10vh auto',
+          height: '500px'
         }}>
         <S3Dropzone
           region='us-east-1'

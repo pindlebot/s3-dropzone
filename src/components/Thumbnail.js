@@ -17,11 +17,23 @@ const IconButton = props => (
 
 const ThumbnailOverlay = props => {
   const styles = props.theme.thumbnailOverlay
- 
+  if (props.loading) {
+    return (
+      <div
+        style={styles}
+        className='s3-dropzone-thumbnail-overlay'
+      >
+        <Spinner
+          theme={props.theme}
+          show={props.loading}
+        />
+      </div>
+    )
+  }
   return (
     <div
       style={styles}
-      className='s3-dropzone-thumbnail-overlay'
+      className='s3-dropzone-thumbnail-overlay s3-dropzone-hidden'
     >
       {props.view ?
       <IconButton 
@@ -109,14 +121,11 @@ class Thumbnail extends React.Component {
           }}
         />
         <ThumbnailOverlay
+          loading={loading}
           onClick={this.props.onClick}
           index={this.props.index}
           theme={this.props.theme}
           view={this.props.view}
-        />
-        <Spinner
-          theme={this.props.theme}
-          show={loading}
         />
       </figure>
     )
