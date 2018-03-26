@@ -2,10 +2,16 @@
   "name": "s3-dropzone",
   "version": "0.0.3",
   "main": "lib/index.js",
+  "engines": {
+    "node": "9.x"
+  },
   "license": "MIT",
   "scripts": {
-    "dev": "parcel example/index.html",
-    "build": "babel src -d lib"
+    "dev": "yarn run clean && parcel example/index.html",
+    "build": "yarn run clean && babel src -d lib",
+    "build:example": "yarn run clean && NODE_ENV=production parcel build example/index.html --no-minify --public-url / --no-cache",
+    "start": "NODE_ENV=production pushstate-server dist",
+    "clean": "rimraf dist && rimraf .cache && rimraf lib"
   },
   "dependencies": {
     "react-dropzone": "^4.2.9",
@@ -18,10 +24,12 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
-    "parcel-bundler": "^1.6.2"
+    "parcel-bundler": "^1.6.2",
+    "pushstate-server": "^3.0.1",
+    "rimraf": "^2.6.2"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-dom": "*"
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   }
 }
