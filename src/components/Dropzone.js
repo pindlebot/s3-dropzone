@@ -3,10 +3,32 @@ import ReactDropzone from 'react-dropzone'
 import sheet from '../stylesheet'
 
 class BaseDropzone extends React.Component {
+
+  getPreview = async (files) => {
+    const readAsDataURL = (file) => new Promise((resolve, reject) => {
+      let reader  = new FileReader()
+
+      reader.addEventListener('load', function () {
+        resolve({ src: reader.result, placeholder: true })
+      }, false)
+
+
+      if (file) {
+        reader.readAsDataURL(file)
+      }
+    })
+
+    const previews = await Promise.all(files.map(file => readAsDataURL(file)))
+    this.props.onAttachmentMount(previews)
+  }
+
   onDrop = async (files) => {
-    this.props.onDrop(true)
+    console.log(files)
+    await this.getPreview(files)
     let error = []
     let uploads = []
+    //
+    return
     for (let file of files) {
       let payload = await this.props.getPayload(file)
       let formData = new window.FormData()
@@ -28,31 +50,37 @@ class BaseDropzone extends React.Component {
       this.props.done(error, uploads)
     }
   }
+
   render () {
     const {
       done,
       onDrop,
       requestParams,
       getPayload,
+      className: classNameProp,
+      theme,
+      onAttachmentMount,
       ...rest
     } = this.props
+    const classNames = ['s3-dropzone']
+    if (classNameProp) {
+      classNames.push(classNameProp)
+    }
+    console.log('dropzone-props', this.props)
     return (
-      <ReactDropzone className='s3-dropzone' onDrop={this.onDrop} {...rest} />
+      <ReactDropzone 
+       className={classNames.join(' ')} 
+       onDrop={this.onDrop} 
+       style={theme.dropzone}
+       {...rest}
+      />
     )
   }
 }
 
 BaseDropzone.defaultProps = {
   requestParams: {},
-  style: {
-    backgroundColor: '#f7f7f7',
-    boxShadow: 'inset 0 0 1px #ddd, 0 2px 4px #e6e6e6',
-    transition: 'all 0.2s ease-in-out',
-    padding: '4%',
-    width: '60vw',
-    height: '60vh'
-  },
-  onDrop: () => {},
+  // onDrop: () => {},
   done: () => {}
 }
 

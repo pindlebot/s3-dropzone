@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel test/index.html",
+    "dev": "parcel example/index.html",
     "build": "babel src -d lib"
   },
   "dependencies": {

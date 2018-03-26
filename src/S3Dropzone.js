@@ -4,13 +4,17 @@ import Button from './components/Button'
 import SpinnerComponent from './components/SpinnerComponent'
 import Dropzone from './components/Dropzone';
 import sheet from './stylesheet'
+import Uploads from './components/Uploads'
+import theme from './theme'
+
 
 class S3Dropzone extends React.Component {
 
   state = {
     loading: false,
     uploads: [],
-    error: []
+    error: [],
+    drag: false
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -19,15 +23,21 @@ class S3Dropzone extends React.Component {
     }
   }
 
-  onDrop = () => {
-    this.setState({ loading: true }, () => {
-      this.props.onDrop(this.state)
+  callback = (src) => {
+    console.log(src)
+  }
+
+  onAttachmentMount = (previews) => {
+    console.log(previews)
+    const uploads = [...this.state.uploads].concat(previews)
+    this.setState({ uploads, drag: false }, () => {
+      console.log(this.state)
+      this.props.onDrop(previews)
     })
   }
 
   done = (error, uploads) => {
     this.setState({ 
-      loading: false,
       uploads: [...this.state.uploads].concat(uploads),
       error: error
     }, () => {
@@ -48,43 +58,43 @@ class S3Dropzone extends React.Component {
     }
   }
 
-  renderThumbnails = () => {
-    const { uploads } = this.state
-    return uploads.map((upload, i) =>
-      <Thumbnail
-        key={i}
-        img={{...upload, ...Thumbnail.defaultProps.img}}
-      />
-    )
+  onDragStart = (evt) => {
+    console.log(evt)
+    this.setState({ drag: true })
+  }
+
+  onDragEnd = () => {
+    this.setState({ drag: false })
   }
 
   render() {
     const {
       thumbnailsContainer,
-      onDrop,
       done,
       spinner,
       uploads,
+      theme,
       ...rest
     } = this.props
     const { loading } = this.state
     return (
       <Dropzone
         {...rest}
+        onDragEnter={this.onDragStart}
+        onDragLeave={this.onDragEnd}
+        className={this.state.drag ? 'drag' : undefined}
+        draggable='true'
+        theme={theme}
+        onAttachmentMount={this.onAttachmentMount}
         >
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%'
-        }}>
-          {loading
-            ? <SpinnerComponent />
-            : <div {...thumbnailsContainer}>{this.renderThumbnails()}</div>
-          }
-          <Button />
+        <div 
+        style={theme.content}>
+          <Uploads 
+            {...this.props}
+            uploads={this.state.uploads}
+            drag={this.state.drag}
+            theme={theme} />
+          <Button theme={theme} />
         </div>
       </Dropzone>
     )
@@ -92,18 +102,9 @@ class S3Dropzone extends React.Component {
 }
 
 S3Dropzone.defaultProps = {
-  thumbnailsContainer: {
-    style: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(25%, 1fr))',
-      gridAutoRows: '150px',
-      overflow: 'scroll',
-      gridGap: '10px 10px',
-      marginBottom: '5%'
-    }
-  },
   done: () => {},
   onDrop: () => {},
+  theme: theme
 }
 
 export default S3Dropzone
