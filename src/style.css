@@ -21,11 +21,6 @@
   position: relative;
 }
 
-.s3-dropzone-thumbnail:hover {
-  transform: translateY(-2px);
-  filter: grayscale(100%)
-}
-
 .s3-dropzone-thumbnail-overlay {
   top: 0;
   left: 0;
@@ -55,6 +50,11 @@
 .s3-dropzone-thumbnail-overlay svg:hover {
   opacity: 1;
   border: 0.5px solid #fff;
+}
+
+.s3-dropzone-img:hover {
+  transform: translateY(-2px);
+  filter: grayscale(50%) brightness(50%);
 }
 
 .s3-dropzone-img {

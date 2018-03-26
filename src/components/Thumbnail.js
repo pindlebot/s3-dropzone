@@ -65,11 +65,13 @@ class Thumbnail extends React.Component {
 
   render () {
     const { hover } = this.state
-    const styles = {
-      ...this.props.theme.img,
-      filter: this.props.loading
-        ? 'blur(1px)'
-        : 'none'
+    let imageStyles = {...this.props.theme.img}
+    if (this.props.loading) {
+      imageStyles.filter = 'blur(1px)'
+    }
+    if (hover) {
+      imageStyles.transform = 'translateY(-2px)'
+      imageStyles.filter = 'grayscale(50%) brightness(50%)'
     }
     return (
       <figure 
@@ -81,7 +83,7 @@ class Thumbnail extends React.Component {
       >
         <img
           {...this.props.img} 
-          style={styles}
+          style={imageStyles}
           ref={ref => { this.ref = ref }}
           className='s3-dropzone-img'
         />

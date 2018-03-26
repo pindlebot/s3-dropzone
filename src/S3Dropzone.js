@@ -2,20 +2,25 @@ import React from 'react'
 import Thumbnail from './components/Thumbnail'
 import Button from './components/Button'
 import SpinnerComponent from './components/SpinnerComponent'
-import Dropzone from './components/Dropzone';
+import Dropzone from './components/BaseDropzone';
 import sheet from './stylesheet'
 import Uploads from './components/Uploads'
 import theme from './theme'
-
+import createS3 from './s3'
 
 class S3Dropzone extends React.Component {
+  constructor (props) {
+    super(props)
 
-  state = {
-    loading: false,
-    uploads: [],
-    error: [],
-    drag: false,
-    view: undefined
+    this.state = {
+      loading: false,
+      uploads: [],
+      error: [],
+      drag: false,
+      view: undefined
+    }
+
+    this.s3 = createS3(props)
   }
 
   componentDidMount = () => {
@@ -45,36 +50,49 @@ class S3Dropzone extends React.Component {
 
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.uploads) {
-      this.setState({ uploads: uploads })
+      this.setState({ uploads: nextProps.uploads })
     }
   }
 
-  onClick = (evt, type, index) => {
+  handleDelete = (upload) => {
+    console.log(this.state)
+    const { bucketName } = this.props
+    return this.s3.deleteObject({
+      Bucket: bucketName,
+      Key: upload.key || upload.src.replace(`https://s3.amazonaws.com/${bucketName}/`, '') 
+    }).promise()
+  }
+
+  onClick = async (evt, type, index) => {
+    let upload = this.state.uploads[index]
     evt.preventDefault()
     switch (type) {
       case 'delete':
         let uploads = [...this.state.uploads]
         uploads.splice(index, 1)
         this.setState({ uploads })
+        await this.handleDelete(upload)
         break
       case 'view':
-        this.setState({ view: this.state.uploads[index] })
+        this.setState({ view: upload })
         break
       case 'close':
         this.setState({ view: undefined })
         break
       default:
     }
+    this.props.onClick(evt, type, upload)
   }
 
   onAttachmentMount = (previews) => {
-    const uploads = [...this.state.uploads].concat(previews)
+    const uploads = previews.concat([...this.state.uploads])
     this.setState({ uploads, drag: false }, () => {
       this.props.onDrop(previews)
     })
   }
 
-  done = (error, uploads) => {
+  onUploadFinish = (error, uploads) => {
+    console.log({ error, uploads })
     this.setState({ 
       uploads: [...this.state.uploads]
         .map(u => ({ ...u, loading: false })),
@@ -111,6 +129,7 @@ class S3Dropzone extends React.Component {
       spinner,
       uploads,
       theme,
+      onClick,
       ...rest
     } = this.props
     const { loading } = this.state
@@ -126,12 +145,13 @@ class S3Dropzone extends React.Component {
     return (
       <Dropzone
         {...rest}
-          onDragEnter={this.onDragStart}
-          onDragLeave={this.onDragEnd}
-          className={this.state.drag ? 'drag' : undefined}
-          draggable='true'
-          theme={theme}
-          onAttachmentMount={this.onAttachmentMount}
+        onDragEnter={this.onDragStart}
+        onDragLeave={this.onDragEnd}
+        className={this.state.drag ? 'drag' : undefined}
+        draggable='true'
+        theme={theme}
+        onAttachmentMount={this.onAttachmentMount}
+        onUploadFinish={this.onUploadFinish}
         >
         <div
           className='s3-dropzone-content'
@@ -149,7 +169,8 @@ class S3Dropzone extends React.Component {
 S3Dropzone.defaultProps = {
   done: () => {},
   onDrop: () => {},
-  theme: theme
+  theme: theme,
+  onClick: () => {}
 }
 
 export default S3Dropzone

@@ -3,16 +3,11 @@ import { render } from 'react-dom'
 import { S3Dropzone } from '../src'
 import 'whatwg-fetch'
 import '../src/style.css'
-
-const BASE_URI = 'http://nootacademy.com'
-
-let postId = Math.floor(Math.random() * 1e6)
-
-const createRelativeUrl = (file) => `static/${postId}/${file.name}`
+import config from './config'
 
 function getInitialState () {
-  let uploads = UPLOADS
-  let data = window.localStorage.getItem('__uploads__')
+  let uploads = config.uploads
+  let data = window.localStorage.getItem(config.localStorageKey)
   if (data) {
     try {
       uploads = JSON.parse(data)
@@ -23,23 +18,9 @@ function getInitialState () {
   return uploads
 }
 
-const UPLOADS = [
-  'https://images.pexels.com/photos/600110/pexels-photo-600110.jpeg',
-  'https://images.pexels.com/photos/286590/pexels-photo-286590.jpeg',
-  'https://images.pexels.com/photos/710309/pexels-photo-710309.jpeg',
-].map(src => ({ src }))
-
 class App extends React.Component {
   state = {
     uploads: getInitialState()
-  }
-
-  getPayload = (file) => {
-    const key = encodeURIComponent(`static/${postId}/${file.name}`)
-    const uploads = [...this.state.uploads]
-    uploads.push({ url: 'http://www.nootacademy.com/api/v1/static/' + key })
-    window.localStorage.setItem('__uploads__', JSON.stringify(uploads))
-    return fetch(`${BASE_URI}/api/v1/presigned/${key}?type=${file.type}`)
   }
 
   done = (err, data) => {
@@ -53,15 +34,41 @@ class App extends React.Component {
     
     return (
       <div 
-      className='container'
-      style={{
-        maxWidth: '660px',
-        margin: '15vh auto'
-      }}>
+        style={{
+          maxWidth: '500px',
+          margin: '15vh auto',
+          height: '400px'
+        }}>
         <S3Dropzone
-          getPayload={this.getPayload}
+          region='us-east-1'
+          identityPoolId={config.identityPoolId}
           done={this.done}
           uploads={this.state.uploads}
+          bucketName={config.bucketName}
+          onClick={(evt, type, upload) => {
+            if (type !== 'delete') return
+            let uploads = [...this.state.uploads].filter(u => u.src !== upload.src)
+            window.localStorage.setItem(
+              config.localStorageKey,
+              JSON.stringify(uploads)
+            )
+          }}
+          interceptor={file => {
+            let uploads = [...this.state.uploads]
+            let key = `static/${file.name}`
+            let src = `https://s3.amazonaws.com/${config.bucketName}/${key}`
+            uploads.unshift({ src, key })
+            window.localStorage.setItem(
+              config.localStorageKey,
+              JSON.stringify(uploads)
+            )
+            return {
+              Fields: {
+                key: key,
+                'Content-Type': file.type,
+              }
+            }
+          }}
         />
       </div>
     )

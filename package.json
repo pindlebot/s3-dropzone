@@ -19,6 +19,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
+    "aws-sdk": "^2.213.1",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
