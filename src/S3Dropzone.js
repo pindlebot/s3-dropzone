@@ -149,9 +149,6 @@ class S3Dropzone extends React.Component {
           className='s3-dropzone-content'
           style={dropzoneContentStyles}>
           {this.renderUploads()}
-          <div className='s3-dropzone-button-container'>
-            <Button theme={theme} />
-          </div>
         </div>
       </Dropzone>
     )

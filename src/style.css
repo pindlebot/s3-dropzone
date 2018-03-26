@@ -89,20 +89,18 @@
   width: 100%;
   height: 100%;
   border: 3px dashed #ddd;
-  display: flex;
   padding: 5%;
   box-sizing: border-box;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 .s3-dropzone-button-container {
-  display: 'flex';
-  flex-basis: '20%';
-  flex-direction: 'column';
-  justify-content: 'flex-end';
-  align-items: 'center';
+  grid-column-start: 1;
+  grid-column-end: 4;
+  display: flex;
+  /* flex-basis: '20%'; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .s3-dropzone-button {
@@ -136,10 +134,12 @@
 
 .s3-dropzone-uploads {
   width: 100%;
+  height: 100%;
   display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   overflow: scroll;
   grid-gap: 10px 10px;
-  flex-basis: 80%;
+  /* flex-basis: 80%; */
 }
 
 .s3-dropzone-upload-icon {
