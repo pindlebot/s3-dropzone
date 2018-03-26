@@ -92,6 +92,18 @@ class S3Dropzone extends React.Component {
     this.setState({ drag: false })
   }
 
+  renderUploads = () => {
+    return (
+      <Uploads 
+        {...this.props}
+        onClick={this.onClick}
+        uploads={this.state.uploads}
+        drag={this.state.drag}
+        view={this.state.view}
+      />
+    )
+  }
+
   render() {
     const {
       thumbnailsContainer,
@@ -103,20 +115,13 @@ class S3Dropzone extends React.Component {
     } = this.props
     const { loading } = this.state
     const dropzoneContentStyles = {
-      ...theme.content,
-      border: this.state.drag ? 0 : (theme.content.border || 0)
+      ...theme.content
+    }
+    if (this.state.drag) {
+      dropzoneContentStyles.border = 0;
     }
     if (this.state.view) {
-      return (
-        <Uploads 
-          {...this.props}
-          uploads={this.state.uploads}
-          drag={this.state.drag}
-          theme={theme}
-          onClick={this.onClick}
-          view={this.state.view}
-        />
-      )
+      return this.renderUploads()
     }
     return (
       <Dropzone
@@ -131,14 +136,7 @@ class S3Dropzone extends React.Component {
         <div
           className='s3-dropzone-content'
           style={dropzoneContentStyles}>
-          <Uploads 
-            {...this.props}
-            uploads={this.state.uploads}
-            drag={this.state.drag}
-            theme={theme}
-            onClick={this.onClick}
-            view={this.state.view}
-          />
+          {this.renderUploads()}
           <div className='s3-dropzone-button-container'>
             <Button theme={theme} />
           </div>

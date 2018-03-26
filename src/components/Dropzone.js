@@ -26,8 +26,6 @@ class BaseDropzone extends React.Component {
     await this.getPreview(files)
     let error = []
     let uploads = []
-    //
-    return
     for (let file of files) {
       let payload = await this.props.getPayload(file)
       let formData = new window.FormData()
@@ -41,7 +39,7 @@ class BaseDropzone extends React.Component {
           body: formData,
           ...this.props.requestParams
         })
-        uploads.push({ upload, file })
+        uploads.push(upload)
       } catch (err) {
         error.push(err)
       }

@@ -5,35 +5,36 @@ import theme from '../theme'
 function Uploads(props) {
   const { 
     drag,
-    view,
-    uploads
+    view
   } = props
-  let _uploads = props.uploads
-  let theme = props.theme.uploads
-
+  let uploadsTheme = props.theme.uploads
+  let uploads = props.uploads
   if (view) {
-    theme.gridTemplateColumns = '1fr'
-    theme.gridTemplateRows = '1fr'
-    _uploads = [view]
+    uploadsTheme.gridTemplateColumns = '1fr'
+    uploadsTheme.gridTemplateRows = '1fr'
+    uploads = [view]
   } else {
-    theme.gridTemplateColumns = '1fr 1fr 1fr'
-    theme.gridTemplateRows = 'repeat(2, calc(50% - 10px))'
+    uploadsTheme.gridTemplateColumns = '1fr 1fr 1fr'
+    uploadsTheme.gridTemplateRows = 'repeat(2, calc(50% - 10px))'
   }
   
   return (
     <div
       className='s3-dropzone-uploads'
-      style={{...props.theme.uploads, opacity: drag ? 0.5 : 1.0}}>
-    {_uploads.map((upload, i) => {
-      const { loading, ...rest } = upload
-      return (<Thumbnail
-        loading={loading}
-        index={i}
-        key={i}
-        img={rest}
-        {...props}
-      />)
-    }
+      style={{
+        ...uploadsTheme,
+        opacity: drag ? 0.5 : 1.0
+      }}>
+      {uploads.map((upload, i) => {
+        const { loading, ...rest } = upload
+        return (<Thumbnail
+          loading={loading}
+          index={i}
+          key={i}
+          img={rest}
+          {...props}
+        />)
+      }
     )}
     </div>
   )

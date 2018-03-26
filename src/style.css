@@ -1,7 +1,8 @@
 .s3-dropzone {
-  width: 60vw;
-  height: 60vh;
+  width: 100%;
+  height: 100%;
   padding: 4%;
+  box-sizing: border-box;
   box-shadow: inset 0 0 1px #ddd, 0 2px 4px #e6e6e6;
   transition: all 0.2s ease-in-out;
   background-color: #f7f7f7;
