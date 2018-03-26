@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+- 9
+- 8
+branches:
+  only:
+  - master
+install:
+- yarn
+script:
+- yarn run build:example
+after_success: 
+deploy:
+  skip_cleanup: true
+  provider: heroku
+  buildpack: nodejs
+  api_key:
+    secure: "$HEROKU_KEY"
+  app: "$HEROKU_APP"
+  run:
