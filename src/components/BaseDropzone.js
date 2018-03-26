@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDropzone from 'react-dropzone'
-import sheet from '../stylesheet'
 import createS3 from '../s3'
 
 class BaseDropzone extends React.Component {
@@ -65,9 +64,9 @@ class BaseDropzone extends React.Component {
       } catch (err) {
         error.push(err)
       }
-      if (!error.length) error = null
-      this.props.onUploadFinish(error, uploads)
     }
+    if (!error.length) error = null
+    this.props.onUploadFinish(error, uploads)
   }
 
   render () {
