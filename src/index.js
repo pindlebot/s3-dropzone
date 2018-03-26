@@ -3,6 +3,7 @@ import Thumbnail from './components/Thumbnail'
 import Button from './components/Button'
 import SpinnerComponent from './components/SpinnerComponent'
 import BaseDropzone from './components/BaseDropzone'
+import registerServiceWorker from './registerServiceWorker'
 
 exports.S3Dropzone = S3Dropzone
 exports.Button = Button
@@ -15,5 +16,6 @@ export default {
   Button,
   Thumbnail,
   SpinnerComponent,
-  BaseDropzone
+  BaseDropzone,
+  registerServiceWorker
 }

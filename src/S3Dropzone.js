@@ -3,7 +3,6 @@ import Thumbnail from './components/Thumbnail'
 import Button from './components/Button'
 import SpinnerComponent from './components/SpinnerComponent'
 import Dropzone from './components/BaseDropzone';
-import sheet from './stylesheet'
 import Uploads from './components/Uploads'
 import theme from './theme'
 import createS3 from './s3'
@@ -23,14 +22,7 @@ class S3Dropzone extends React.Component {
     this.s3 = createS3(props)
   }
 
-  componentDidMount = () => {
-    if (!document.getElementById('spinnerStyles')) {
-      let style = document.createElement('style')
-      style.id = 'spinnerStyles'
-      style.innerHTML = sheet
-      document.querySelector('head').append(style)
-    }
-    
+  componentDidMount = () => {    
     if (this.props.uploads) {
       this.setState({ uploads: this.props.uploads })
     }

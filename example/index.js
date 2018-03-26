@@ -4,6 +4,7 @@ import { S3Dropzone } from '../src'
 import 'whatwg-fetch'
 import '../src/style.css'
 import config from './config'
+import registerServiceWorker from '../src/registerServiceWorker'
 
 function getInitialState () {
   let uploads = config.uploads
@@ -79,3 +80,6 @@ render(
   <App />,
   document.getElementById('root')
 )
+
+
+registerServiceWorker()

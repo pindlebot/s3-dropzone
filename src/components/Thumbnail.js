@@ -8,54 +8,60 @@ const IconButton = props => (
   <div style={{
     margin: '5px',
   }}
+    className='s3-dropzone-thumbnail-overlay-icon'
     onClick={evt => props.onClick(evt, props.name, props.index)}
   >
     {props.children}
   </div>
 )
-const ThumbnailOverlay = props => (
-  <div
-    style={{
-      ...props.theme.thumbnailOverlay,
-      display: (props.hover || props.view) ? 'flex' : 'none'
-    }}
-    className='s3-dropzone-thumbnail-overlay'
-  >
-    {props.view ?
-    <IconButton 
-      onClick={props.onClick}
-      index={props.index}
-      name='close'>
-      <CloseIcon />
-    </IconButton> :
-    <React.Fragment>
+
+const ThumbnailOverlay = props => {
+  const styles = props.theme.thumbnailOverlay
+ 
+  return (
+    <div
+      style={styles}
+      className='s3-dropzone-thumbnail-overlay'
+    >
+      {props.view ?
       <IconButton 
         onClick={props.onClick}
         index={props.index}
-        name='view'>
-        <PageViewIcon />
-      </IconButton>
-      <IconButton 
-        onClick={props.onClick}
-        index={props.index}
-        name='delete'>
-        <DeleteIcon />
-      </IconButton>
-    </React.Fragment>}
-  </div>
-)
+        name='close'>
+        <CloseIcon />
+      </IconButton> :
+      <React.Fragment>
+        <IconButton 
+          onClick={props.onClick}
+          index={props.index}
+          name='view'>
+          <PageViewIcon />
+        </IconButton>
+        <IconButton 
+          onClick={props.onClick}
+          index={props.index}
+          name='delete'>
+          <DeleteIcon />
+        </IconButton>
+      </React.Fragment>}
+    </div>
+  )
+}
 
 class Thumbnail extends React.Component {
   state = {
-    hover: false
+    hover: false,
+    loading: true,
+    error: false,
+    blur: 5
   }
 
-  onMouseEnter = () => {
-    this.setState({ hover: true })
+  componentDidMount = () => {
+    this.timer = setInterval(this.sharpen, 100)
   }
 
-  onMouseLeave = () => {
-    this.setState({ hover: false})
+  componentWillUnmount() {
+    clearInterval(this.timer)
   }
 
   preventBubbles = (evt) => {
@@ -63,21 +69,28 @@ class Thumbnail extends React.Component {
     evt.stopPropagation()
   }
 
+  sharpen = () => {
+    if (this.state.blur > 0) {
+      this.setState({ blur: this.state.blur - 0.5 })
+    } else {
+      clearInterval(this.timer)
+    }
+  }
+
   render () {
-    const { hover } = this.state
-    let imageStyles = {...this.props.theme.img}
-    if (this.props.loading) {
-      imageStyles.filter = 'blur(1px)'
+    const imageStyles = {...this.props.theme.img}
+    const loading = this.state.loading || this.props.loading
+    const { view } = this.props
+    let imageClassNames = ['s3-dropzone-thumbnail-img']
+    if (loading) {
+      imageStyles.visibility = 'hidden'
+    } else if (!view) {
+      imageClassNames.push('s3-dropzone-thumbnail-blur')
     }
-    if (hover) {
-      imageStyles.transform = 'translateY(-2px)'
-      imageStyles.filter = 'grayscale(50%) brightness(50%)'
-    }
+    console.log({ loading })
     return (
       <figure 
         style={this.props.theme.figure}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
         onClick={this.preventBubbles}
         className='s3-dropzone-thumbnail'
       >
@@ -85,10 +98,17 @@ class Thumbnail extends React.Component {
           {...this.props.img} 
           style={imageStyles}
           ref={ref => { this.ref = ref }}
-          className='s3-dropzone-img'
+          className={imageClassNames.join(' ')}
+          onLoad={(evt) => {
+            setTimeout(() => {
+              this.setState({ loading: false })
+            }, 0)
+          }}
+          onError={(evt) => {
+            this.setState({ error: true })
+          }}
         />
         <ThumbnailOverlay
-          hover={hover}
           onClick={this.props.onClick}
           index={this.props.index}
           theme={this.props.theme}
@@ -96,9 +116,7 @@ class Thumbnail extends React.Component {
         />
         <Spinner
           theme={this.props.theme}
-          style={{
-            display: this.props.loading ? 'flex' : 'none'
-          }}
+          show={loading}
         />
       </figure>
     )

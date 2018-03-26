@@ -19,6 +19,7 @@
 .s3-dropzone-thumbnail {
   margin: 0;
   position: relative;
+  background-image: linear-gradient(to right, #434343 0%, black 100%);
 }
 
 .s3-dropzone-thumbnail-overlay {
@@ -37,51 +38,56 @@
   justify-content: center;
 }
 
-.s3-dropzone-thumbnail-overlay:hover {
-  display: flex;
+.s3-dropzone-spinner {
+  visibility: hidden;
 }
 
-.s3-dropzone-thumbnail-overlay svg {
-  padding: 2px;
-  border: 0.5px solid transparent;
-  opacity: 0.6;
+.s3-dropzone-thumbnail:hover .s3-dropzone-thumbnail-overlay {
+  display: flex !important;  
 }
 
-.s3-dropzone-thumbnail-overlay svg:hover {
-  opacity: 1;
-  border: 0.5px solid #fff;
-}
-
-.s3-dropzone-img:hover {
+.s3-dropzone-thumbnail:hover .s3-dropzone-thumbnail-img {
   transform: translateY(-2px);
   filter: grayscale(50%) brightness(50%);
 }
 
-.s3-dropzone-img {
+.s3-dropzone-thumbnail-overlay-icon {
+  padding: 2px;
+  box-sizing: border-box;
+  opacity: 0.6;
+  border: 0.5px solid transparent;
+}
+
+.s3-dropzone-thumbnail-overlay-icon:hover {
+  opacity: 1;
+  border: 0.5px solid rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.s3-dropzone-thumbnail-blur {
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
+  animation-name: blurDelay;
+  animation-duration: 1s;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-direction: normal;
+  /* animation: thumbnailBlurDelay 10s 1s linear 1 normal; */
+}
+
+@keyframes blurDelay {
+  from {
+    filter: blur(10px)
+  }
+  to {
+    filter: blur(0px)
+  }
+}
+
+.s3-dropzone-thumbnail-img {
   width: 100%;
   height: 100%;
-  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
   object-fit: cover;
-}
-
-.s3-dropzone-spinner-container {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  flex-direction: row;
-  justify-content: center;
-  display: none;
-}
-
-.s3-dropzone-spinner-container:hover {
-  display: flex;
-}
-
-.s3-dropzone-spinner {
-  width: 18px;
-  height: 18px;
-  background-color: #fff;
 }
 
 .s3-dropzone-content {
@@ -150,6 +156,7 @@
 
 .s3-dropzone-svg-icon {
   color: inherit;
+  display: block;
 }
 
 .s3-dropzone .sk-circle {

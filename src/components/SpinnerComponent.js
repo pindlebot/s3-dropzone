@@ -1,7 +1,10 @@
 import React from 'react'
 
 const SpinnerComponent = props => (
-  <div className='s3-dropzone-thumbnail-overlay' style={props.style}>
+  <div className='s3-dropzone-thumbnail-overlay s3-dropzone-spinner' style={{
+    ...props.style,
+    visibility: props.show ? 'visible': 'hidden'
+  }}>
     <div className="sk-circle">
       <div className="sk-circle1 sk-child"></div>
       <div className="sk-circle2 sk-child"></div>
@@ -19,6 +22,8 @@ const SpinnerComponent = props => (
   </div>
 )
 
-SpinnerComponent.defaultProps = {}
+SpinnerComponent.defaultProps = {
+  show: false
+}
 
 export default SpinnerComponent
