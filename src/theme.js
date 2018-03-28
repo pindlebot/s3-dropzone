@@ -26,5 +26,8 @@ export const classes = {
   uploadIcon: 's3-dropzone-upload-icon',
   svgIcon: 's3-dropzone-svg-icon',
   image: 's3-dropzone-thumbnail-img',
-  hidden: 's3-dropzone-hidden'
+  hidden: 's3-dropzone-hidden',
+  modal: 's3-dropzone-modal',
+  modalWrapper: 's3-dropzone-modal-wrapper',
+  modalOverlay: 's3-dropzone-modal-overlay'
 }

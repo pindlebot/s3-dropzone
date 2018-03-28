@@ -6,6 +6,7 @@ import Dropzone from './components/BaseDropzone';
 import Uploads from './components/Uploads'
 import * as theme from './theme'
 import createS3 from './s3'
+import Modal from './components/Modal'
 
 class S3Dropzone extends React.Component {
   constructor (props) {
@@ -15,7 +16,8 @@ class S3Dropzone extends React.Component {
       uploads: [],
       error: [],
       drag: false,
-      view: undefined
+      view: undefined,
+      modalOpen: true
     }
 
     this.s3 = createS3(props)
@@ -36,6 +38,8 @@ class S3Dropzone extends React.Component {
   onWindowClick = () => {
     if (this.state.view) {
       this.setState({ view: undefined })
+    } else {
+      this.setState({ modalOpen: false })
     }
   }
 
@@ -124,7 +128,8 @@ class S3Dropzone extends React.Component {
       onClick,
       ...rest
     } = this.props
-    const { loading } = this.state
+    const { loading, modalOpen } = this.state
+    if (!modalOpen) return false
     const dropzoneContentStyles = {
       ...theme.content
     }
@@ -135,22 +140,24 @@ class S3Dropzone extends React.Component {
       return this.renderUploads()
     }
     return (
-      <Dropzone
-        {...rest}
-        onDragEnter={this.onDragStart}
-        onDragLeave={this.onDragEnd}
-        className={this.state.drag ? 'drag' : undefined}
-        draggable='true'
-        theme={theme}
-        fileReaderOnLoad={this.fileReaderOnLoad}
-        onUploadFinish={this.onUploadFinish}
-        >
-        <div
-          className='s3-dropzone-content'
-          style={dropzoneContentStyles}>
-          {this.renderUploads()}
-        </div>
-      </Dropzone>
+      <Modal {...this.props}>
+        <Dropzone
+          {...rest}
+          onDragEnter={this.onDragStart}
+          onDragLeave={this.onDragEnd}
+          className={this.state.drag ? 'drag' : undefined}
+          draggable='true'
+          theme={theme}
+          fileReaderOnLoad={this.fileReaderOnLoad}
+          onUploadFinish={this.onUploadFinish}
+          >
+          <div
+            className='s3-dropzone-content'
+            style={dropzoneContentStyles}>
+            {this.renderUploads()}
+          </div>
+        </Dropzone>
+      </Modal>
     )
   }
 }

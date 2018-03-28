@@ -13,9 +13,11 @@ function Uploads(props) {
   let uploads = props.uploads
   if (view) {
     uploadsTheme.gridTemplateColumns = '1fr'
+    uploadsTheme.gridAutoRows = 'auto'
     uploads = [view]
   } else {
     uploadsTheme.gridTemplateColumns = '1fr 1fr 1fr'
+    uploadsTheme.gridAutoRows = 'minmax(150px, 50%)'
   }
   
   return (
