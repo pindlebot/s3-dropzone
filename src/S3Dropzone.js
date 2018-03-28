@@ -4,7 +4,7 @@ import Button from './components/Button'
 import SpinnerComponent from './components/SpinnerComponent'
 import Dropzone from './components/BaseDropzone';
 import Uploads from './components/Uploads'
-import theme from './theme'
+import * as theme from './theme'
 import createS3 from './s3'
 
 class S3Dropzone extends React.Component {
@@ -12,7 +12,6 @@ class S3Dropzone extends React.Component {
     super(props)
 
     this.state = {
-      loading: false,
       uploads: [],
       error: [],
       drag: false,
@@ -71,12 +70,13 @@ class S3Dropzone extends React.Component {
       case 'close':
         this.setState({ view: undefined })
         break
+      case 'insert':
       default:
     }
     this.props.onClick(evt, type, upload)
   }
 
-  onAttachmentMount = (previews) => {
+  fileReaderOnLoad = (previews) => {
     const uploads = previews.concat([...this.state.uploads])
     this.setState({ uploads, drag: false }, () => {
       this.props.onDrop(previews)
@@ -142,7 +142,7 @@ class S3Dropzone extends React.Component {
         className={this.state.drag ? 'drag' : undefined}
         draggable='true'
         theme={theme}
-        onAttachmentMount={this.onAttachmentMount}
+        fileReaderOnLoad={this.fileReaderOnLoad}
         onUploadFinish={this.onUploadFinish}
         >
         <div
@@ -158,7 +158,8 @@ class S3Dropzone extends React.Component {
 S3Dropzone.defaultProps = {
   done: () => {},
   onDrop: () => {},
-  theme: theme,
+  theme: theme.keys,
+  classes: theme.classes,
   onClick: () => {}
 }
 

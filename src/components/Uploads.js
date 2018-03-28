@@ -6,7 +6,8 @@ import Button from './Button'
 function Uploads(props) {
   const { 
     drag,
-    view
+    view,
+    classes,
   } = props
   let uploadsTheme = props.theme.uploads
   let uploads = props.uploads
@@ -15,12 +16,11 @@ function Uploads(props) {
     uploads = [view]
   } else {
     uploadsTheme.gridTemplateColumns = '1fr 1fr 1fr'
-    //uploadsTheme.gridTemplateRows = 'repeat(2, calc(50% - 10px))'
   }
   
   return (
     <div
-      className='s3-dropzone-uploads'
+      className={classes.uploads}
       style={{
         ...uploadsTheme,
         opacity: drag ? 0.5 : 1.0
@@ -36,8 +36,8 @@ function Uploads(props) {
         />)
       }
     )}
-    {!view && <div className='s3-dropzone-button-container'>
-      <Button theme={props.theme} />
+    {!view && <div className={classes.buttonContainer}>
+      <Button theme={props.theme} classes={classes} />
     </div>}
     </div>
   )

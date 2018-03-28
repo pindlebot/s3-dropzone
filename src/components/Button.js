@@ -2,8 +2,10 @@ import React from 'react'
 import UploadIcon from './icons/Upload'
 
 const Button = props => (
-  <button style={props.theme.button} className='s3-dropzone-button'>
-    <UploadIcon />
+  <button
+    style={props.theme.button}
+    className={props.classes.button}>
+    <UploadIcon classes={props.classes} />
     {props.children}
   </button>
 )

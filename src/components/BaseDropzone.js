@@ -10,7 +10,7 @@ class BaseDropzone extends React.Component {
     this.s3 = createS3(props)
   }
 
-  getPreview = async (files) => {
+  loadPreviews = async (files) => {
     const readAsDataURL = (file) => new Promise((resolve, reject) => {
       let reader  = new FileReader()
 
@@ -24,15 +24,17 @@ class BaseDropzone extends React.Component {
       }
     })
 
-    const previews = await Promise.all(files.map(file => readAsDataURL(file)))
-    this.props.onAttachmentMount(previews)
+    const previews = await Promise.all(
+      files.map(file => readAsDataURL(file))
+    )
+    this.props.fileReaderOnLoad(previews)
   }
 
   createPresignedPost = (params) => new Promise((resolve, reject) => {
     if (!params.Bucket) {
       params.Bucket = this.props.bucketName
     }
-    console.log({ params })
+
     this.s3.createPresignedPost(params, (err, data) => {
       if (err) console.error(err)
       resolve(data)
@@ -40,7 +42,7 @@ class BaseDropzone extends React.Component {
   })
 
   onDrop = async (files) => {
-    await this.getPreview(files)
+    await this.loadPreviews(files)
     let error = []
     let uploads = []
     for (let file of files) {
@@ -74,23 +76,21 @@ class BaseDropzone extends React.Component {
       done,
       onDrop,
       requestParams,
-      getPayload,
       theme,
       onUploadFinish,
-      onAttachmentMount,
+      fileReaderOnLoad,
       region,
       identityPoolId,
       bucketName,
       className: classNameProp,
+      classes,
       interceptor,
       ...rest
     } = this.props
-    console.log(this.props)
-    const classNames = ['s3-dropzone']
+    const classNames = [classes.dropzone]
     if (classNameProp) {
       classNames.push(classNameProp)
     }
-    console.log(this.s3)
     return (
       <ReactDropzone 
        className={classNames.join(' ')} 

@@ -97,7 +97,6 @@
   grid-column-start: 1;
   grid-column-end: 4;
   display: flex;
-  /* flex-basis: '20%'; */
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -139,7 +138,6 @@
   grid-template-columns: 1fr 1fr 1fr;
   overflow: scroll;
   grid-gap: 10px 10px;
-  /* flex-basis: 80%; */
 }
 
 .s3-dropzone-upload-icon {

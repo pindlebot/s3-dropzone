@@ -3,12 +3,13 @@ import Spinner from './SpinnerComponent'
 import DeleteIcon from './icons/Delete'
 import PageViewIcon from './icons/PageView'
 import CloseIcon from './icons/Close'
+import AddIcon from './icons/Add'
 
 const IconButton = props => (
   <div style={{
     margin: '5px',
   }}
-    className='s3-dropzone-thumbnail-overlay-icon'
+    className={props.classes.thumbnailOverlayIcon}
     onClick={evt => props.onClick(evt, props.name, props.index)}
   >
     {props.children}
@@ -16,12 +17,13 @@ const IconButton = props => (
 )
 
 const ThumbnailOverlay = props => {
+  const { classes } = props
   const styles = props.theme.thumbnailOverlay
   if (props.loading) {
     return (
       <div
         style={styles}
-        className='s3-dropzone-thumbnail-overlay'
+        className={classes.thumbnailOverlay}
       >
         <Spinner
           theme={props.theme}
@@ -33,27 +35,37 @@ const ThumbnailOverlay = props => {
   return (
     <div
       style={styles}
-      className='s3-dropzone-thumbnail-overlay s3-dropzone-hidden'
+      className={[classes.thumbnailOverlay, classes.hidden].join(' ')}
     >
       {props.view ?
       <IconButton 
+        {...props}
         onClick={props.onClick}
         index={props.index}
         name='close'>
-        <CloseIcon />
+        <CloseIcon classes={classes} />
       </IconButton> :
       <React.Fragment>
         <IconButton 
-          onClick={props.onClick}
-          index={props.index}
-          name='view'>
-          <PageViewIcon />
-        </IconButton>
-        <IconButton 
+         {...props}
           onClick={props.onClick}
           index={props.index}
           name='delete'>
-          <DeleteIcon />
+          <DeleteIcon classes={classes} />
+        </IconButton>
+        <IconButton 
+         {...props}
+          onClick={props.onClick}
+          index={props.index}
+          name='view'>
+          <PageViewIcon classes={classes} />
+        </IconButton>
+        <IconButton
+          {...props}
+          onClick={props.onClick}
+          index={props.index}
+          name='insert'>
+          <AddIcon classes={classes} />
         </IconButton>
       </React.Fragment>}
     </div>
@@ -92,19 +104,18 @@ class Thumbnail extends React.Component {
   render () {
     const imageStyles = {...this.props.theme.img}
     const loading = this.state.loading || this.props.loading
-    const { view } = this.props
-    let imageClassNames = ['s3-dropzone-thumbnail-img']
+    const { view, classes } = this.props
+    let imageClassNames = [classes.image]
     if (loading) {
       imageStyles.visibility = 'hidden'
     } else if (!view) {
       imageClassNames.push('s3-dropzone-thumbnail-blur')
     }
-    console.log({ loading })
     return (
       <figure 
         style={this.props.theme.figure}
         onClick={this.preventBubbles}
-        className='s3-dropzone-thumbnail'
+        className={classes.thumbnail}
       >
         <img
           {...this.props.img} 
@@ -126,6 +137,7 @@ class Thumbnail extends React.Component {
           index={this.props.index}
           theme={this.props.theme}
           view={this.props.view}
+          classes={this.props.classes}
         />
       </figure>
     )
