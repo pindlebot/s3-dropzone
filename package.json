@@ -8,17 +8,17 @@
   "license": "MIT",
   "scripts": {
     "dev": "yarn run clean && parcel example/index.html",
-    "build": "yarn run clean && babel src -d lib",
+    "build": "yarn run clean && babel src -d lib --copy-files",
     "build:example": "yarn run clean && NODE_ENV=production parcel build example/index.html --no-minify --public-url / --no-cache",
     "start": "NODE_ENV=production pushstate-server dist",
     "clean": "rimraf dist && rimraf .cache && rimraf lib"
   },
   "dependencies": {
-    "pushstate-server": "^3.0.1",
     "react-dropzone": "^4.2.9",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
+    "pushstate-server": "^3.0.1",
     "aws-sdk": "^2.213.1",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
