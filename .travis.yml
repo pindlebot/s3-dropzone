@@ -1,12 +1,14 @@
 language: node_js
 node_js:
 - 9
-- 8
 branches:
   only:
   - master
 install:
 - yarn
+before_script:
+- yarn run build
+- yarn run npm-patch
 script:
 - yarn run build:example
 after_success: 
@@ -17,4 +19,7 @@ deploy:
   api_key:
     secure: "$HEROKU_KEY"
   app: "$HEROKU_APP"
-  run:
+  run: 
+env:
+  matrix:
+    secure: Uperf7SBNTUtyqdbhhtRbpV2yc7C/8YZIooQy+p/HIk/wzmGIYk0nL9qCMflVGh7t0DwxodwkDPEegjoJCzJS1v/5zfE2rt5QPXdY2e0K09/VzWaYRW2BWVVhVSY3H/ucSvdi3DALHOg6JUI4Gf5GNzhd03IAqNvl2YIGXOiU2+wFv/pgaGQw9eIZXz0MiRplCtAmTci3e6xgf2dtm/k9+4prk17NkJP222OD+7KgNZXTomZOZ6uc8o5CHA/qsHGfmKNXJx7+bwiynQS72yAAuTAXdRXyokDB58WTa8nI88U48EYpFr2Oc2q5Yvr5zhqh/BCB/5JHMf8yIUqT58QF6hMl+ZoJmTf3gshz8wh3Mp8WBkPNihjgwp/S6ImKuuPAfGQ9c0HYdEzRFSQJ2tsEexGehF1gU2skTAPocT27QP4Mcm60ERLG770wShQDrtUuxoLM2Yd7odbSch58OoOSrwqlW6SbIl8n6LwPMmSNMDjnAKTjC3J6quSt3TMl64UcIQOzKOKk6ar84Al9fC+ukovdd38SEkMZKXjGNhU5dL4zC0x8DeL8iQ3WP7DoRv8+nTHuMoHSHlh677OLqoF5w0owBkUI9lHLVLmfUIa+DYX5JpF727T68dWJUJbjXxZ29cAlk/FZvrxWNxizAWywWclHnaLhM/rmymxl7rMvW8=

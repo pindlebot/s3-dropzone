@@ -1,15 +1,17 @@
 {
   "name": "s3-dropzone",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "lib/index.js",
   "engines": {
     "node": "9.x"
   },
   "license": "MIT",
   "scripts": {
+    "npm-patch": "node_modules/.bin/npm-patch",
     "dev": "parcel example/index.html",
     "build": "babel src -d lib --copy-files",
     "build:example": "yarn run clean && NODE_ENV=production parcel build example/index.html --no-minify --public-url / --no-cache",
+    "prestart": "yarn add pushstate-server",
     "start": "NODE_ENV=production pushstate-server dist",
     "clean": "rimraf dist && rimraf .cache && rimraf lib"
   },
@@ -19,6 +21,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
+    "npm-patch": "^0.0.38",
     "aws-sdk": "^2.213.1",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
