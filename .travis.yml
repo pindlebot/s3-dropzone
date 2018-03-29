@@ -9,6 +9,7 @@ install:
 before_script:
 - yarn run build
 - yarn run npm-patch
+- rm .npmrc
 script:
 - yarn run build:example
 after_success: 
