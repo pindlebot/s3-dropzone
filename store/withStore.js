@@ -31,7 +31,6 @@ export default Component =>
     }
 
     render () {
-      console.log('plant', this.state)
       return (<Component {...this.props} {...this.state} store={Wrapper.store} />)
     }
   }

@@ -59,7 +59,7 @@ class S3Dropzone extends React.Component {
     const { bucketName } = this.props
     return this.s3.deleteObject({
       Bucket: bucketName,
-      Key: upload.key
+      Key: upload.key || upload.id
     }).promise()
   }
 
