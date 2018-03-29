@@ -3332,9 +3332,9 @@ normalize-url@^2.0.1:
     query-string "^5.0.1"
     sort-keys "^2.0.0"
 
-npm-patch@^0.0.38:
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/npm-patch/-/npm-patch-0.0.38.tgz#45a04031a01bdeb325f456a029aa608471376f3f"
+npm-patch@^0.0.39:
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/npm-patch/-/npm-patch-0.0.39.tgz#308d34ecfe4577d9f7767bbd8e8e7b263275a72b"
   dependencies:
     chalk "^2.3.0"
     dotenv "^5.0.0"
