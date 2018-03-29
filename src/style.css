@@ -1,12 +1,11 @@
 .s3-dropzone {
   width: 100%;
   height: 100%;
-  padding: 4%;
+  padding: 5% 0 5% 0;
   box-sizing: border-box;
-  box-shadow: inset 0 0 1px #ddd, 0 2px 4px #e6e6e6;
   transition: all 0.2s ease-in-out;
   background-color: #fff;
-  border-radius: 12px;
+  border-radius: 6px;
 }
 
 .s3-dropzone.drag {
@@ -29,7 +28,7 @@
   flex-direction: column;
   opacity: 1;
   transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+  /* box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12); */
 }
 
 .s3-dropzone-modal-wrapper {
@@ -52,14 +51,40 @@
   z-index: -1;
   position: fixed;
   will-change: opacity;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #B1B7D1;
   -webkit-tap-highlight-color: transparent;
 }
 
 .s3-dropzone-thumbnail {
   margin: 0;
   position: relative;
+  overflow: hidden;
+  background: #4706e2;
+}
+
+.s3-dropzone-thumbnail-loading {
   background-image: linear-gradient(to right, #434343 0%, black 100%);
+}
+
+.s3-dropzone-thumbnail-error {
+  background: #F7F8FA;
+}
+
+.s3-dropzone-blur {
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
+  animation: blurDelay 1s 0s 1 ease-out normal; 
+}
+
+.s3-dropzone-thumbnail-loading .s3-dropzone-thumbnail-img,
+.s3-dropzone-thumbnail-error .s3-dropzone-thumbnail-img {
+  visibility: hidden;
+}
+
+.s3-dropzone-thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
 }
 
 .s3-dropzone-thumbnail-overlay {
@@ -76,25 +101,23 @@
   align-items: center;
   flex-direction: row;
   justify-content: center;
+  visibility: visible;
 }
 
 .s3-dropzone-hidden {
   visibility: hidden;
 }
 
-.s3-dropzone-thumbnail:hover .s3-dropzone-thumbnail-overlay {
-  visibility: visible !important;  
-}
-
 .s3-dropzone-thumbnail:hover .s3-dropzone-thumbnail-img {
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
   filter: grayscale(50%) brightness(50%);
+  /* filter: opacity(50%); */
 }
 
 .s3-dropzone-thumbnail-overlay-icon {
   padding: 2px;
   box-sizing: border-box;
-  opacity: 0.6;
+  opacity: 0.9;
   border: 0.5px solid transparent;
 }
 
@@ -104,9 +127,13 @@
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-.s3-dropzone-thumbnail-blur {
-  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
-  animation: blurDelay 1s 0s 1 ease-out normal; 
+.s3-dropzone-thumbnail-error .s3-dropzone-svg-icon {
+  fill: #9B9FB5;
+}
+
+.s3-dropzone-thumbnail-error .s3-dropzone-thumbnail-overlay-icon:hover {
+  border: 0.5px solid #9B9FB5;
+  background-color: transparent;
 }
 
 @keyframes blurDelay {
@@ -118,27 +145,47 @@
   }
 }
 
-.s3-dropzone-thumbnail-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .s3-dropzone-content {
   width: 100%;
   height: 100%;
-  border: 3px dashed #ddd;
-  padding: 5%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .s3-dropzone-button-container {
-  grid-column-start: 1;
-  grid-column-end: 4;
+  position: relative;
+  z-index: 5;
+  grid-column-start: 2;
+  grid-column-end: 5;
+}
+
+.s3-dropzone-button-container-inner {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #F7F8FA;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #B1B7D1;
+  position: relative;
+  border-radius: 2px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.s3-dropzone-button-container:before {
+  z-index: 1;
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  height: 100%;
+  width: 100%;
+  background: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" version="1.1"><defs><pattern id="Pattern2" patternUnits="userSpaceOnUse" width="5" height="5"><path d="M 0,5 l 5,-5 M -1,1 l 2.5,-2.5 M 4,6 l 2.5,-2.5" stroke-width="1" shape-rendering="auto" stroke="#B1B7D1" stroke-linecap="square"></path></pattern></defs><rect fill="url(#Pattern2)" x="0" y="0" width="100" height="100"/></svg>');
 }
 
 .s3-dropzone-button {
@@ -153,9 +200,9 @@
   display: inline-flex;
   position: relative;
   font-size: 16px;
-  box-shadow: 0 3px 5px 2px rgba(255, 105, 135, .30);
+  box-shadow: 0 3px 5px 2px rgb(71, 6, 226, 0.3);
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+  background-color: #4706e2;
   user-select: none;
   line-height: .1em;
   font-weight: 500;
@@ -165,7 +212,6 @@
   text-transform: uppercase;
   justify-content: space-around;
   text-decoration: none;
-  background-color: transparent;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
@@ -174,10 +220,10 @@
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-rows: minmax(150px, 50%);
-  overflow: scroll;
-  grid-gap: 10px 10px;
+  grid-template-columns: 0.1fr 1fr 1fr 1fr 0.1fr;
+  grid-auto-rows: minmax(150px, 100%);
+  /* overflow: scroll; */
+  grid-gap: 15px 15px;
 }
 
 .s3-dropzone-upload-icon {

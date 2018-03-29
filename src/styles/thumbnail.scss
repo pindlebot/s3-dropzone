@@ -1,0 +1,115 @@
+.s3-dropzone-thumbnail {
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  width: 100%;
+  height: 100%;
+}
+
+.s3-dropzone-thumbnail:nth-of-type(1) {
+  grid-column-start: 2;
+}
+.s3-dropzone-thumbnail:nth-of-type(2) {
+  grid-column-start: 3;
+}
+.s3-dropzone-thumbnail:nth-of-type(3) {
+  grid-column-start: 4;
+}
+.s3-dropzone-thumbnail:nth-of-type(4) {
+  grid-column-start: 2;
+}
+.s3-dropzone-thumbnail:nth-of-type(5) {
+  grid-column-start: 3;
+}
+.s3-dropzone-thumbnail:nth-of-type(6) {
+  grid-column-start: 4;
+}
+
+.s3-dropzone-thumbnail-loading {
+  background-image: linear-gradient(to right, #434343 0%, black 100%);
+}
+
+.s3-dropzone-thumbnail-error {
+  background: #F7F8FA;
+}
+
+.s3-dropzone-thumbnail-loading .s3-dropzone-thumbnail-img,
+.s3-dropzone-thumbnail-error .s3-dropzone-thumbnail-img {
+  visibility: hidden;
+}
+
+.s3-dropzone-thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+}
+
+.s3-dropzone-thumbnail-overlay {
+  top: 0;
+  left: 0;
+  right: 0;
+  color: #fff;
+  width: 100%;
+  bottom: 0;
+  display: flex;
+  padding: 5%;
+  position: absolute;
+  box-sizing: border-box;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  visibility: visible;
+}
+
+.s3-dropzone-thumbnail:hover .s3-dropzone-thumbnail-img {
+  filter: grayscale(50%) brightness(50%);
+}
+
+.s3-dropzone-thumbnail-overlay-icon {
+  padding: 2px;
+  box-sizing: border-box;
+  opacity: 0.9;
+  border: 0.5px solid transparent;
+}
+
+.s3-dropzone-thumbnail-overlay-icon:hover {
+  opacity: 1;
+  border: 0.5px solid rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.s3-dropzone-thumbnail-error .s3-dropzone-svg-icon {
+  fill: #9B9FB5;
+}
+
+.s3-dropzone-thumbnail-error .s3-dropzone-thumbnail-overlay-icon:hover {
+  border: 0.5px solid #9B9FB5;
+  background-color: transparent;
+}
+
+.s3-dropzone-blur {
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
+  animation: blurDelay 1s 0s 1 ease-out normal; 
+}
+
+@keyframes blurDelay {
+  from {
+    filter: blur(10px)
+  }
+  to {
+    filter: blur(0px)
+  }
+}
+
+.s3-dropzone-upload-icon {
+  fill: #fff;
+  width: 32px;
+  height: 32px;
+}
+
+.s3-dropzone-svg-icon {
+  color: inherit;
+  display: block;
+}

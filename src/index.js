@@ -1,7 +1,7 @@
 import S3Dropzone from './S3Dropzone'
 import Thumbnail from './components/Thumbnail'
 import Button from './components/Button'
-import SpinnerComponent from './components/SpinnerComponent'
+import SpinnerComponent from './components/Thumbnail/SpinnerComponent'
 import BaseDropzone from './components/BaseDropzone'
 import registerServiceWorker from './registerServiceWorker'
 

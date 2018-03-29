@@ -36,7 +36,7 @@ class BaseDropzone extends React.Component {
     }
 
     this.s3.createPresignedPost(params, (err, data) => {
-      if (err) console.error(err)
+      if (err) reject(err)
       resolve(data)
     })
   })
@@ -47,7 +47,7 @@ class BaseDropzone extends React.Component {
     let uploads = []
     for (let file of files) {
       let { type } = file
-      let params = this.props.interceptor(file)
+      let params = this.props.tap(file)
       let payload = await this.createPresignedPost(
         params
       )
@@ -84,7 +84,7 @@ class BaseDropzone extends React.Component {
       bucketName,
       className: classNameProp,
       classes,
-      interceptor,
+      tap,
       ...rest
     } = this.props
     const classNames = [classes.dropzone]
@@ -107,7 +107,7 @@ BaseDropzone.defaultProps = {
   onDrop: () => {},
   done: () => {},
   region: 'us-east-1',
-  interceptor: file => ({
+  tap: file => ({
     Fields: {
       key: file.name,
       'Content-Type': file.type,

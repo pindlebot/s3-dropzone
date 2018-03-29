@@ -8,6 +8,6 @@ const defaultUploads = [
 export default {
   bucketName: 's3-dropzone-example',
   identityPoolId: 'us-east-1:ec98f845-271e-411b-950d-5530d96e7d94',
-  uploads: defaultUploads,
+  uploads: [],
   localStorageKey: '__uploads__'
 }

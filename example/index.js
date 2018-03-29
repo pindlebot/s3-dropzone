@@ -2,7 +2,8 @@ import React from 'react'
 import { render } from 'react-dom'
 import { S3Dropzone } from '../src'
 import 'whatwg-fetch'
-import '../src/style.css'
+//import '../src/style.css'
+import '../src/styles/main.scss'
 import config from './config'
 import * as worker from '../src/registerServiceWorker'
 
@@ -34,12 +35,6 @@ class App extends React.Component {
   render () {
     
     return (
-      <div 
-        style={{
-          maxWidth: '600px',
-          margin: '10vh auto',
-          height: '500px'
-        }}>
         <S3Dropzone
           region='us-east-1'
           identityPoolId={config.identityPoolId}
@@ -55,7 +50,7 @@ class App extends React.Component {
               JSON.stringify(uploads)
             )
           }}
-          interceptor={file => {
+          tap={file => {
             let uploads = [...this.state.uploads]
             let key = `static/${file.name}`
             let src = `https://s3.amazonaws.com/${config.bucketName}/${key}`
@@ -72,7 +67,6 @@ class App extends React.Component {
             }
           }}
         />
-      </div>
     )
   }
 }

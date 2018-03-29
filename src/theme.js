@@ -17,6 +17,7 @@ export const keys = {
 export const classes = {
   dropzone: 's3-dropzone',
   uploads: 's3-dropzone-uploads',
+  grid: 's3-dropzone-grid',
   thumbnail: 's3-dropzone-thumbnail',
   thumbnailOverlay: 's3-dropzone-thumbnail-overlay',
   thumbnailOverlayIcon: 's3-dropzone-thumbnail-overlay-icon',

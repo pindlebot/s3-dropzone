@@ -1,9 +1,8 @@
 import React from 'react'
 import Thumbnail from './components/Thumbnail'
 import Button from './components/Button'
-import SpinnerComponent from './components/SpinnerComponent'
 import Dropzone from './components/BaseDropzone';
-import Uploads from './components/Uploads'
+import Grid from './components/Grid'
 import * as theme from './theme'
 import createS3 from './s3'
 import Modal from './components/Modal'
@@ -17,7 +16,8 @@ class S3Dropzone extends React.Component {
       error: [],
       drag: false,
       view: undefined,
-      modalOpen: true
+      visible: true,
+      startIndex: 0
     }
 
     this.s3 = createS3(props)
@@ -35,26 +35,31 @@ class S3Dropzone extends React.Component {
     window.removeEventListener('click', this.onWindowClick);
   }
 
-  onWindowClick = () => {
+  onWindowClick = (evt) => {
     if (this.state.view) {
       this.setState({ view: undefined })
     } else {
-      this.setState({ modalOpen: false })
+      this.setState({ visible: false })
+      this.props.onClickAway(evt)
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.uploads) {
-      this.setState({ uploads: nextProps.uploads })
-    }
+      const visible = nextProps.hasOwnProperty('visible') 
+        ? visible
+        : this.state.visible
+      this.setState({ uploads: nextProps.uploads, visible })
+    } else if (nextProps.hasOwnProperty('visible')) {
+      this.setState({ visible: nextProps.visible })
+    } 
   }
 
   handleDelete = (upload) => {
-    console.log(this.state)
     const { bucketName } = this.props
     return this.s3.deleteObject({
       Bucket: bucketName,
-      Key: upload.key || upload.src.replace(`https://s3.amazonaws.com/${bucketName}/`, '') 
+      Key: upload.key
     }).promise()
   }
 
@@ -88,7 +93,6 @@ class S3Dropzone extends React.Component {
   }
 
   onUploadFinish = (error, uploads) => {
-    console.log({ error, uploads })
     this.setState({ 
       uploads: [...this.state.uploads]
         .map(u => ({ ...u, loading: false })),
@@ -102,19 +106,22 @@ class S3Dropzone extends React.Component {
     this.setState({ drag: true })
   }
 
-  onDragEnd = () => {
+  onDragEnd = (evt) => {
     this.setState({ drag: false })
   }
 
-  renderUploads = () => {
+  renderGrid = () => {
     return (
-      <Uploads 
-        {...this.props}
-        onClick={this.onClick}
-        uploads={this.state.uploads}
-        drag={this.state.drag}
-        view={this.state.view}
-      />
+        <React.Fragment>
+        <Grid 
+          {...this.props}
+          onClick={this.onClick}
+          uploads={this.state.uploads}
+          drag={this.state.drag}
+          view={this.state.view}
+          startIndex={this.state.startIndex}
+        />
+      </React.Fragment>
     )
   }
 
@@ -126,10 +133,11 @@ class S3Dropzone extends React.Component {
       uploads,
       theme,
       onClick,
+      onClickAway,
       ...rest
     } = this.props
-    const { loading, modalOpen } = this.state
-    if (!modalOpen) return false
+    const { loading, visible } = this.state
+    if (!visible) return false
     const dropzoneContentStyles = {
       ...theme.content
     }
@@ -137,7 +145,9 @@ class S3Dropzone extends React.Component {
       dropzoneContentStyles.border = 0;
     }
     if (this.state.view) {
-      return this.renderUploads()
+      return (
+        <Modal {...this.props}>{this.renderGrid()}</Modal>
+      )
     }
     return (
       <Modal {...this.props}>
@@ -154,7 +164,7 @@ class S3Dropzone extends React.Component {
           <div
             className='s3-dropzone-content'
             style={dropzoneContentStyles}>
-            {this.renderUploads()}
+            {this.renderGrid()}
           </div>
         </Dropzone>
       </Modal>
@@ -167,7 +177,8 @@ S3Dropzone.defaultProps = {
   onDrop: () => {},
   theme: theme.keys,
   classes: theme.classes,
-  onClick: () => {}
+  onClick: () => {},
+  onClickAway: () => {}
 }
 
 export default S3Dropzone
