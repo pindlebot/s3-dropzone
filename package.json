@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "parcel example/index.html",
-    "build": "yarn run clean && babel src -d lib --copy-files",
+    "build": "babel src -d lib --copy-files",
     "build:example": "yarn run clean && NODE_ENV=production parcel build example/index.html --no-minify --public-url / --no-cache",
     "start": "NODE_ENV=production pushstate-server dist",
     "clean": "rimraf dist && rimraf .cache && rimraf lib"
