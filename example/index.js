@@ -32,8 +32,16 @@ class App extends React.Component {
     console.log('done()', data)
   }
 
+  componentDidMount () {
+    if (!this.timer) {
+      //this.timer = setTimeout(() => {
+      //  this.setState({ uploads: [] })
+      //}, 3000)
+    }
+  }
+
   render () {
-    
+    console.log(this.state.uploads)
     return (
         <S3Dropzone
           region='us-east-1'
@@ -51,9 +59,9 @@ class App extends React.Component {
           }}
           tap={file => {
             let uploads = [...this.state.uploads]
-            let key = `static/${file.name}`
+            let key = `static/${Math.round(Date.now() / 1000)}-${file.name}`
             let src = `https://s3.amazonaws.com/${config.bucketName}/${key}`
-            uploads.unshift({ src, key })
+            uploads.unshift({ src, key, id: key })
             window.localStorage.setItem(
               config.localStorageKey,
               JSON.stringify(uploads)

@@ -6,28 +6,23 @@ import Grid from './components/Grid'
 import * as theme from './theme'
 import createS3 from './s3'
 import Modal from './components/Modal'
+import withStore from './store/withStore'
 
 class S3Dropzone extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      uploads: [],
       error: [],
       drag: false,
       view: undefined,
-      visible: true,
       startIndex: 0
     }
 
     this.s3 = createS3(props)
   }
 
-  componentDidMount = () => {    
-    if (this.props.uploads) {
-      this.setState({ uploads: this.props.uploads })
-    }
-
+  componentDidMount = () => {
     setTimeout(() => { window.addEventListener('click', this.onWindowClick) })
   }
 
@@ -39,39 +34,29 @@ class S3Dropzone extends React.Component {
     if (this.state.view) {
       this.setState({ view: undefined })
     } else {
-      this.setState({ visible: false })
+      this.props.store.update('visible', false)
       this.props.onClickAway(evt)
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.uploads) {
-      const visible = nextProps.hasOwnProperty('visible') 
-        ? visible
-        : this.state.visible
-      this.setState({ uploads: nextProps.uploads, visible })
-    } else if (nextProps.hasOwnProperty('visible')) {
-      this.setState({ visible: nextProps.visible })
-    } 
-  }
-
   handleDelete = (upload) => {
+    console.log('handleDelete', upload)
     const { bucketName } = this.props
     return this.s3.deleteObject({
       Bucket: bucketName,
-      Key: upload.key || upload.id
+      Key: upload.id || upload.key
     }).promise()
   }
 
   onClick = async (evt, type, index) => {
-    let upload = this.state.uploads[index]
+    let upload = {...this.props.uploads[index]}
     evt.preventDefault()
     switch (type) {
       case 'delete':
-        let uploads = [...this.state.uploads]
+        this.handleDelete(upload)
+        let uploads = [...this.props.uploads]
         uploads.splice(index, 1)
-        this.setState({ uploads })
-        await this.handleDelete(upload)
+        this.props.store.update('uploads', uploads)
         break
       case 'view':
         this.setState({ view: upload })
@@ -85,21 +70,22 @@ class S3Dropzone extends React.Component {
     this.props.onClick(evt, type, upload)
   }
 
-  fileReaderOnLoad = (previews) => {
-    const uploads = previews.concat([...this.state.uploads])
-    this.setState({ uploads, drag: false }, () => {
-      this.props.onDrop(previews)
+  fileReaderOnLoad = (preview) => {
+    console.log({ preview })
+    const uploads = [...this.props.uploads]
+    uploads.push(preview)
+    this.setState({ drag: false}, () => {
+      this.props.store.update('uploads', uploads)
+      this.props.onDrop(preview)
     })
   }
 
   onUploadFinish = (error, uploads) => {
-    this.setState({ 
-      uploads: [...this.state.uploads]
-        .map(u => ({ ...u, loading: false })),
-      error: error
-    }, () => {
-      this.props.done(error, uploads)
-    })
+    this.props.store.update('uploads',
+       [...this.props.uploads].map(u => ({ ...u, loading: false })
+      ),
+    )
+    this.props.done(error, uploads)
   }
 
   onDragStart = (evt) => {
@@ -116,7 +102,7 @@ class S3Dropzone extends React.Component {
         <Grid 
           {...this.props}
           onClick={this.onClick}
-          uploads={this.state.uploads}
+          uploads={this.props.uploads}
           drag={this.state.drag}
           view={this.state.view}
           startIndex={this.state.startIndex}
@@ -134,9 +120,11 @@ class S3Dropzone extends React.Component {
       theme,
       onClick,
       onClickAway,
+      store,
+      visible,
       ...rest
     } = this.props
-    const { loading, visible } = this.state
+    const { loading } = this.state
     if (!visible) return false
     const dropzoneContentStyles = {
       ...theme.content
@@ -149,6 +137,7 @@ class S3Dropzone extends React.Component {
         <Modal {...this.props}>{this.renderGrid()}</Modal>
       )
     }
+    console.log(this.props)
     return (
       <Modal {...this.props}>
         <Dropzone
@@ -181,4 +170,4 @@ S3Dropzone.defaultProps = {
   onClickAway: () => {}
 }
 
-export default S3Dropzone
+export default withStore(S3Dropzone)

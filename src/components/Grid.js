@@ -61,11 +61,15 @@ class Grid extends React.Component {
         </button>
         {uploads.map((upload, i) => {
           const { loading, ...rest } = upload
+          let key = upload.id || upload.key
           return (<Thumbnail
             loading={loading}
             index={i}
-            key={i}
-            img={rest}
+            key={key}
+            img={{
+              ...rest,
+              'data-s3-key': key
+            }}
             {...this.props}
           />)
         }

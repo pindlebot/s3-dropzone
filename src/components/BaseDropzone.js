@@ -10,12 +10,17 @@ class BaseDropzone extends React.Component {
     this.s3 = createS3(props)
   }
 
-  loadPreviews = async (files) => {
+  loadPreview = async (key, file) => {
     const readAsDataURL = (file) => new Promise((resolve, reject) => {
       let reader  = new FileReader()
 
       reader.addEventListener('load', function () {
-        resolve({ src: reader.result, loading: true })
+        resolve({ 
+          src: reader.result,
+          key: key,
+          id: key,
+          loading: true
+        })
       }, false)
 
 
@@ -24,10 +29,9 @@ class BaseDropzone extends React.Component {
       }
     })
 
-    const previews = await Promise.all(
-      files.map(file => readAsDataURL(file))
-    )
-    this.props.fileReaderOnLoad(previews)
+    const preview = await readAsDataURL(file)
+
+    this.props.fileReaderOnLoad(preview)
   }
 
   createPresignedPost = (params) => new Promise((resolve, reject) => {
@@ -42,12 +46,12 @@ class BaseDropzone extends React.Component {
   })
 
   onDrop = async (files) => {
-    await this.loadPreviews(files)
     let error = []
     let uploads = []
     for (let file of files) {
       let { type } = file
       let params = this.props.tap(file)
+      await this.loadPreview(params.Fields.key, file)
       let payload = await this.createPresignedPost(
         params
       )
@@ -62,7 +66,11 @@ class BaseDropzone extends React.Component {
           body: formData,
           ...this.props.requestParams
         })
-        uploads.push({ ...upload, key: params.Fields.key })
+        uploads.push({ 
+          ...upload,
+          id: params.Fields.key,
+          key: params.Fields.key
+        })
       } catch (err) {
         error.push(err)
       }
@@ -109,7 +117,7 @@ BaseDropzone.defaultProps = {
   region: 'us-east-1',
   tap: file => ({
     Fields: {
-      key: file.name,
+      key: `${Math.round(Date.now() / 1000)}-${file.name}`,
       'Content-Type': file.type,
     }
   })
