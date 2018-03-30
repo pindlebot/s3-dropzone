@@ -6,14 +6,13 @@ import Grid from './components/Grid'
 import * as theme from './theme'
 import createS3 from './s3'
 import Modal from './components/Modal'
-import withStore from './store/withStore'
+import subscriptions from 'react-subscriptions'
 
 class S3Dropzone extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      error: [],
       drag: false,
       view: undefined,
       startIndex: 0
@@ -40,7 +39,6 @@ class S3Dropzone extends React.Component {
   }
 
   handleDelete = (upload) => {
-    console.log('handleDelete', upload)
     const { bucketName } = this.props
     return this.s3.deleteObject({
       Bucket: bucketName,
@@ -53,7 +51,9 @@ class S3Dropzone extends React.Component {
     evt.preventDefault()
     switch (type) {
       case 'delete':
-        this.handleDelete(upload)
+        if (!upload.error) {
+          this.handleDelete(upload)
+        }
         let uploads = [...this.props.uploads]
         uploads.splice(index, 1)
         this.props.store.update('uploads', uploads)
@@ -71,7 +71,6 @@ class S3Dropzone extends React.Component {
   }
 
   fileReaderOnLoad = (preview) => {
-    console.log({ preview })
     const uploads = [...this.props.uploads]
     uploads.push(preview)
     this.setState({ drag: false}, () => {
@@ -98,16 +97,14 @@ class S3Dropzone extends React.Component {
 
   renderGrid = () => {
     return (
-        <React.Fragment>
-        <Grid 
-          {...this.props}
-          onClick={this.onClick}
-          uploads={this.props.uploads}
-          drag={this.state.drag}
-          view={this.state.view}
-          startIndex={this.state.startIndex}
-        />
-      </React.Fragment>
+      <Grid 
+        {...this.props}
+        onClick={this.onClick}
+        uploads={this.props.uploads}
+        drag={this.state.drag}
+        view={this.state.view}
+        startIndex={this.state.startIndex}
+      />
     )
   }
 
@@ -115,7 +112,6 @@ class S3Dropzone extends React.Component {
     const {
       thumbnailsContainer,
       done,
-      spinner,
       uploads,
       theme,
       onClick,
@@ -124,7 +120,7 @@ class S3Dropzone extends React.Component {
       visible,
       ...rest
     } = this.props
-    const { loading } = this.state
+
     if (!visible) return false
     const dropzoneContentStyles = {
       ...theme.content
@@ -137,7 +133,6 @@ class S3Dropzone extends React.Component {
         <Modal {...this.props}>{this.renderGrid()}</Modal>
       )
     }
-    console.log(this.props)
     return (
       <Modal {...this.props}>
         <Dropzone
@@ -162,6 +157,7 @@ class S3Dropzone extends React.Component {
 }
 
 S3Dropzone.defaultProps = {
+  visible: true,
   done: () => {},
   onDrop: () => {},
   theme: theme.keys,
@@ -170,4 +166,4 @@ S3Dropzone.defaultProps = {
   onClickAway: () => {}
 }
 
-export default withStore(S3Dropzone)
+export default subscriptions.withStore()(S3Dropzone)

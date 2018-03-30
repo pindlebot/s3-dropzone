@@ -1,6 +1,7 @@
 import React from 'react'
 import ThumbnailOverlay from './ThumbnailOverlay'
 import classNames from 'classnames'
+import { pick } from 'react-valid-attributes'
 
 function Image(props) {
   const className = classNames([
@@ -8,9 +9,10 @@ function Image(props) {
     props.className,
     ...props.classNames
   ])
+  const elementProps = pick(props, 'img')
   return (
       <img
-      {...props.img} 
+      {...elementProps} 
       style={props.style}
       className={className}
       onLoad={props.onLoad}
@@ -36,10 +38,18 @@ class Thumbnail extends React.Component {
     evt.stopPropagation()
   }
 
+  updateStore = (key, value) => {
+    let { index } = this.props
+    let uploads = [...this.props.store.get('uploads')]
+    uploads[index] = {
+      ...uploads[index],
+      [key]: value
+    }
+    this.props.store.update('uploads', uploads)
+  }
+
   render () {
-    const { error } = this.state
-    const loading = (this.state.loading || this.props.loading) && !error
-    const { view, classes } = this.props   
+    const { view, classes, error, loading } = this.props   
     const className = classNames(
       classes.thumbnail,
       loading 
@@ -67,23 +77,23 @@ class Thumbnail extends React.Component {
               : undefined
           }
           classes={this.props.classes}
-          img={{...this.props.img}}
           onLoad={(evt) => {
-            this.setState({ loading: false })
+            this.updateStore('loading', false)
           }}
           onError={(evt) => {
-            this.setState({ error: true })
+            this.updateStore('error', true)
           }}
+          {...this.props}
         />
         <ThumbnailOverlay
-          hover={this.state.hover}
+          error={error}
           loading={loading}
+          hover={this.state.hover}
           onClick={this.props.onClick}
           index={this.props.index}
           theme={this.props.theme}
           view={this.props.view}
           classes={this.props.classes}
-          error={this.state.error}
         />
       </figure>
     )

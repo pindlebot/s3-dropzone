@@ -55,7 +55,6 @@ const ThumbnailOverlay = props => {
     theme,
     view
   } = props
-  console.log(props)
   const styles = theme.thumbnailOverlay
   const className = classNames(
     classes.thumbnailOverlay

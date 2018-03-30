@@ -18,6 +18,8 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "react-dropzone": "^4.2.9",
+    "react-subscriptions": "^0.0.2",
+    "react-valid-attributes": "^0.0.1",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {

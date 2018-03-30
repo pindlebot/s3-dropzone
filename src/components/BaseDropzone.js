@@ -45,16 +45,34 @@ class BaseDropzone extends React.Component {
     })
   })
 
+  handleError = (index) => {
+    console.log('handleError')
+    const uploads = [...this.props.store.get('uploads')]
+    uploads[index] = {
+      ...uploads[index],
+      error: true
+    }
+    this.props.store.update('uploads', uploads)
+  }
+
   onDrop = async (files) => {
-    let error = []
+    let errors = []
     let uploads = []
-    for (let file of files) {
+    let index = 0
+    while (files.length > index) {
+      let file = files.shift()
       let { type } = file
       let params = this.props.tap(file)
       await this.loadPreview(params.Fields.key, file)
-      let payload = await this.createPresignedPost(
-        params
-      )
+      let payload
+      try {
+        payload = await this.createPresignedPost(
+          params
+        )
+      } catch(err) {
+        this.handleError(index)
+      }
+
       let formData = new window.FormData()
       for (let field in payload.fields) {
         formData.append(field, payload.fields[field])
@@ -72,11 +90,12 @@ class BaseDropzone extends React.Component {
           key: params.Fields.key
         })
       } catch (err) {
-        error.push(err)
+        errors.push({ error, key: params.Fields.key })
+        this.handleError(index)
       }
+      index++
     }
-    if (!error.length) error = null
-    this.props.onUploadFinish(error, uploads)
+    this.props.onUploadFinish(errors, uploads)
   }
 
   render () {

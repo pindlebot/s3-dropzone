@@ -36,12 +36,7 @@ class Grid extends React.Component {
     let uploads = [...this.props.uploads]
       .slice(startIndex, startIndex + 6)
     if (view) {
-      //uploadsTheme.gridTemplateColumns = '1fr'
-      //uploadsTheme.gridAutoRows = 'auto'
       uploads = [view]
-    } else {
-      //uploadsTheme.gridTemplateColumns = '1fr 1fr 1fr'
-      //uploadsTheme.gridAutoRows = 'minmax(150px, 50%)'
     }
     
     return (
@@ -59,21 +54,12 @@ class Grid extends React.Component {
           >
           <KeyboardArrowLeft classes={this.props.classes} />
         </button>
-        {uploads.map((upload, i) => {
-          const { loading, ...rest } = upload
-          let key = upload.id || upload.key
-          return (<Thumbnail
-            loading={loading}
-            index={i}
-            key={key}
-            img={{
-              ...rest,
-              'data-s3-key': key
-            }}
-            {...this.props}
-          />)
-        }
-      )}
+        {uploads.map((upload, index) => <Thumbnail
+          index={index}
+          key={index}
+          {...upload}
+          {...this.props}
+        />)}
         <button
           className='after'
           onClick={this.onClickAfter}
