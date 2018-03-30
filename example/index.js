@@ -2,10 +2,8 @@ import React from 'react'
 import { render } from 'react-dom'
 import { S3Dropzone } from '../src'
 import 'whatwg-fetch'
-//import '../src/style.css'
 import '../src/styles/main.scss'
 import config from './config'
-import * as worker from '../src/registerServiceWorker'
 
 function getInitialState () {
   let uploads = config.uploads
@@ -81,6 +79,3 @@ render(
   <App />,
   document.getElementById('root')
 )
-
-
-// worker.register()
