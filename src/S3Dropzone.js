@@ -7,6 +7,7 @@ import * as theme from './theme'
 import createS3 from './s3'
 import Modal from './components/Modal'
 import subscriptions from 'react-subscriptions'
+import uniqBy from 'lodash.uniqby'
 
 class S3Dropzone extends React.Component {
   constructor (props) {
@@ -96,6 +97,7 @@ class S3Dropzone extends React.Component {
   }
 
   renderGrid = () => {
+    const uploads = uniqBy(this.props.uploads, upload => upload.id || upload.key)
     return (
       <Grid 
         {...this.props}
@@ -112,7 +114,6 @@ class S3Dropzone extends React.Component {
     const {
       thumbnailsContainer,
       done,
-      uploads,
       theme,
       onClick,
       onClickAway,
@@ -133,10 +134,16 @@ class S3Dropzone extends React.Component {
         <Modal {...this.props}>{this.renderGrid()}</Modal>
       )
     }
+    const uploads = uniqBy(
+      this.props.uploads,
+      upload => upload.id || upload.key
+    )
+
     return (
       <Modal {...this.props}>
         <Dropzone
           {...rest}
+          uploads={uploads}
           onDragEnter={this.onDragStart}
           onDragLeave={this.onDragEnd}
           className={this.state.drag ? 'drag' : undefined}
@@ -166,4 +173,12 @@ S3Dropzone.defaultProps = {
   onClickAway: () => {}
 }
 
-export default subscriptions.withStore()(S3Dropzone)
+const S3DropzoneWithUnique = props => {
+  const uploads = uniqBy(props.uploads, upload => upload.id || upload.key)
+  return <S3Dropzone {...props} uploads={uploads} />
+}
+
+export default subscriptions.withStore({
+  uploads: [],
+  visible: true
+})(S3DropzoneWithUnique)

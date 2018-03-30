@@ -17,8 +17,9 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "lodash.uniqby": "^4.7.0",
     "react-dropzone": "^4.2.9",
-    "react-subscriptions": "^0.0.2",
+    "react-subscriptions": "^0.0.4",
     "react-valid-attributes": "^0.0.1",
     "whatwg-fetch": "^2.0.3"
   },

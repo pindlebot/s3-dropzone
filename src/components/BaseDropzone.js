@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDropzone from 'react-dropzone'
 import createS3 from '../s3'
+import classNames from 'classnames'
 
 class BaseDropzone extends React.Component {
 
@@ -16,7 +17,7 @@ class BaseDropzone extends React.Component {
 
       reader.addEventListener('load', function () {
         resolve({ 
-          src: reader.result,
+          data: reader.result,
           key: key,
           id: key,
           loading: true
@@ -46,8 +47,7 @@ class BaseDropzone extends React.Component {
   })
 
   handleError = (index) => {
-    console.log('handleError')
-    const uploads = [...this.props.store.get('uploads')]
+    const uploads = [...this.props.uploads]
     uploads[index] = {
       ...uploads[index],
       error: true
@@ -84,7 +84,7 @@ class BaseDropzone extends React.Component {
           body: formData,
           ...this.props.requestParams
         })
-        uploads.push({ 
+        uploads.push({
           ...upload,
           id: params.Fields.key,
           key: params.Fields.key
@@ -112,15 +112,17 @@ class BaseDropzone extends React.Component {
       className: classNameProp,
       classes,
       tap,
+      uploads,
       ...rest
     } = this.props
-    const classNames = [classes.dropzone]
-    if (classNameProp) {
-      classNames.push(classNameProp)
-    }
+  
+    const className = classNames(
+      classes.dropzone,
+      classNameProp
+    )
     return (
       <ReactDropzone 
-       className={classNames.join(' ')} 
+       className={className} 
        onDrop={this.onDrop} 
        style={theme.dropzone}
        {...rest}

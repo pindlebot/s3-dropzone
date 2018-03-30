@@ -61,13 +61,6 @@ const ThumbnailOverlay = props => {
   )
   const isExpanded = !!view
   switch (true) {
-    case loading:
-      return (
-        <Spinner
-          theme={props.theme}
-          show={props.loading}
-        />
-      )
     case isExpanded:
       return (
         <IconButton 
@@ -92,6 +85,13 @@ const ThumbnailOverlay = props => {
         <ErrorIcon
           classes={classes}
           fill={'#555'}
+        />
+      )
+    case loading:
+      return (
+        <Spinner
+          theme={props.theme}
+          show={props.loading}
         />
       )
     default:

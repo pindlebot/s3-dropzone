@@ -17,6 +17,7 @@ function Image(props) {
       className={className}
       onLoad={props.onLoad}
       onError={props.onError}
+      src={props.data || props.src}
     />
   )
 }
@@ -49,13 +50,16 @@ class Thumbnail extends React.Component {
   }
 
   render () {
-    const { view, classes, error, loading } = this.props   
+    const { view, classes } = this.props   
+    const error = this.state.error || this.props.error
+    const loading = this.state.loading || this.props.loading
+    console.log({ error, loading })
     const className = classNames(
       classes.thumbnail,
-      loading 
-        ? 's3-dropzone-thumbnail-loading'
-        : error
-          ? 's3-dropzone-thumbnail-error'
+      error
+        ? 's3-dropzone-thumbnail-error'
+        : loading
+          ? 's3-dropzone-thumbnail-loading'
           : undefined
     )
     return (
@@ -78,10 +82,10 @@ class Thumbnail extends React.Component {
           }
           classes={this.props.classes}
           onLoad={(evt) => {
-            this.updateStore('loading', false)
+            this.setState({ loading: false })
           }}
           onError={(evt) => {
-            this.updateStore('error', true)
+            this.setState({ error: true })
           }}
           {...this.props}
         />

@@ -24,21 +24,12 @@ class App extends React.Component {
   }
 
   done = (err, data) => {
-    if (err) {
-    } 
-    console.log('done()', data)
-  }
-
-  componentDidMount () {
-    if (!this.timer) {
-      //this.timer = setTimeout(() => {
-      //  this.setState({ uploads: [] })
-      //}, 3000)
-    }
+    if (err) {}
+    console.log({ data })
+    // this.setState({ uploads: this.state.uploads.concat(data) })
   }
 
   render () {
-    console.log(this.state.uploads)
     return (
         <S3Dropzone
           region='us-east-1'
@@ -48,7 +39,7 @@ class App extends React.Component {
           bucketName={config.bucketName}
           onClick={(evt, type, upload) => {
             if (type !== 'delete') return
-            let uploads = [...this.state.uploads].filter(u => u.src !== upload.src)
+            let uploads = [...this.state.uploads].filter(u => u.id !== upload.id)
             window.localStorage.setItem(
               config.localStorageKey,
               JSON.stringify(uploads)
