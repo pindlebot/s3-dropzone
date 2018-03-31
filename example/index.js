@@ -18,6 +18,8 @@ function getInitialState () {
   return uploads
 }
 
+const toUrl = (key) => `https://s3.amazonaws.com/${config.bucketName}/${key}`
+
 class App extends React.Component {
   state = {
     uploads: getInitialState()
@@ -25,8 +27,16 @@ class App extends React.Component {
 
   done = (err, data) => {
     if (err) {}
-    console.log({ data })
-    // this.setState({ uploads: this.state.uploads.concat(data) })
+    let uploads = data.map(d => ({ 
+      ...d, src: toUrl(d.key) 
+    })).concat([...this.state.uploads])
+    this.setState({ uploads
+    }, () => {
+      window.localStorage.setItem(
+        config.localStorageKey,
+        JSON.stringify(uploads)
+      )
+    })
   }
 
   render () {
@@ -46,14 +56,7 @@ class App extends React.Component {
             )
           }}
           tap={file => {
-            let uploads = [...this.state.uploads]
             let key = `static/${Math.round(Date.now() / 1000)}-${file.name}`
-            let src = `https://s3.amazonaws.com/${config.bucketName}/${key}`
-            uploads.unshift({ src, key, id: key })
-            window.localStorage.setItem(
-              config.localStorageKey,
-              JSON.stringify(uploads)
-            )
             return {
               Fields: {
                 key: key,

@@ -30,8 +30,7 @@ Image.defaultProps = {
 class Thumbnail extends React.Component {
   state = {
     hover: false,
-    loading: true,
-    error: false
+    loading: true
   }
 
   preventBubbles = (evt) => {
@@ -41,7 +40,7 @@ class Thumbnail extends React.Component {
 
   updateStore = (key, value) => {
     let { index } = this.props
-    let uploads = [...this.props.store.get('uploads')]
+    let uploads = [...this.props.uploads]
     uploads[index] = {
       ...uploads[index],
       [key]: value
@@ -51,9 +50,8 @@ class Thumbnail extends React.Component {
 
   render () {
     const { view, classes } = this.props   
-    const error = this.state.error || this.props.error
-    const loading = this.state.loading || this.props.loading
-    console.log({ error, loading })
+    const error = this.state.error
+    const loading = this.state.loading
     const className = classNames(
       classes.thumbnail,
       error
@@ -85,7 +83,7 @@ class Thumbnail extends React.Component {
             this.setState({ loading: false })
           }}
           onError={(evt) => {
-            this.setState({ error: true })
+            this.updateStore('error', true)
           }}
           {...this.props}
         />
