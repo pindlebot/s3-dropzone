@@ -7,9 +7,10 @@
   },
   "license": "MIT",
   "scripts": {
+    "sass": "node-sass src/styles/main.scss --output node-sass src/styles.css", 
     "npm-patch": "node_modules/.bin/npm-patch",
     "dev": "parcel example/index.html",
-    "build": "babel src -d lib --copy-files",
+    "build": "yarn run sass && babel src -d lib --copy-files",
     "build:example": "NODE_ENV=production parcel build example/index.html --no-minify --public-url / --no-cache",
     "prestart": "yarn add pushstate-server",
     "start": "NODE_ENV=production pushstate-server dist",
