@@ -4,7 +4,7 @@ import Button from './components/Button'
 import Dropzone from './components/BaseDropzone';
 import Grid from './components/Grid'
 import * as theme from './theme'
-import createS3 from './s3'
+import createClient from './createClient'
 import Modal from './components/Modal'
 import { withStore } from 'react-subscriptions'
 import uniqBy from 'lodash.uniqby'
@@ -19,7 +19,7 @@ class S3Dropzone extends React.Component {
       startIndex: 0
     }
 
-    this.s3 = createS3(props)
+    this.client = createClient(props)
   }
 
   componentDidMount = () => {
@@ -53,7 +53,7 @@ class S3Dropzone extends React.Component {
     switch (type) {
       case 'delete':
         if (!upload.error) {
-          this.handleDelete(upload)
+          this.client.remove(upload.id || upload.key)
         }
         let uploads = [...this.props.uploads]
         uploads.splice(index, 1)
