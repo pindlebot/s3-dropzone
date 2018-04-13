@@ -52,7 +52,7 @@ class BaseDropzone extends React.Component {
       let file = files.shift()
       let { type } = file
       let params, { Fields: { key } } = this.props.tap(file)
-      let preview = await util.loadPreview(params.Fields.key, file)
+      let preview = await util.loadPreview(key, file)
       this.props.fileReaderOnLoad(preview)
       let payload
       try {
@@ -70,11 +70,11 @@ class BaseDropzone extends React.Component {
         )
         uploads.push({
           ...upload,
-          id: params.Fields.key,
-          key: params.Fields.key
+          id: key,
+          key: key
         })
       } catch (err) {
-        errors.push({ error, key: params.Fields.key })
+        errors.push({ error, key })
         this.handleError(index)
       }
       index++
