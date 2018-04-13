@@ -1,6 +1,6 @@
 {
   "name": "s3-dropzone",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "main": "lib/index.js",
   "engines": {
     "node": "9.x"
