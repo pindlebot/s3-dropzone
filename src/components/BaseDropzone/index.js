@@ -115,6 +115,7 @@ class BaseDropzone extends React.Component {
   }
 }
 
+
 BaseDropzone.defaultProps = {
   requestParams: {},
   onDrop: () => {},
