@@ -73,7 +73,7 @@ class BaseDropzone extends React.Component {
           id: key,
           key: key
         })
-      } catch (err) {
+      } catch (error) {
         errors.push({ error, key })
         this.handleError(index)
       }
