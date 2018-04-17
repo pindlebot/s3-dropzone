@@ -30,7 +30,8 @@ Image.defaultProps = {
 class Thumbnail extends React.Component {
   state = {
     hover: false,
-    loading: true
+    loading: true,
+    className: ''
   }
 
   preventBubbles = (evt) => {
@@ -73,14 +74,12 @@ class Thumbnail extends React.Component {
         }}
       >
         <Image
-          className={
-           !loading && !error && !view
-              ? 's3-dropzone-blur'
-              : undefined
-          }
+          className={this.state.className}
           classes={this.props.classes}
           onLoad={(evt) => {
-            this.setState({ loading: false })
+            if (this.state.loading) {
+              this.setState({ loading: false, className: 's3-dropzone-blur' })
+            }
           }}
           onError={(evt) => {
             this.updateStore('error', true)

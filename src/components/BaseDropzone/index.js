@@ -97,6 +97,7 @@ class BaseDropzone extends React.Component {
       classes,
       tap,
       uploads,
+      store,
       ...rest
     } = this.props
   

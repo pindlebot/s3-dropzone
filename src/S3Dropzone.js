@@ -146,7 +146,8 @@ class S3Dropzone extends React.Component {
           theme={theme}
           fileReaderOnLoad={this.fileReaderOnLoad}
           onUploadFinish={this.onUploadFinish}
-          >
+          store={store}
+        >
           <div
             className='s3-dropzone-content'
             style={dropzoneContentStyles}>
@@ -168,12 +169,12 @@ S3Dropzone.defaultProps = {
   onClickAway: () => {}
 }
 
-const S3DropzoneWithUnique = props => {
-  const uploads = uniqBy(props.uploads, upload => upload.id || upload.key)
-  console.log(props)
-  
-  return <S3Dropzone {...props} uploads={uploads} />
-}
+const S3DropzoneWithUnique = props => 
+  <S3Dropzone 
+    {...props}
+    uploads={
+      uniqBy(props.uploads, upload => upload.id || upload.key)
+    } />
 
 export default withStore({
   uploads: [],
