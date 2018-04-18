@@ -16,7 +16,8 @@ class S3Dropzone extends React.Component {
     this.state = {
       drag: false,
       view: undefined,
-      startIndex: 0
+      minimize: false,
+      modal: undefined
     }
 
     this.client = createClient(props)
@@ -34,8 +35,8 @@ class S3Dropzone extends React.Component {
     if (this.state.view) {
       this.setState({ view: undefined })
     } else {
-      this.props.store.update('visible', false)
-      this.props.onClickAway(evt)
+      // this.props.store.update('visible', false)
+      // this.props.onClickAway(evt)
     }
   }
 
@@ -60,6 +61,7 @@ class S3Dropzone extends React.Component {
         this.props.store.update('uploads', uploads)
         break
       case 'view':
+        console.log(evt.target.parentNode.offsetParent)
         this.setState({ view: upload })
         break
       case 'close':
@@ -104,9 +106,23 @@ class S3Dropzone extends React.Component {
         uploads={this.props.uploads}
         drag={this.state.drag}
         view={this.state.view}
-        startIndex={this.state.startIndex}
+        modal={this.state.modal}
       />
     )
+  }
+
+  minimize = () => {
+    this.setState({
+      modal: this.state.modal === 'minimized'
+        ? undefined : 'minimized'
+    })
+  }
+
+  maximize = () => {
+    this.setState({
+      modal: this.state.modal === 'maximized'
+        ? undefined : 'maximized'
+    })
   }
 
   render() {
@@ -131,11 +147,23 @@ class S3Dropzone extends React.Component {
     }
     if (this.state.view) {
       return (
-        <Modal {...this.props}>{this.renderGrid()}</Modal>
+        <Modal
+          {...this.props}
+          modal={this.state.modal}
+          minimize={this.minimize}
+          maximize={this.maximize}
+        >
+          <div className='s3-dropzone'>{this.renderGrid()}</div>
+        </Modal>
       )
     }
     return (
-      <Modal {...this.props}>
+      <Modal
+        {...this.props}
+        modal={this.state.modal}
+        minimize={this.minimize}
+        maximize={this.maximize}
+      >
         <Dropzone
           {...rest}
           uploads={uploads}
@@ -148,11 +176,7 @@ class S3Dropzone extends React.Component {
           onUploadFinish={this.onUploadFinish}
           store={store}
         >
-          <div
-            className='s3-dropzone-content'
-            style={dropzoneContentStyles}>
-            {this.renderGrid()}
-          </div>
+        {this.renderGrid()}
         </Dropzone>
       </Modal>
     )

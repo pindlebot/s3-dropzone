@@ -51,7 +51,8 @@ class BaseDropzone extends React.Component {
     while (files.length > index) {
       let file = files.shift()
       let { type } = file
-      let params, { Fields: { key } } = this.props.tap(file)
+      let params = this.props.tap(file)
+      let { Fields: { key } } = params
       let preview = await util.loadPreview(key, file)
       this.props.fileReaderOnLoad(preview)
       let payload

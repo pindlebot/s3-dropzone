@@ -51,10 +51,12 @@ class Thumbnail extends React.Component {
 
   render () {
     const { view, classes } = this.props   
+    console.log(this.props)
     const error = this.state.error
     const loading = this.state.loading
     const className = classNames(
       classes.thumbnail,
+      view ? 's3-dropzone-full-width' : '',
       error
         ? 's3-dropzone-thumbnail-error'
         : loading
@@ -74,7 +76,7 @@ class Thumbnail extends React.Component {
         }}
       >
         <Image
-          className={this.state.className}
+          // className={this.state.className}
           classes={this.props.classes}
           onLoad={(evt) => {
             if (this.state.loading) {

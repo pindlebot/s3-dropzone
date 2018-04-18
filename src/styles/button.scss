@@ -1,61 +1,38 @@
-.s3-dropzone-button-container {
-  position: relative;
-  z-index: 5;
-  grid-column-start: 2;
-  grid-column-end: 5;
-}
-
-.s3-dropzone-button-container-inner {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.s3-dropzone-button-content {
   align-items: center;
-  background-color: #F7F8FA;
-  width: 100%;
-  height: 100%;
-  border: 1px solid #B1B7D1;
-  position: relative;
-  border-radius: 2px;
-  box-sizing: border-box;
-  z-index: 10;
+  display: inline-flex;
+  justify-content: center;
+  line-height: 18px;
 }
 
-.s3-dropzone-button-container:before {
-  z-index: 1;
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  height: 100%;
+.s3-dropzone-button-wrapper {
+  border-radius: 5px;
+  display: inline-block;
+  height: 40px;
   width: 100%;
-  background: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" version="1.1"><defs><pattern id="Pattern2" patternUnits="userSpaceOnUse" width="5" height="5"><path d="M 0,5 l 5,-5 M -1,1 l 2.5,-2.5 M 4,6 l 2.5,-2.5" stroke-width="1" shape-rendering="auto" stroke="#B1B7D1" stroke-linecap="square"></path></pattern></defs><rect fill="url(#Pattern2)" x="0" y="0" width="100" height="100"/></svg>');
 }
 
 .s3-dropzone-button {
-  color: white;
-  width: 180px;
-  height: 48px;
-  cursor: pointer;
-  margin: 0;
-  border: 0;
-  outline: none;
-  padding: 0 30px;
-  display: inline-flex;
-  position: relative;
-  font-size: 16px;
-  box-shadow: 0 3px 5px 2px rgba(71, 6, 226, 0.3);
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  background-color: #4706e2;
-  user-select: none;
-  line-height: .1em;
-  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  background-image: linear-gradient(0deg, #4ba8ff 0, #6cb8ff 100%);
+  box-shadow: 0 1px 1px 0 rgba(109,133,158,0.5);
   align-items: center;
-  border-radius: 4px;
-  letter-spacing: .025em;
-  text-transform: uppercase;
-  justify-content: space-around;
-  text-decoration: none;
-  -webkit-font-smoothing: antialiased;
-  -webkit-tap-highlight-color: transparent;
+  border: 1px solid #3b99f0;
+  border-radius: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Tahoma', 'Geneva', 'Arial', sans-serif;
+  font-weight: 600;
+  height: 100%;
+  justify-content: center;
+  letter-spacing: 0;
+  text-align: center;
+  user-select: none;
+  width: 100%;
+}
+
+.s3-dropzone-button:hover {
+  background-image: linear-gradient(0deg, #6cb8ff 0, #6cb8ff 100%);
+  box-shadow: 0 2px 1px 0 rgba(155,172,191,0.5);
 }

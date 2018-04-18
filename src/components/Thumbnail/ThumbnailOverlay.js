@@ -84,7 +84,7 @@ const ThumbnailOverlay = props => {
       return (
         <ErrorIcon
           classes={classes}
-          fill={'#555'}
+          fill={'#e4567b'}
         />
       )
     case loading:

@@ -22,7 +22,7 @@ export const classes = {
   thumbnailOverlay: 's3-dropzone-thumbnail-overlay',
   thumbnailOverlayIcon: 's3-dropzone-thumbnail-overlay-icon',
   content: 's3-dropzone-content',
-  buttonContainer: 's3-dropzone-button-container',
+  buttonWrapper: 's3-dropzone-button-wrapper',
   button: 's3-dropzone-button',
   uploadIcon: 's3-dropzone-upload-icon',
   svgIcon: 's3-dropzone-svg-icon',
@@ -30,5 +30,6 @@ export const classes = {
   hidden: 's3-dropzone-hidden',
   modal: 's3-dropzone-modal',
   modalWrapper: 's3-dropzone-modal-wrapper',
-  modalOverlay: 's3-dropzone-modal-overlay'
+  modalOverlay: 's3-dropzone-modal-overlay',
+  modalFooter: 's3-dropzone-modal-footer'
 }

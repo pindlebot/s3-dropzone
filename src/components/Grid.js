@@ -8,7 +8,8 @@ import KeyboardArrowLeft from './icons/KeyboardArrowLeft'
 class Grid extends React.Component {
 
   state = {
-    startIndex: 0
+    startIndex: 0,
+    style: {}
   }
 
   onClickBefore = evt => {
@@ -25,60 +26,74 @@ class Grid extends React.Component {
     this.setState({ startIndex: startIndex + 6 })
   }
 
+  renderGridBody = () => {
+    let { startIndex } = this.state
+
+    let { view } = this.props
+    let uploads = [...this.props.uploads]
+      .slice(startIndex, startIndex + 6)
+    if (this.props.view) {
+      uploads = [view]
+    }
+    
+    return (
+      <React.Fragment>
+      {!view && <button
+        className='before'
+        onClick={this.onClickBefore}
+        role='button'
+        disabled={this.state.startIndex <= 0}
+        >
+        <KeyboardArrowLeft classes={this.props.classes} />
+      </button>}
+      {uploads.map((upload, index) => <Thumbnail
+        index={index}
+        key={index}
+        {...upload}
+        {...this.props}
+      />)}
+      {!view &&
+        <React.Fragment>
+          <button
+            className='after'
+            onClick={this.onClickAfter}
+            role='button'
+            disabled={(this.state.startIndex + 6) >= this.props.uploads.length}
+          >
+            <KeyboardArrowRight classes={this.props.classes} />
+          </button>
+          <div className={this.props.classes.modalFooter}>
+            <Button theme={this.props.theme} classes={this.props.classes} />
+          </div>
+        </React.Fragment>
+      }
+      </React.Fragment>
+    )
+  }
+
   render () {
     const { 
       drag,
       view,
       classes,
+      modal
     } = this.props
     let uploadsTheme = this.props.theme.uploads
     let { startIndex } = this.state
-    let uploads = [...this.props.uploads]
-      .slice(startIndex, startIndex + 6)
-    if (view) {
-      uploads = [view]
-    }
-    
+    const minimized = modal === 'minimized'
     return (
       <div
-        className={view ? 's3-dropzone-grid-view' : classes.grid}
+        className={classes.grid}
         style={{
           ...uploadsTheme,
-          opacity: drag ? 0.5 : 1.0
-        }}>
-        <button
-          className='before'
-          onClick={this.onClickBefore}
-          role='button'
-          disabled={this.state.startIndex <= 0}
-          >
-          <KeyboardArrowLeft classes={this.props.classes} />
-        </button>
-        {uploads.map((upload, index) => <Thumbnail
-          index={index}
-          key={index}
-          {...upload}
-          {...this.props}
-        />)}
-        <button
-          className='after'
-          onClick={this.onClickAfter}
-          role='button'
-          disabled={(this.state.startIndex + 6) >= this.props.uploads.length}
-          >
-          <KeyboardArrowRight classes={this.props.classes} />
-        </button>
-        {!view && 
-          <React.Fragment>
-            <div></div>
-            <div className={this.props.classes.buttonContainer}>
-              <div className='s3-dropzone-button-container-inner'>
-                <Button theme={this.props.theme} classes={this.props.classes} />
-              </div>
-            </div>
-            <div></div>
-          </React.Fragment>
-         }
+          backgroundColor: minimized ? 'transparent' : '#F4F9FD',
+          boxShadow: minimized ? 'none' : '0px 1px 2px 0px rgba(0, 0, 0, 0.14)',
+          opacity: drag ? 0.5 : 1.0,
+          ...this.state.style
+        }}
+        ref={ref => { this.grid = ref }}
+        >
+          {!minimized && this.renderGridBody()}
       </div>
     )
   }
