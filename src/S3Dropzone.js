@@ -5,7 +5,7 @@ import Dropzone from './components/BaseDropzone';
 import Grid from './components/Grid'
 import * as theme from './theme'
 import createClient from './createClient'
-import Modal from './components/Modal'
+import Modal, { ModalFooter, ModalHeader } from './components/Modal'
 import { withStore } from 'react-subscriptions'
 import uniqBy from 'lodash.uniqby'
 
@@ -61,7 +61,6 @@ class S3Dropzone extends React.Component {
         this.props.store.update('uploads', uploads)
         break
       case 'view':
-        console.log(evt.target.parentNode.offsetParent)
         this.setState({ view: upload })
         break
       case 'close':
@@ -107,6 +106,7 @@ class S3Dropzone extends React.Component {
         drag={this.state.drag}
         view={this.state.view}
         modal={this.state.modal}
+        className={this.state.view ? 's3-dropzone-grid-view' : ''}
       />
     )
   }
@@ -142,18 +142,20 @@ class S3Dropzone extends React.Component {
     const dropzoneContentStyles = {
       ...theme.content
     }
-    if (this.state.drag) {
-      dropzoneContentStyles.border = 0;
-    }
+   
     if (this.state.view) {
       return (
         <Modal
           {...this.props}
           modal={this.state.modal}
-          minimize={this.minimize}
-          maximize={this.maximize}
+          view={this.state.view}
         >
-          <div className='s3-dropzone'>{this.renderGrid()}</div>
+          <ModalHeader
+            minimize={this.minimize}
+            maximize={this.maximize}
+            {...this.props}
+          />
+          {this.renderGrid()}
         </Modal>
       )
     }
@@ -161,8 +163,7 @@ class S3Dropzone extends React.Component {
       <Modal
         {...this.props}
         modal={this.state.modal}
-        minimize={this.minimize}
-        maximize={this.maximize}
+        view={this.state.view}
       >
         <Dropzone
           {...rest}
@@ -176,7 +177,17 @@ class S3Dropzone extends React.Component {
           onUploadFinish={this.onUploadFinish}
           store={store}
         >
+        <ModalHeader
+          minimize={this.minimize}
+          maximize={this.maximize}
+          {...this.props}
+        />
         {this.renderGrid()}
+        <ModalFooter 
+          modal={this.state.modal}
+          view={this.state.view}
+          {...this.props}
+        />
         </Dropzone>
       </Modal>
     )

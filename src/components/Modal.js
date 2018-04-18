@@ -1,6 +1,7 @@
 import React from 'react'
+import Button from './Button'
 
-const ModalHeader = props => (
+export const ModalHeader = props => (
   <div className='s3-dropzone-modal-header'>
     <div
       className='s3-dropzone-oval1'
@@ -27,17 +28,26 @@ const ModalHeader = props => (
   </div>
 )
 
+export const ModalFooter = props => props.modal === 'minimized' || props.view ? false : (
+  <div className={props.classes.modalFooter}>
+    <Button theme={props.theme} classes={props.classes} />
+  </div>
+)
+
+const createStyles = props => ({
+  width: props.modal === 'maximized' ? '100%' : '600px',
+  height: props.modal === 'maximized' ? '100%' : '400px',
+  backgroundColor: props.modal === 'minimized' ? 'transparent' : '#F4F9FD',
+  boxShadow: props.modal === 'minimized' ? 'none' : '0px 1px 2px 0px rgba(0, 0, 0, 0.14)',
+})
 
 const Modal = props => (
   <div className={props.classes.modalWrapper}>
     <div className={props.classes.modalOverlay} />
-    <div className={props.classes.modal}
-      style={props.modal === 'maximized' 
-        ? { width: '100%', height: '100%' }
-        : { width: '600px', height: '400px' }
-      }
+    <div
+      className={props.classes.modal}
+      style={createStyles(props)}
     >
-      <ModalHeader {...props} /> 
       {props.children}
     </div>
   </div>

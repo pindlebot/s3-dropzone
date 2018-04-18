@@ -4,6 +4,7 @@ import theme from '../theme'
 import Button from './Button'
 import KeyboardArrowRight from './icons/KeyboardArrowRight'
 import KeyboardArrowLeft from './icons/KeyboardArrowLeft'
+import classNames from 'classnames'
 
 class Grid extends React.Component {
 
@@ -62,9 +63,6 @@ class Grid extends React.Component {
           >
             <KeyboardArrowRight classes={this.props.classes} />
           </button>
-          <div className={this.props.classes.modalFooter}>
-            <Button theme={this.props.theme} classes={this.props.classes} />
-          </div>
         </React.Fragment>
       }
       </React.Fragment>
@@ -76,18 +74,19 @@ class Grid extends React.Component {
       drag,
       view,
       classes,
-      modal
+      modal,
+      className
     } = this.props
     let uploadsTheme = this.props.theme.uploads
     let { startIndex } = this.state
     const minimized = modal === 'minimized'
     return (
       <div
-        className={classes.grid}
+        className={classNames(classes.grid, className)}
         style={{
           ...uploadsTheme,
-          backgroundColor: minimized ? 'transparent' : '#F4F9FD',
-          boxShadow: minimized ? 'none' : '0px 1px 2px 0px rgba(0, 0, 0, 0.14)',
+          //backgroundColor: minimized ? 'transparent' : '#F4F9FD',
+          //boxShadow: minimized ? 'none' : '0px 1px 2px 0px rgba(0, 0, 0, 0.14)',
           opacity: drag ? 0.5 : 1.0,
           ...this.state.style
         }}

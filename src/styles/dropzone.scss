@@ -1,6 +1,9 @@
 .s3-dropzone {
   transition: all 0.2s ease-in-out;
-  flex-basis: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 .s3-dropzone.drag {
@@ -14,17 +17,21 @@
 .s3-dropzone-grid {
   display: grid;
   grid-template-columns: 1fr 10fr 10fr 10fr 1fr;
-  grid-template-rows: 4fr 4fr 2fr;
+  grid-template-rows: 1fr 1fr;
   grid-gap: 15px 15px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 100px);
 }
 
 .s3-dropzone-grid-view {
-  width: 100%;
-  height: 100%;
+  height: calc(100% - 30px);
+}
+
+.s3-dropzone-grid-view .s3-dropzone-thumbnail {
+  grid-column-end: 5;
+  grid-row-end: 3;
 }
 
 .s3-dropzone-grid .after, 

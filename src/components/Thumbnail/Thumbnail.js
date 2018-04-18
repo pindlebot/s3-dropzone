@@ -51,7 +51,6 @@ class Thumbnail extends React.Component {
 
   render () {
     const { view, classes } = this.props   
-    console.log(this.props)
     const error = this.state.error
     const loading = this.state.loading
     const className = classNames(
