@@ -12,27 +12,29 @@ import ZoomOutMap from '../icons/ZoomOutMap'
 function DefaultToolbar (props) {
   return (
     <React.Fragment>
-      <IconButton 
-       {...props}
+      <IconButton
+        {...props}
         onClick={props.onClick}
         index={props.index}
         name='delete'>
         <DeleteIcon classes={props.classes} fill={props.fill} />
       </IconButton>
-      <IconButton 
-       {...props}
-        onClick={props.onClick}
-        index={props.index}
-        name='view'>
-        <ZoomOutMap classes={props.classes} fill={props.fill} />
-      </IconButton>
-      <IconButton
-        {...props}
-        onClick={props.onClick}
-        index={props.index}
-        name='insert'>
-        <AddIcon classes={props.classes} fill={props.fill} />
-      </IconButton>
+      {!props.error && <React.Fragment>
+        <IconButton
+          {...props}
+          onClick={props.onClick}
+          index={props.index}
+          name='view'>
+          <ZoomOutMap classes={props.classes} fill={props.fill} />
+        </IconButton>
+        <IconButton
+          {...props}
+          onClick={props.onClick}
+          index={props.index}
+          name='insert'>
+          <AddIcon classes={props.classes} fill={props.fill} />
+        </IconButton>
+      </React.Fragment>}
     </React.Fragment>
   )
 }
@@ -47,7 +49,7 @@ const ThumbnailOverlayWrapper = props => (
 )
 
 const ThumbnailOverlay = props => {
-  const { 
+  const {
     classes,
     loading,
     error,
@@ -63,7 +65,7 @@ const ThumbnailOverlay = props => {
   switch (true) {
     case isExpanded:
       return (
-        <IconButton 
+        <IconButton
           {...props}
           onClick={props.onClick}
           index={props.index}
@@ -104,4 +106,3 @@ export default props => (
     <ThumbnailOverlay {...props} />
   </ThumbnailOverlayWrapper>
 )
-

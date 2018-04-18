@@ -8,7 +8,7 @@ exports.S3Dropzone = S3Dropzone
 exports.Button = Button
 exports.Thumbnail = Thumbnail
 exports.SpinnerComponent = SpinnerComponent
-exports.BaseDropzone  = BaseDropzone
+exports.BaseDropzone = BaseDropzone
 
 export default {
   S3Dropzone,

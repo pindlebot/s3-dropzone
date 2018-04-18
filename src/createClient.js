@@ -6,7 +6,7 @@ export default ({ region, identityPoolId, bucketName}) => {
     IdentityPoolId: identityPoolId
   })
   const s3 = new AWS.S3()
-  
+
   const remove = (key, bucket = bucketName) => s3.deleteObject({
     Bucket: bucket,
     Key: key

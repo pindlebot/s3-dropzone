@@ -142,23 +142,7 @@ class S3Dropzone extends React.Component {
     const dropzoneContentStyles = {
       ...theme.content
     }
-   
-    if (this.state.view) {
-      return (
-        <Modal
-          {...this.props}
-          modal={this.state.modal}
-          view={this.state.view}
-        >
-          <ModalHeader
-            minimize={this.minimize}
-            maximize={this.maximize}
-            {...this.props}
-          />
-          {this.renderGrid()}
-        </Modal>
-      )
-    }
+  
     return (
       <Modal
         {...this.props}
@@ -177,17 +161,17 @@ class S3Dropzone extends React.Component {
           onUploadFinish={this.onUploadFinish}
           store={store}
         >
-        <ModalHeader
-          minimize={this.minimize}
-          maximize={this.maximize}
-          {...this.props}
-        />
-        {this.renderGrid()}
-        <ModalFooter 
-          modal={this.state.modal}
-          view={this.state.view}
-          {...this.props}
-        />
+          <ModalHeader
+            minimize={this.minimize}
+            maximize={this.maximize}
+            {...this.props}
+          />
+            {this.renderGrid()}
+          <ModalFooter 
+            modal={this.state.modal}
+            view={this.state.view}
+            {...this.props}
+          />
         </Dropzone>
       </Modal>
     )

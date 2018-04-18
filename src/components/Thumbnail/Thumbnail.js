@@ -50,8 +50,8 @@ class Thumbnail extends React.Component {
   }
 
   render () {
-    const { view, classes } = this.props   
-    const error = this.state.error
+    console.log(this.props)
+    const { view, classes, error } = this.props   
     const loading = this.state.loading
     const className = classNames(
       classes.thumbnail,
@@ -75,14 +75,14 @@ class Thumbnail extends React.Component {
         }}
       >
         <Image
-          // className={this.state.className}
           classes={this.props.classes}
           onLoad={(evt) => {
             if (this.state.loading) {
-              this.setState({ loading: false, className: 's3-dropzone-blur' })
+              this.setState({ loading: false })
             }
           }}
           onError={(evt) => {
+            console.log(evt)
             this.updateStore('error', true)
           }}
           {...this.props}

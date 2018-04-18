@@ -14,7 +14,8 @@
     "build:example": "NODE_ENV=production parcel build example/index.html --no-minify --public-url / --no-cache",
     "prestart": "yarn add pushstate-server",
     "start": "NODE_ENV=production pushstate-server dist",
-    "clean": "rimraf dist && rimraf .cache && rimraf lib"
+    "clean": "rimraf dist && rimraf .cache && rimraf lib",
+    "lint": "standard \"src/**/*.js\" --verbose --fix | snazzy"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "aws-sdk": "^2.213.1",
     "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -38,7 +40,9 @@
     "pushstate-server": "^3.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "snazzy": "^7.1.1",
+    "standard": "^11.0.1"
   },
   "peerDependencies": {
     "react": "*",
