@@ -29,8 +29,6 @@ const NextButton = props => (props.modal === 'minimized' || props.view) ? false 
   </button>
 )
 
-const INC =  window.innerWidth >= 568 ? 6 : 1
-
 class Grid extends React.Component {
 
   state = {
@@ -41,21 +39,21 @@ class Grid extends React.Component {
     let { startIndex } = this.state
     evt.preventDefault()
     evt.stopPropagation()
-    this.setState({ startIndex: Math.abs(startIndex - INC) })
+    this.setState({ startIndex: Math.abs(startIndex - this.props.gridSize) })
   }
 
   onClickAfter = evt => {
     let { startIndex } = this.state
     evt.preventDefault()
     evt.stopPropagation()
-    this.setState({ startIndex: startIndex + INC })
+    this.setState({ startIndex: startIndex + this.props.gridSize })
   }
 
   renderGridBody = () => {
     const { startIndex } = this.state
     const { view } = this.props
     const uploads = view ? [view] : [...this.props.uploads]
-      .slice(startIndex, startIndex + INC)
+      .slice(startIndex, startIndex + this.props.gridSize)
     
     return uploads.map((upload, index) => (
       <Thumbnail

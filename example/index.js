@@ -30,7 +30,12 @@ class App extends React.Component {
     let uploads = data.map(d => ({ 
       ...d, src: toUrl(d.key) 
     })).concat([...this.state.uploads])
-    this.setState({ uploads
+    this.update(uploads)
+  }
+
+  update = uploads => {
+    this.setState({ 
+      uploads
     }, () => {
       window.localStorage.setItem(
         config.localStorageKey,
@@ -50,10 +55,7 @@ class App extends React.Component {
           onClick={(evt, type, upload) => {
             if (type !== 'delete') return
             let uploads = [...this.state.uploads].filter(u => u.id !== upload.id)
-            window.localStorage.setItem(
-              config.localStorageKey,
-              JSON.stringify(uploads)
-            )
+            this.update(uploads)
           }}
           tap={file => {
             let key = `static/${Math.round(Date.now() / 1000)}-${file.name}`

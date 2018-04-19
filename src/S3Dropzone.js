@@ -8,12 +8,20 @@ import createClient from './createClient'
 import Modal, { ModalFooter, ModalHeader } from './components/Modal'
 import { withStore } from 'react-subscriptions'
 import uniqBy from 'lodash.uniqby'
+import debounce from 'lodash.debounce'
 
 // @media only screen 
 // and (min-device-width: 320px)
 // and (max-device-width: 568px) {
 //
 // }
+
+function arrayBufferToBase64(buffer) {
+  var binary = ''
+  var bytes = [].slice.call(new Uint8Array(buffer))
+  bytes.forEach((b) => binary += String.fromCharCode(b))
+  return window.btoa(binary)
+}
 
 class S3Dropzone extends React.Component {
   constructor (props) {
@@ -23,7 +31,7 @@ class S3Dropzone extends React.Component {
       drag: false,
       view: undefined,
       modal: window.innerWidth > 568 ? undefined : 'maximized',
-      iconStyles: { width: 13, height: 13 }
+      gridSize: window.innerWidth >= 568 ? 6 : 1
     }
 
     this.client = createClient(props)
@@ -31,7 +39,7 @@ class S3Dropzone extends React.Component {
 
   componentDidMount = () => {
     setTimeout(() => { window.addEventListener('click', this.onWindowClick) })
-    // setTimeout(() => { window.addEventListener('resize', this.onWindowResize) })
+    setTimeout(() => { window.addEventListener('resize', debounce(this.onWindowResize, 200)) })
   }
 
   componentWillUnmount = () => {
@@ -45,17 +53,14 @@ class S3Dropzone extends React.Component {
   }
 
   onWindowResize = evt => {
-    const INTERVAL = 1000
-    console.log({ timer: this.timer })
-
-    if (!this.timer) {
-      this.timer = setTimeout(() => {
-        console.log('done')
-        window.clearInterval(this.timer)
-      }, INTERVAL)
+    let width = evt.srcElement.innerWidth
+    let gridSize = width >= 568 ? 6 : 1
+    if (this.state.gridSize !== gridSize) {
+      let modal = this.state.modal === undefined && gridSize === 1
+        ? 'maximized'
+        : this.state.modal
+      this.setState({ gridSize, modal })
     }
-   
-    console.log(evt.srcElement.innerWidth)
   }
 
   handleDelete = (upload) => {
@@ -125,6 +130,7 @@ class S3Dropzone extends React.Component {
         view={this.state.view}
         modal={this.state.modal}
         className={this.state.view ? 's3-dropzone-grid-view' : ''}
+        gridSize={this.state.gridSize}
       />
     )
   }
@@ -185,9 +191,19 @@ class S3Dropzone extends React.Component {
           />
             {this.renderGrid()}
           <ModalFooter 
+           {...this.props}
             modal={this.state.modal}
             view={this.state.view}
-            {...this.props}
+            onClick={value => {
+              fetch(value)
+                .then(resp => 
+                  resp.arrayBuffer()
+                    .then(buff => {
+                      var base64Flag = 'data:image/jpeg;base64,';
+                      var imageStr = arrayBufferToBase64(buff);
+                    })
+                )
+            }}
           />
         </Dropzone>
       </Modal>

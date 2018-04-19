@@ -5,12 +5,12 @@ import {
   MaximizeIcon,
   MinimizeIcon
 } from './WindowIcons'
+import ButtonWithInput from './ButtonWithInput'
 
 export const ModalHeader = props => (
   <div className='s3-dropzone-modal-header'>
     <div className='s3-dropzone-modal-header-inner' ref={props.setRef}>
       <button
-        // style={props.iconStyles}
         className='s3-dropzone-oval'
         onClick={evt => {
           evt.stopPropagation()
@@ -25,7 +25,6 @@ export const ModalHeader = props => (
       </button>
       <button
         className='s3-dropzone-oval'
-        //style={props.iconStyles}
         onClick={evt => {
           evt.stopPropagation()
           props.setModalState('minimized')
@@ -38,7 +37,6 @@ export const ModalHeader = props => (
       </button>
       <button
         className='s3-dropzone-oval'
-        // style={props.iconStyles}
         onClick={evt => {
           evt.stopPropagation()
           props.setModalState('maximized')
@@ -55,7 +53,7 @@ export const ModalHeader = props => (
 
 export const ModalFooter = props => props.modal === 'minimized' || props.view ? false : (
   <div className={props.classes.modalFooter}>
-    <Button theme={props.theme} classes={props.classes} />
+    <ButtonWithInput {...props} />
   </div>
 )
 

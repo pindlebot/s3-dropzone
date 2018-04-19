@@ -103,7 +103,6 @@
   line-height: 18px; }
 
 .s3-dropzone-button {
-  border-radius: 5px;
   font-size: 14px;
   color: #fff;
   background-image: linear-gradient(0deg, #4ba8ff 0, #6cb8ff 100%);
@@ -118,11 +117,45 @@
   letter-spacing: 0;
   text-align: center;
   user-select: none;
-  padding: 2px 20px; }
+  padding: 2px 20px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 40px; }
 
 .s3-dropzone-button:hover {
   background-image: linear-gradient(0deg, #6cb8ff 0, #6cb8ff 100%);
   box-shadow: 0 2px 1px 0 rgba(155, 172, 191, 0.5); }
+
+.s3-dropzone-button-input {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 0;
+  height: 100%;
+  margin: 0 -4px 0 0;
+  padding-left: 10px;
+  width: 100%;
+  border: 1px solid #d8e0ea;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #4c6072;
+  display: inline-block;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Tahoma', 'Geneva', 'Arial', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 8px;
+  transition: border-color 150ms ease-out;
+  height: 40px; }
+  .s3-dropzone-button-input:focus {
+    outline: 0; }
+
+.s3-dropzone-input-group {
+  align-items: center;
+  display: inline-flex;
+  max-width: 100%;
+  max-height: 40px; }
 
 .s3-dropzone .sk-circle {
   width: 40px;
@@ -283,7 +316,7 @@
   /* border-bottom-right-radius: 5px; */
   /* height: calc(100% - 130px); */ }
 
-@media only screen and (min-width: 320px) and (max-width: 568px) {
+@media only screen and (max-width: 568px) {
   .s3-dropzone-grid {
     grid-template-columns: 1fr; } }
 
