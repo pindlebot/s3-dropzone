@@ -9,6 +9,12 @@ import Modal, { ModalFooter, ModalHeader } from './components/Modal'
 import { withStore } from 'react-subscriptions'
 import uniqBy from 'lodash.uniqby'
 
+// @media only screen 
+// and (min-device-width: 320px)
+// and (max-device-width: 568px) {
+//
+// }
+
 class S3Dropzone extends React.Component {
   constructor (props) {
     super(props)
@@ -16,8 +22,8 @@ class S3Dropzone extends React.Component {
     this.state = {
       drag: false,
       view: undefined,
-      minimize: false,
-      modal: undefined
+      modal: window.innerWidth > 568 ? undefined : 'maximized',
+      iconStyles: { width: 13, height: 13 }
     }
 
     this.client = createClient(props)
@@ -25,19 +31,31 @@ class S3Dropzone extends React.Component {
 
   componentDidMount = () => {
     setTimeout(() => { window.addEventListener('click', this.onWindowClick) })
+    // setTimeout(() => { window.addEventListener('resize', this.onWindowResize) })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     window.removeEventListener('click', this.onWindowClick);
   }
 
-  onWindowClick = (evt) => {
+  onWindowClick = evt => {
     if (this.state.view) {
       this.setState({ view: undefined })
-    } else {
-      // this.props.store.update('visible', false)
-      // this.props.onClickAway(evt)
     }
+  }
+
+  onWindowResize = evt => {
+    const INTERVAL = 1000
+    console.log({ timer: this.timer })
+
+    if (!this.timer) {
+      this.timer = setTimeout(() => {
+        console.log('done')
+        window.clearInterval(this.timer)
+      }, INTERVAL)
+    }
+   
+    console.log(evt.srcElement.innerWidth)
   }
 
   handleDelete = (upload) => {
@@ -111,21 +129,22 @@ class S3Dropzone extends React.Component {
     )
   }
 
-  minimize = () => {
-    this.setState({
-      modal: this.state.modal === 'minimized'
-        ? undefined : 'minimized'
+  setModalState = (state) => {
+    this.setState({ 
+      modal: this.state.modal === state
+        ? undefined
+        : state
     })
   }
 
-  maximize = () => {
-    this.setState({
-      modal: this.state.modal === 'maximized'
-        ? undefined : 'maximized'
-    })
+  setRef = ref => {
+    this.modalHeader = ref
+    let { height } = ref.getBoundingClientRect()
+    height = height / 2
+    this.setState({ iconStyles: { width: height, height: height } })
   }
 
-  render() {
+  render () {
     const {
       thumbnailsContainer,
       done,
@@ -139,9 +158,6 @@ class S3Dropzone extends React.Component {
     } = this.props
 
     if (!visible) return false
-    const dropzoneContentStyles = {
-      ...theme.content
-    }
   
     return (
       <Modal
@@ -162,8 +178,9 @@ class S3Dropzone extends React.Component {
           store={store}
         >
           <ModalHeader
-            minimize={this.minimize}
-            maximize={this.maximize}
+            setModalState={this.setModalState}
+            setRef={this.setRef}
+            iconStyles={this.state.iconStyles}
             {...this.props}
           />
             {this.renderGrid()}
@@ -191,9 +208,8 @@ S3Dropzone.defaultProps = {
 const S3DropzoneWithUnique = props => 
   <S3Dropzone 
     {...props}
-    uploads={
-      uniqBy(props.uploads, upload => upload.id || upload.key)
-    } />
+    uploads={uniqBy(props.uploads, upload => upload.id || upload.key)}
+  />
 
 export default withStore({
   uploads: [],

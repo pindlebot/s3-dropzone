@@ -5,67 +5,65 @@ import Button from './Button'
 import KeyboardArrowRight from './icons/KeyboardArrowRight'
 import KeyboardArrowLeft from './icons/KeyboardArrowLeft'
 import classNames from 'classnames'
+import { start } from 'pretty-error';
+
+const PrevButton = props => (props.modal === 'minimized' || props.view) ? false : ( 
+  <button
+    className='before'
+    onClick={props.onClickBefore}
+    role='button'
+    disabled={props.startIndex <= 0}
+  >
+    <KeyboardArrowLeft classes={props.classes} />
+  </button>
+)
+
+const NextButton = props => (props.modal === 'minimized' || props.view) ? false : (
+  <button
+    className='after'
+    onClick={props.onClickAfter}
+    role='button'
+    disabled={(props.startIndex + 6) >= props.uploads.length}
+  >
+    <KeyboardArrowRight classes={props.classes} />
+  </button>
+)
+
+const INC =  window.innerWidth >= 568 ? 6 : 1
 
 class Grid extends React.Component {
 
   state = {
-    startIndex: 0,
-    style: {}
+    startIndex: 0
   }
 
   onClickBefore = evt => {
     let { startIndex } = this.state
     evt.preventDefault()
     evt.stopPropagation()
-    this.setState({ startIndex: Math.abs(startIndex - 6) })
+    this.setState({ startIndex: Math.abs(startIndex - INC) })
   }
 
   onClickAfter = evt => {
     let { startIndex } = this.state
     evt.preventDefault()
     evt.stopPropagation()
-    this.setState({ startIndex: startIndex + 6 })
+    this.setState({ startIndex: startIndex + INC })
   }
 
   renderGridBody = () => {
-    let { startIndex } = this.state
-
-    let { view } = this.props
-    let uploads = [...this.props.uploads]
-      .slice(startIndex, startIndex + 6)
-    if (this.props.view) {
-      uploads = [view]
-    }
+    const { startIndex } = this.state
+    const { view } = this.props
+    const uploads = view ? [view] : [...this.props.uploads]
+      .slice(startIndex, startIndex + INC)
     
-    return (
-      <React.Fragment>
-      {!view && <button
-        className='before'
-        onClick={this.onClickBefore}
-        role='button'
-        disabled={this.state.startIndex <= 0}
-        >
-        <KeyboardArrowLeft classes={this.props.classes} />
-      </button>}
-      {uploads.map((upload, index) => <Thumbnail
+    return uploads.map((upload, index) => (
+      <Thumbnail
         index={index}
         key={index}
         {...upload}
         {...this.props}
-      />)}
-      {!view &&
-        <React.Fragment>
-          <button
-            className='after'
-            onClick={this.onClickAfter}
-            role='button'
-            disabled={(this.state.startIndex + 6) >= this.props.uploads.length}
-          >
-            <KeyboardArrowRight classes={this.props.classes} />
-          </button>
-        </React.Fragment>
-      }
-      </React.Fragment>
+      />)
     )
   }
 
@@ -77,22 +75,31 @@ class Grid extends React.Component {
       modal,
       className
     } = this.props
-    let uploadsTheme = this.props.theme.uploads
     let { startIndex } = this.state
     const minimized = modal === 'minimized'
     return (
-      <div
-        className={classNames(classes.grid, className)}
-        style={{
-          ...uploadsTheme,
-          //backgroundColor: minimized ? 'transparent' : '#F4F9FD',
-          //boxShadow: minimized ? 'none' : '0px 1px 2px 0px rgba(0, 0, 0, 0.14)',
-          opacity: drag ? 0.5 : 1.0,
-          ...this.state.style
-        }}
-        ref={ref => { this.grid = ref }}
-        >
+      <div className={
+        classNames('s3-dropzone-modal-content', view ? 'full-width' : '')
+      }>
+        <PrevButton
+          {...this.props}
+          startIndex={startIndex}
+          onClickBefore={this.onClickBefore}
+        />
+        <div
+          className={classes.grid}
+          style={{
+            opacity: drag ? 0.5 : 1.0,
+          }}
+          ref={ref => { this.grid = ref }}
+          >
           {!minimized && this.renderGridBody()}
+        </div>
+        <NextButton
+          {...this.props}
+          startIndex={startIndex}
+          onClickAfter={this.onClickAfter}
+        />
       </div>
     )
   }

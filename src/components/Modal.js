@@ -1,31 +1,54 @@
 import React from 'react'
 import Button from './Button'
+import {
+  CloseIcon,
+  MaximizeIcon,
+  MinimizeIcon
+} from './WindowIcons'
 
 export const ModalHeader = props => (
   <div className='s3-dropzone-modal-header'>
-    <div className='s3-dropzone-modal-header-inner'>
-      <div
-        className='s3-dropzone-oval1'
+    <div className='s3-dropzone-modal-header-inner' ref={props.setRef}>
+      <button
+        // style={props.iconStyles}
+        className='s3-dropzone-oval'
         onClick={evt => {
           evt.stopPropagation()
           props.store.update('visible', false)
           props.onClickAway(evt)
         }}
-      />
-      <div
-        className='s3-dropzone-oval2'
+      >
+        <CloseIcon
+          width={'0.5rem'}
+          height={'0.5rem'}
+        />
+      </button>
+      <button
+        className='s3-dropzone-oval'
+        //style={props.iconStyles}
         onClick={evt => {
           evt.stopPropagation()
-          props.minimize()
+          props.setModalState('minimized')
         }}
-      />
-      <div
-        className='s3-dropzone-oval3'
+      >
+        <MinimizeIcon
+          width={'0.5rem'}
+          height={'0.5rem'}
+        />
+      </button>
+      <button
+        className='s3-dropzone-oval'
+        // style={props.iconStyles}
         onClick={evt => {
           evt.stopPropagation()
-          props.maximize()
+          props.setModalState('maximized')
         }}
-      />
+      >
+        <MaximizeIcon
+          width={'0.5rem'}
+          height={'0.5rem'}
+        />
+      </button>
     </div>
   </div>
 )
@@ -37,8 +60,8 @@ export const ModalFooter = props => props.modal === 'minimized' || props.view ? 
 )
 
 const createStyles = props => ({
-  width: props.modal === 'maximized' ? '100%' : '600px',
-  height: props.modal === 'maximized' ? '100%' : '400px',
+  width: props.modal === 'maximized' ? '100%' : `${window.innerHeight / window.innerWidth * 90}vw`,
+  height: props.modal === 'maximized' ? '100%' : '70vh',
   backgroundColor: props.modal === 'minimized' ? 'transparent' : '#F4F9FD',
   boxShadow: props.modal === 'minimized' ? 'none' : '0px 1px 2px 0px rgba(0, 0, 0, 0.14)'
 })
