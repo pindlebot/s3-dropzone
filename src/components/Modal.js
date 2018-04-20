@@ -9,7 +9,7 @@ import ButtonWithInput from './ButtonWithInput'
 
 export const ModalHeader = props => (
   <div className='s3-dropzone-modal-header'>
-    <div className='s3-dropzone-modal-header-inner' ref={props.setRef}>
+    <div className='s3-dropzone-modal-header-inner'>
       <button
         className='s3-dropzone-oval'
         onClick={evt => {

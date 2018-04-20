@@ -41,10 +41,19 @@ function DefaultToolbar (props) {
 
 const ThumbnailOverlayWrapper = props => (
   <div
-    style={props.theme.thumbnailOverlay}
+    style={{
+      width: '100%',
+      height: `${100 / props.aspectRatio}%`
+    }}
     className={props.classes.thumbnailOverlay}
   >
-    {props.children}
+    <div className='s3-dropzone-thumbnail-overlay-row'></div>
+    <div className='s3-dropzone-thumbnail-overlay-row'>
+      {props.children}
+    </div>
+    <div className='s3-dropzone-thumbnail-overlay-row'>
+      <div style={{fontSize: '11px'}}>{props.id}</div>
+    </div>
   </div>
 )
 
@@ -61,6 +70,7 @@ const ThumbnailOverlay = props => {
   const className = classNames(
     classes.thumbnailOverlay
   )
+  console.log(props)
   const isExpanded = !!view
   switch (true) {
     case isExpanded:

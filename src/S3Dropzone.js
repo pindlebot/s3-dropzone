@@ -9,6 +9,8 @@ import Modal, { ModalFooter, ModalHeader } from './components/Modal'
 import { withStore } from 'react-subscriptions'
 import uniqBy from 'lodash.uniqby'
 import debounce from 'lodash.debounce'
+import * as util from './components/BaseDropzone/util'
+import fileType from 'file-type'
 
 // @media only screen 
 // and (min-device-width: 320px)
@@ -43,7 +45,8 @@ class S3Dropzone extends React.Component {
   }
 
   componentWillUnmount = () => {
-    window.removeEventListener('click', this.onWindowClick);
+    window.removeEventListener('click', this.onWindowClick)
+    window.removeEventListener('resize', this.onWindowResize)
   }
 
   onWindowClick = evt => {
@@ -53,13 +56,20 @@ class S3Dropzone extends React.Component {
   }
 
   onWindowResize = evt => {
+    let state = {}
     let width = evt.srcElement.innerWidth
-    let gridSize = width >= 568 ? 6 : 1
-    if (this.state.gridSize !== gridSize) {
-      let modal = this.state.modal === undefined && gridSize === 1
-        ? 'maximized'
-        : this.state.modal
-      this.setState({ gridSize, modal })
+    state.gridSize = width >= 568 ? 6 : 1
+    if (this.state.gridSize !== state.gridSize) {
+      let modal
+      switch(state.gridSize) {
+        case 6:
+          modal = undefined
+          break
+        case 1:
+          modal = 'maximized'
+      }
+      state.modal = modal
+      this.setState(state)
     }
   }
 
@@ -95,28 +105,11 @@ class S3Dropzone extends React.Component {
     this.props.onClick(evt, type, upload)
   }
 
-  fileReaderOnLoad = (preview) => {
-    const uploads = [...this.props.uploads]
-    uploads.unshift(preview)
-    this.setState({ drag: false}, () => {
-      this.props.store.update('uploads', uploads)
-      this.props.onDrop(preview)
-    })
-  }
-
-  onUploadFinish = (error, uploads) => {
-    this.props.store.update('uploads',
-       [...this.props.uploads].map(u => ({ ...u, loading: false })
-      ),
-    )
-    this.props.done(error, uploads)
-  }
-
-  onDragStart = (evt) => {
+  onDragEnter = (evt) => {
     this.setState({ drag: true })
   }
 
-  onDragEnd = (evt) => {
+  onDragLeave = (evt) => {
     this.setState({ drag: false })
   }
 
@@ -143,21 +136,12 @@ class S3Dropzone extends React.Component {
     })
   }
 
-  setRef = ref => {
-    this.modalHeader = ref
-    let { height } = ref.getBoundingClientRect()
-    height = height / 2
-    this.setState({ iconStyles: { width: height, height: height } })
-  }
-
   render () {
     const {
       thumbnailsContainer,
-      done,
       theme,
       onClick,
       onClickAway,
-      store,
       visible,
       uploads,
       ...rest
@@ -174,18 +158,14 @@ class S3Dropzone extends React.Component {
         <Dropzone
           {...rest}
           uploads={uploads}
-          onDragEnter={this.onDragStart}
-          onDragLeave={this.onDragEnd}
+          onDragEnter={this.onDragEnter}
+          onDragLeave={this.onDragLeave}
           className={this.state.drag ? 'drag' : undefined}
           draggable='true'
           theme={theme}
-          fileReaderOnLoad={this.fileReaderOnLoad}
-          onUploadFinish={this.onUploadFinish}
-          store={store}
         >
           <ModalHeader
             setModalState={this.setModalState}
-            setRef={this.setRef}
             iconStyles={this.state.iconStyles}
             {...this.props}
           />
@@ -194,15 +174,15 @@ class S3Dropzone extends React.Component {
            {...this.props}
             modal={this.state.modal}
             view={this.state.view}
-            onClick={value => {
-              fetch(value)
-                .then(resp => 
-                  resp.arrayBuffer()
-                    .then(buff => {
-                      var base64Flag = 'data:image/jpeg;base64,';
-                      var imageStr = arrayBufferToBase64(buff);
-                    })
-                )
+            onClick={async value => {
+              this.onDragLeave()
+              let [_, key] = value.match(/.*\/([^?]+)/)
+              let buff = await fetch(value)
+                .then(resp => resp.arrayBuffer())
+              let type = fileType(buff)
+              let file = new File([buff], key, { type });
+              let { uploads, errors } = await util.onDrop(this.props, this.client, [file])
+              this.props.done(errors, uploads)
             }}
           />
         </Dropzone>

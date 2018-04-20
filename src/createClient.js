@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk'
 
-export default ({ region, identityPoolId, bucketName}) => {
+export default ({ region, identityPoolId, bucketName }) => {
   AWS.config.region = region
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: identityPoolId
@@ -35,9 +35,12 @@ export default ({ region, identityPoolId, bucketName}) => {
     })
   }
 
+  const putObject = params => s3.putObject({ Bucket: bucketName, ...params }).promise()
+
   return {
     remove,
     presign,
-    post
+    post,
+    putObject
   }
 }

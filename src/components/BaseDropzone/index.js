@@ -12,75 +12,11 @@ class BaseDropzone extends React.Component {
     this.client = createClient(props)
   }
 
-  loadPreview = async (key, file) => {
-    const readAsDataURL = (file) => new Promise((resolve, reject) => {
-      let reader  = new FileReader()
-
-      reader.addEventListener('load', function () {
-        resolve({ 
-          data: reader.result,
-          key: key,
-          id: key,
-          loading: true
-        })
-      }, false)
-
-      if (file) {
-        reader.readAsDataURL(file)
-      }
-    })
-
-    const preview = await readAsDataURL(file)
-
-    this.props.fileReaderOnLoad(preview)
-  }
-
-  handleError = (index) => {
-    const uploads = [...this.props.uploads]
-    uploads[index] = {
-      ...uploads[index],
-      error: true
-    }
-    this.props.store.update('uploads', uploads)
-  }
-
-  onDrop = async (files) => {
-    let errors = []
-    let uploads = []
-    let index = 0
-    while (files.length > index) {
-      let file = files.shift()
-      let { type } = file
-      let params = this.props.tap(file)
-      let { Fields: { key } } = params
-      let preview = await util.loadPreview(key, file)
-      this.props.fileReaderOnLoad(preview)
-      let payload
-      try {
-        payload = await this.client.presign(
-          params
-        )
-      } catch(err) {
-        this.handleError(index)
-      }
-      try {
-        let upload = await this.client.post(
-          file,
-          payload,
-          this.props.requestParams
-        )
-        uploads.push({
-          ...upload,
-          id: key,
-          key: key
-        })
-      } catch (error) {
-        errors.push({ error, key })
-        this.handleError(index)
-      }
-      index++
-    }
-    this.props.onUploadFinish(errors, uploads)
+  onDrop = async files => {
+    this.props.onDragLeave()
+    let { uploads, errors } = await util.onDrop(this.props, this.client, files)
+    console.log({ uploads, errors })
+    this.props.done(errors, uploads)
   }
 
   render () {
@@ -89,8 +25,6 @@ class BaseDropzone extends React.Component {
       onDrop,
       requestParams,
       theme,
-      onUploadFinish,
-      fileReaderOnLoad,
       region,
       identityPoolId,
       bucketName,

@@ -26,6 +26,7 @@ class App extends React.Component {
   }
 
   done = (err, data) => {
+    console.log(data)
     if (err) {}
     let uploads = data.map(d => ({ 
       ...d, src: toUrl(d.key) 
