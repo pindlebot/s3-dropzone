@@ -202,7 +202,9 @@ const S3DropzoneWithUnique = props =>
     uploads={uniqBy(props.uploads, upload => upload.id || upload.key)}
   />
 
-export default withStore({
+const initialState = {
   uploads: [],
   visible: true
-})(S3DropzoneWithUnique)
+}
+
+export default withStore(initialState)(S3DropzoneWithUnique)

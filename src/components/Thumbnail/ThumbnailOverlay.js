@@ -41,7 +41,7 @@ function DefaultToolbar (props) {
       </div>
       <div className='dz-thumbnail-overlay-row'>
         <div style={{fontSize: '10px'}}>
-          {props.id.match(/.*\/([^?]+)/)[1]}
+          {props.id}
         </div>
       </div>
     </React.Fragment>
