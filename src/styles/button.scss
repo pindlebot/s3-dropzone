@@ -1,15 +1,11 @@
-.s3-dropzone-button-content {
+.dz-button-content {
   align-items: center;
   display: inline-flex;
   justify-content: center;
   line-height: 18px;
 }
 
-.s3-dropzone-button-wrapper {
-  
-}
-
-.s3-dropzone-button {
+.dz-button {
   font-size: 14px;
   color: #fff;
   background-image: linear-gradient(0deg, #4ba8ff 0, #6cb8ff 100%);
@@ -32,22 +28,21 @@
   height: 40px;
 }
 
-.s3-dropzone-button:hover {
+.dz-button:disabled {
+  cursor: unset;
+  opacity: 0.4;
+}
+
+.dz-button:hover {
   background-image: linear-gradient(0deg, #6cb8ff 0, #6cb8ff 100%);
   box-shadow: 0 2px 1px 0 rgba(155,172,191,0.5);
 }
 
-.s3-dropzone-button-input {
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 0;
+.dz-button-input {
   height: 100%;
-  margin: 0 -4px 0 0;
+  margin: 0 -2px 0 0;
   padding-left: 10px;
   width: 100%;
-  border: 1px solid #d8e0ea;
-  border-radius: 5px;
   box-sizing: border-box;
   color: #4c6072;
   display: inline-block;
@@ -57,12 +52,21 @@
   padding: 8px;
   transition: border-color 150ms ease-out;
   height: 40px;
+  border-left: 1px solid #d8e0ea;
+  border-top: 1px solid #d8e0ea;
+  border-bottom: 1px solid #d8e0ea;
+  border-right: 0;
+  border-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 0;
   &:focus {
     outline: 0;
   }
 }
 
-.s3-dropzone-input-group {
+.dz-input-group {
   align-items: center;
   display: inline-flex;
   flex-basis: 60%;

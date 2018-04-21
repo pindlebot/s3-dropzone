@@ -1,5 +1,16 @@
 import React from 'react'
-import Button from '../Button'
+import URL_REGEX from '../../url'
+
+const Button = props => (
+  <button
+    className='dz-button'
+    style={props.theme.button}
+    onClick={props.onClick}
+    disabled={props.disabled}
+  >
+    {props.children}
+  </button>
+)
 
 class ButtonWithInput extends React.Component {
   state = {
@@ -9,28 +20,26 @@ class ButtonWithInput extends React.Component {
   onChange = evt => this.setState({ value: evt.target.value })
   
   render () {
-    console.log(this.props)
     return (
       <div
-        onClick={evt => {
-          evt.preventDefault()
-          evt.stopPropagation()
-        }}
-        className='s3-dropzone-input-group'
+        className='dz-input-group'
       >
         <input 
           value={this.state.value}
           onChange={this.onChange}
-          className='s3-dropzone-button-input'
+          className='dz-button-input'
         />
         <Button
           {...this.props} 
+          disabled={!(this.state.value && URL_REGEX.test(this.state.value))}
           onClick={evt => {
             evt.preventDefault()
             evt.stopPropagation()
             this.props.onClick(this.state.value)
           }}
-        />
+        >
+          Upload
+        </Button>
       </div>
     )
   }

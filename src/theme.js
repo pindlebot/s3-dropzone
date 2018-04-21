@@ -1,4 +1,4 @@
-const prefix = 's3-dropzone'
+const prefix = 'dz'
 
 export const keys = {
   dropzone: {},
@@ -15,21 +15,21 @@ export const keys = {
 }
 
 export const classes = {
-  dropzone: 's3-dropzone',
-  uploads: 's3-dropzone-uploads',
-  grid: 's3-dropzone-grid',
-  thumbnail: 's3-dropzone-thumbnail',
-  thumbnailOverlay: 's3-dropzone-thumbnail-overlay',
-  thumbnailOverlayIcon: 's3-dropzone-thumbnail-overlay-icon',
-  content: 's3-dropzone-content',
-  buttonWrapper: 's3-dropzone-button-wrapper',
-  button: 's3-dropzone-button',
-  uploadIcon: 's3-dropzone-upload-icon',
-  svgIcon: 's3-dropzone-svg-icon',
-  image: 's3-dropzone-thumbnail-img',
-  hidden: 's3-dropzone-hidden',
-  modal: 's3-dropzone-modal',
-  modalWrapper: 's3-dropzone-modal-wrapper',
-  modalOverlay: 's3-dropzone-modal-overlay',
-  modalFooter: 's3-dropzone-modal-footer'
+  dropzone: 'dz',
+  uploads: 'dz-uploads',
+  grid: 'dz-grid',
+  thumbnail: 'dz-thumbnail',
+  thumbnailOverlay: 'dz-thumbnail-overlay',
+  thumbnailOverlayIcon: 'dz-thumbnail-overlay-icon',
+  content: 'dz-content',
+  buttonWrapper: 'dz-button-wrapper',
+  button: 'dz-button',
+  uploadIcon: 'dz-upload-icon',
+  svgIcon: 'dz-svg-icon',
+  image: 'dz-thumbnail-img',
+  hidden: 'dz-hidden',
+  modal: 'dz-modal',
+  modalWrapper: 'dz-modal-wrapper',
+  modalOverlay: 'dz-modal-overlay',
+  modalFooter: 'dz-modal-footer'
 }

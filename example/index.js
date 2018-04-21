@@ -53,7 +53,7 @@ class App extends React.Component {
           done={this.done}
           uploads={this.state.uploads}
           bucketName={config.bucketName}
-          onClick={(evt, type, upload) => {
+          handleClick={(evt, type, upload) => {
             if (type !== 'delete') return
             let uploads = [...this.state.uploads].filter(u => u.id !== upload.id)
             this.update(uploads)

@@ -10,9 +10,9 @@ import { start } from 'pretty-error';
 const PrevButton = props => (props.modal === 'minimized' || props.view) ? false : ( 
   <button
     className='before'
-    onClick={props.onClickBefore}
+    onClick={props.onClick}
     role='button'
-    disabled={props.startIndex <= 0}
+    disabled={props.index <= 0}
   >
     <KeyboardArrowLeft classes={props.classes} />
   </button>
@@ -21,9 +21,9 @@ const PrevButton = props => (props.modal === 'minimized' || props.view) ? false 
 const NextButton = props => (props.modal === 'minimized' || props.view) ? false : (
   <button
     className='after'
-    onClick={props.onClickAfter}
+    onClick={props.onClick}
     role='button'
-    disabled={(props.startIndex + 6) >= props.uploads.length}
+    disabled={(props.index + props.gridSize) >= props.uploads.length}
   >
     <KeyboardArrowRight classes={props.classes} />
   </button>
@@ -32,28 +32,28 @@ const NextButton = props => (props.modal === 'minimized' || props.view) ? false 
 class Grid extends React.Component {
 
   state = {
-    startIndex: 0
+    index: 0
   }
 
   onClickBefore = evt => {
-    let { startIndex } = this.state
+    let { index } = this.state
     evt.preventDefault()
     evt.stopPropagation()
-    this.setState({ startIndex: Math.abs(startIndex - this.props.gridSize) })
+    this.setState({ index: Math.abs(index - this.props.gridSize) })
   }
 
   onClickAfter = evt => {
-    let { startIndex } = this.state
+    let { index } = this.state
     evt.preventDefault()
     evt.stopPropagation()
-    this.setState({ startIndex: startIndex + this.props.gridSize })
+    this.setState({ index: index + this.props.gridSize })
   }
 
   renderGridBody = () => {
-    const { startIndex } = this.state
+    const { index } = this.state
     const { view } = this.props
     const uploads = view ? [view] : [...this.props.uploads]
-      .slice(startIndex, startIndex + this.props.gridSize)
+      .slice(index, index + this.props.gridSize)
     
     return uploads.map((upload, index) => (
       <Thumbnail
@@ -73,16 +73,16 @@ class Grid extends React.Component {
       modal,
       className
     } = this.props
-    let { startIndex } = this.state
+    let { index } = this.state
     const minimized = modal === 'minimized'
     return (
       <div className={
-        classNames('s3-dropzone-modal-content', view ? 'full-width' : '')
+        classNames('dz-modal-content', view ? 'full-width' : '')
       }>
         <PrevButton
           {...this.props}
-          startIndex={startIndex}
-          onClickBefore={this.onClickBefore}
+          index={index}
+          onClick={this.onClickBefore}
         />
         <div
           className={classes.grid}
@@ -95,8 +95,8 @@ class Grid extends React.Component {
         </div>
         <NextButton
           {...this.props}
-          startIndex={startIndex}
-          onClickAfter={this.onClickAfter}
+          index={index}
+          onClick={this.onClickAfter}
         />
       </div>
     )

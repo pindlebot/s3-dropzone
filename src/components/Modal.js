@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from './Button'
 import {
   CloseIcon,
   MaximizeIcon,
@@ -8,51 +7,47 @@ import {
 import ButtonWithInput from './ButtonWithInput'
 
 export const ModalHeader = props => (
-  <div className='s3-dropzone-modal-header'>
-    <div className='s3-dropzone-modal-header-inner'>
+  <div className='dz-modal-header'>
+    <div className='dz-modal-header-inner' style={{}}>
       <button
-        className='s3-dropzone-oval'
+        className='dz-oval'
         onClick={evt => {
           evt.stopPropagation()
           props.store.update('visible', false)
-          props.onClickAway(evt)
+          props.onClose(evt)
         }}
       >
-        <CloseIcon
-          width={'0.5rem'}
-          height={'0.5rem'}
-        />
+        <CloseIcon />
       </button>
       <button
-        className='s3-dropzone-oval'
+        className='dz-oval'
         onClick={evt => {
           evt.stopPropagation()
           props.setModalState('minimized')
         }}
       >
-        <MinimizeIcon
-          width={'0.5rem'}
-          height={'0.5rem'}
-        />
+        <MinimizeIcon />
       </button>
       <button
-        className='s3-dropzone-oval'
+        className='dz-oval'
         onClick={evt => {
           evt.stopPropagation()
           props.setModalState('maximized')
         }}
       >
-        <MaximizeIcon
-          width={'0.5rem'}
-          height={'0.5rem'}
-        />
+        <MaximizeIcon />
       </button>
     </div>
   </div>
 )
 
 export const ModalFooter = props => props.modal === 'minimized' || props.view ? false : (
-  <div className={props.classes.modalFooter}>
+  <div
+    onClick={evt => {
+      evt.preventDefault()
+      evt.stopPropagation()
+    }}
+    className={props.classes.modalFooter}>
     <ButtonWithInput {...props} />
   </div>
 )

@@ -1,6 +1,6 @@
-.s3-dropzone-modal {
+.dz-modal {
   display: flex;
-  position: relative; 
+  position: relative;
   flex-direction: column;
   opacity: 1;
   transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -9,7 +9,7 @@
   cursor: default;
 }
 
-.s3-dropzone-modal-wrapper {
+.dz-modal-wrapper {
   top: 0;
   left: 0;
   width: 100%;
@@ -21,7 +21,7 @@
   justify-content: center;
 }
 
-.s3-dropzone-modal-overlay {
+.dz-modal-overlay {
   top: 0;
   left: 0;
   width: 100%;
@@ -29,12 +29,12 @@
   z-index: -1;
   position: fixed;
   will-change: opacity;
-  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   opacity: 0.5;
   -webkit-tap-highlight-color: transparent;
 }
 
-.s3-dropzone-modal-footer {
+.dz-modal-footer {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -42,12 +42,11 @@
   flex-basis: 20%;
 }
 
-.s3-dropzone-modal-header {
+.dz-modal-header {
   flex-basis: 15%;
 }
 
-.s3-dropzone-modal-header-inner {
-  background-color: #9BACBF;
+.dz-modal-header-inner {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -57,19 +56,14 @@
   height: 2rem;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  background-color: #ecf3f8;
+  border-bottom: 1px solid #e5eef4;
   button svg {
     visibility: hidden;
   }
 }
 
-.s3-dropzone-modal-content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-basis: 65%;
-}
-
-.s3-dropzone-oval {
+.dz-oval {
   outline: 0;
   border: 0;
   background-color: transparent;
@@ -89,17 +83,51 @@
   }
 }
 
-.s3-dropzone-oval:nth-child(1) {
+.dz-oval:nth-child(1) {
   background-color: #FF6258;
   border: 1px solid #F24941;
 }
 
-.s3-dropzone-oval:nth-child(2) {
+.dz-oval:nth-child(2) {
   background-color: #FFC12F;
   border: 1px solid #DF9F22;
 }
 
-.s3-dropzone-oval:nth-child(3) {
+.dz-oval:nth-child(3) {
   background-color: #29CE42;
   border: 1px solid #1DAC2D;
+}
+
+.dz-modal-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-basis: 65%;
+}
+
+.dz-modal-content .after,
+.dz-modal-content .before {
+  @extend .dz-column;
+  cursor: pointer;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  svg {
+    fill: #9bacbf;
+    width: 36px;
+    height: 36px;
+  }
+  &:hover {
+    background-color: #f4f9fd;
+    svg {
+      fill: #4ba8ff;
+    }
+  }
+  &:disabled {
+    svg {
+      fill: $white;
+    }
+  }
 }

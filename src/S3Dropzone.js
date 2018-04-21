@@ -1,7 +1,7 @@
 import React from 'react'
 import Thumbnail from './components/Thumbnail'
 import Button from './components/Button'
-import Dropzone from './components/BaseDropzone';
+import ModalDropzone from './components/BaseDropzone';
 import Grid from './components/Grid'
 import * as theme from './theme'
 import createClient from './createClient'
@@ -9,21 +9,8 @@ import Modal, { ModalFooter, ModalHeader } from './components/Modal'
 import { withStore } from 'react-subscriptions'
 import uniqBy from 'lodash.uniqby'
 import debounce from 'lodash.debounce'
-import * as util from './components/BaseDropzone/util'
+import * as util from './util'
 import fileType from 'file-type'
-
-// @media only screen 
-// and (min-device-width: 320px)
-// and (max-device-width: 568px) {
-//
-// }
-
-function arrayBufferToBase64(buffer) {
-  var binary = ''
-  var bytes = [].slice.call(new Uint8Array(buffer))
-  bytes.forEach((b) => binary += String.fromCharCode(b))
-  return window.btoa(binary)
-}
 
 class S3Dropzone extends React.Component {
   constructor (props) {
@@ -33,7 +20,7 @@ class S3Dropzone extends React.Component {
       drag: false,
       view: undefined,
       modal: window.innerWidth > 568 ? undefined : 'maximized',
-      gridSize: window.innerWidth >= 568 ? 6 : 1
+      gridSize: window.innerWidth > 568 ? 6 : 1
     }
 
     this.client = createClient(props)
@@ -102,7 +89,7 @@ class S3Dropzone extends React.Component {
       case 'insert':
       default:
     }
-    this.props.onClick(evt, type, upload)
+    this.props.handleClick(evt, type, upload)
   }
 
   onDragEnter = (evt) => {
@@ -122,7 +109,6 @@ class S3Dropzone extends React.Component {
         drag={this.state.drag}
         view={this.state.view}
         modal={this.state.modal}
-        className={this.state.view ? 's3-dropzone-grid-view' : ''}
         gridSize={this.state.gridSize}
       />
     )
@@ -136,17 +122,29 @@ class S3Dropzone extends React.Component {
     })
   }
 
+  handleSubmit = async value => {
+    let [_, key] = value.match(/.*\/([^?]+)/)
+    let buff = await fetch(value)
+      .then(resp => resp.arrayBuffer())
+    let type = fileType(buff)
+    let file = new File([buff], key, { type });
+    this.onDrop([file])
+  }
+
+  onDrop = async files => {
+    this.onDragLeave()
+    let { uploads, errors } = await util.handleDrop(this.props, this.client, files)
+    this.props.done(errors, uploads)
+  }
+
   render () {
     const {
-      thumbnailsContainer,
       theme,
-      onClick,
-      onClickAway,
+      classes,
       visible,
       uploads,
       ...rest
     } = this.props
-
     if (!visible) return false
   
     return (
@@ -155,14 +153,14 @@ class S3Dropzone extends React.Component {
         modal={this.state.modal}
         view={this.state.view}
       >
-        <Dropzone
-          {...rest}
-          uploads={uploads}
+        <ModalDropzone
           onDragEnter={this.onDragEnter}
           onDragLeave={this.onDragLeave}
+          onDrop={this.onDrop}
           className={this.state.drag ? 'drag' : undefined}
           draggable='true'
           theme={theme}
+          classes={classes}
         >
           <ModalHeader
             setModalState={this.setModalState}
@@ -174,18 +172,9 @@ class S3Dropzone extends React.Component {
            {...this.props}
             modal={this.state.modal}
             view={this.state.view}
-            onClick={async value => {
-              this.onDragLeave()
-              let [_, key] = value.match(/.*\/([^?]+)/)
-              let buff = await fetch(value)
-                .then(resp => resp.arrayBuffer())
-              let type = fileType(buff)
-              let file = new File([buff], key, { type });
-              let { uploads, errors } = await util.onDrop(this.props, this.client, [file])
-              this.props.done(errors, uploads)
-            }}
+            onClick={this.handleSubmit}
           />
-        </Dropzone>
+        </ModalDropzone>
       </Modal>
     )
   }
@@ -197,8 +186,16 @@ S3Dropzone.defaultProps = {
   onDrop: () => {},
   theme: theme.keys,
   classes: theme.classes,
-  onClick: () => {},
-  onClickAway: () => {}
+  handleClick: () => {},
+  onClose: () => {},
+  tap: file => ({
+    Fields: {
+      key: `${Math.round(Date.now() / 1000)}-${file.name}`,
+      'Content-Type': file.type,
+    }
+  }),
+  region: 'us-east-1',
+  requestParams: {},
 }
 
 const S3DropzoneWithUnique = props => 

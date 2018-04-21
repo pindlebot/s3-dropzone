@@ -18,7 +18,6 @@ function Image(props) {
       onLoad={props.onLoad}
       onError={props.onError}
       src={props.data || props.src}
-      ref={props.refCallback}
     />
   )
 }
@@ -33,7 +32,6 @@ class Thumbnail extends React.Component {
     hover: false,
     loading: true,
     className: '',
-    aspectRatio: 1
   }
 
   preventBubbles = (evt) => {
@@ -51,25 +49,15 @@ class Thumbnail extends React.Component {
     this.props.store.update('uploads', uploads)
   }
 
-  refCallback = (img) => {
-    this.img = img
-    // let aspectRatio = img.naturalWidth / img.naturalHeight
-
-    // this.setState({
-    //  aspectRatio: img.naturalWidth / img.naturalHeight
-    // })
-  }
-
   render () {
     const { view, classes, error } = this.props   
     const loading = this.state.loading
     const className = classNames(
       classes.thumbnail,
-      view ? 's3-dropzone-full-width' : '',
       error
-        ? 's3-dropzone-thumbnail-error'
+        ? 'dz-thumbnail-error'
         : loading
-          ? 's3-dropzone-thumbnail-loading'
+          ? 'dz-thumbnail-loading'
           : undefined
     )
     return (
@@ -94,7 +82,6 @@ class Thumbnail extends React.Component {
           onError={(evt) => {
             this.updateStore('error', true)
           }}
-          refCallback={this.refCallback}
           {...this.props}
         />
         <ThumbnailOverlay
@@ -106,7 +93,6 @@ class Thumbnail extends React.Component {
           theme={this.props.theme}
           view={this.props.view}
           classes={this.props.classes}
-          aspectRatio={this.state.aspectRatio}
           {...this.props}
         />
       </figure>

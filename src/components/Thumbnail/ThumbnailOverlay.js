@@ -12,48 +12,47 @@ import ZoomOutMap from '../icons/ZoomOutMap'
 function DefaultToolbar (props) {
   return (
     <React.Fragment>
-      <IconButton
-        {...props}
-        onClick={props.onClick}
-        index={props.index}
-        name='delete'>
-        <DeleteIcon classes={props.classes} fill={props.fill} />
-      </IconButton>
-      {!props.error && <React.Fragment>
+      <div className='dz-thumbnail-overlay-row' />
+      <div className='dz-thumbnail-overlay-row'>
         <IconButton
           {...props}
           onClick={props.onClick}
           index={props.index}
-          name='view'>
-          <ZoomOutMap classes={props.classes} fill={props.fill} />
+          name='delete'
+        >
+          <DeleteIcon classes={props.classes} fill={props.fill} />
         </IconButton>
-        <IconButton
-          {...props}
-          onClick={props.onClick}
-          index={props.index}
-          name='insert'>
-          <AddIcon classes={props.classes} fill={props.fill} />
-        </IconButton>
-      </React.Fragment>}
+        {!props.error && <React.Fragment>
+          <IconButton
+            {...props}
+            onClick={props.onClick}
+            index={props.index}
+            name='view'>
+            <ZoomOutMap classes={props.classes} fill={props.fill} />
+          </IconButton>
+          <IconButton
+            {...props}
+            onClick={props.onClick}
+            index={props.index}
+            name='insert'>
+            <AddIcon classes={props.classes} fill={props.fill} />
+          </IconButton>
+        </React.Fragment>}
+      </div>
+      <div className='dz-thumbnail-overlay-row'>
+        <div style={{fontSize: '10px'}}>
+          {props.id.match(/.*\/([^?]+)/)[1]}
+        </div>
+      </div>
     </React.Fragment>
   )
 }
 
 const ThumbnailOverlayWrapper = props => (
   <div
-    style={{
-      width: '100%',
-      height: `${100 / props.aspectRatio}%`
-    }}
     className={props.classes.thumbnailOverlay}
   >
-    <div className='s3-dropzone-thumbnail-overlay-row'></div>
-    <div className='s3-dropzone-thumbnail-overlay-row'>
-      {props.children}
-    </div>
-    <div className='s3-dropzone-thumbnail-overlay-row'>
-      <div style={{fontSize: '11px'}}>{props.id}</div>
-    </div>
+    {props.children}
   </div>
 )
 
@@ -70,26 +69,24 @@ const ThumbnailOverlay = props => {
   const className = classNames(
     classes.thumbnailOverlay
   )
-  console.log(props)
   const isExpanded = !!view
   switch (true) {
     case isExpanded:
-      return (
-        <IconButton
+      return hover
+        ? (<IconButton
           {...props}
           onClick={props.onClick}
           index={props.index}
           name='close'>
           <CloseIcon classes={classes} />
-        </IconButton>
-      )
+        </IconButton>) : false
     case hover:
       return (
         <DefaultToolbar
           {...props}
           onClick={props.onClick}
           index={props.index}
-          fill={error ? '#555' : '#fff'}
+          fill={error ? '#fff' : '#fff'}
         />
       )
     case error:
