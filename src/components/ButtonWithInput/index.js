@@ -18,19 +18,19 @@ class ButtonWithInput extends React.Component {
   }
 
   onChange = evt => this.setState({ value: evt.target.value })
-  
+
   render () {
     return (
       <div
         className='dz-input-group'
       >
-        <input 
+        <input
           value={this.state.value}
           onChange={this.onChange}
           className='dz-button-input'
         />
         <Button
-          {...this.props} 
+          {...this.props}
           disabled={!(this.state.value && URL_REGEX.test(this.state.value))}
           onClick={evt => {
             evt.preventDefault()

@@ -3,7 +3,7 @@ import ThumbnailOverlay from './ThumbnailOverlay'
 import classNames from 'classnames'
 import { pick } from 'react-valid-attributes'
 
-function Image(props) {
+function Image (props) {
   const className = classNames([
     props.classes.image,
     props.className,
@@ -11,8 +11,8 @@ function Image(props) {
   ])
   const elementProps = pick(props, 'img')
   return (
-      <img
-      {...elementProps} 
+    <img
+      {...elementProps}
       style={props.style}
       className={className}
       onLoad={props.onLoad}
@@ -31,7 +31,7 @@ class Thumbnail extends React.Component {
   state = {
     hover: false,
     loading: true,
-    className: '',
+    className: ''
   }
 
   preventBubbles = (evt) => {
@@ -50,7 +50,7 @@ class Thumbnail extends React.Component {
   }
 
   render () {
-    const { view, classes, error } = this.props   
+    const { view, classes, error } = this.props
     const loading = this.state.loading
     const className = classNames(
       classes.thumbnail,
@@ -61,7 +61,7 @@ class Thumbnail extends React.Component {
           : undefined
     )
     return (
-      <figure 
+      <figure
         style={this.props.theme.figure}
         onClick={this.preventBubbles}
         className={className}

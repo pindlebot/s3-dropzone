@@ -50,6 +50,9 @@
     "react": "*",
     "react-dom": "*"
   },
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   }

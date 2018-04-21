@@ -1,7 +1,5 @@
 import React from 'react'
-import Thumbnail from './components/Thumbnail'
-import Button from './components/Button'
-import ModalDropzone from './components/BaseDropzone';
+import ModalDropzone from './components/BaseDropzone'
 import Grid from './components/Grid'
 import * as theme from './theme'
 import createClient from './createClient'
@@ -48,7 +46,7 @@ class S3Dropzone extends React.Component {
     state.gridSize = width >= 568 ? 6 : 1
     if (this.state.gridSize !== state.gridSize) {
       let modal
-      switch(state.gridSize) {
+      switch (state.gridSize) {
         case 6:
           modal = undefined
           break
@@ -102,7 +100,7 @@ class S3Dropzone extends React.Component {
 
   renderGrid = () => {
     return (
-      <Grid 
+      <Grid
         {...this.props}
         onClick={this.onClick}
         uploads={this.props.uploads}
@@ -115,7 +113,7 @@ class S3Dropzone extends React.Component {
   }
 
   setModalState = (state) => {
-    this.setState({ 
+    this.setState({
       modal: this.state.modal === state
         ? undefined
         : state
@@ -127,7 +125,7 @@ class S3Dropzone extends React.Component {
     let buff = await fetch(value)
       .then(resp => resp.arrayBuffer())
     let type = fileType(buff)
-    let file = new File([buff], key, { type });
+    let file = new File([buff], key, { type })
     this.onDrop([file])
   }
 
@@ -146,7 +144,7 @@ class S3Dropzone extends React.Component {
       ...rest
     } = this.props
     if (!visible) return false
-  
+
     return (
       <Modal
         {...this.props}
@@ -167,9 +165,9 @@ class S3Dropzone extends React.Component {
             iconStyles={this.state.iconStyles}
             {...this.props}
           />
-            {this.renderGrid()}
-          <ModalFooter 
-           {...this.props}
+          {this.renderGrid()}
+          <ModalFooter
+            {...this.props}
             modal={this.state.modal}
             view={this.state.view}
             onClick={this.handleSubmit}
@@ -191,15 +189,15 @@ S3Dropzone.defaultProps = {
   tap: file => ({
     Fields: {
       key: `${Math.round(Date.now() / 1000)}-${file.name}`,
-      'Content-Type': file.type,
+      'Content-Type': file.type
     }
   }),
   region: 'us-east-1',
-  requestParams: {},
+  requestParams: {}
 }
 
-const S3DropzoneWithUnique = props => 
-  <S3Dropzone 
+const S3DropzoneWithUnique = props =>
+  <S3Dropzone
     {...props}
     uploads={uniqBy(props.uploads, upload => upload.id || upload.key)}
   />
