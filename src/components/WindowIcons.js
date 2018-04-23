@@ -15,8 +15,6 @@ export const CloseIcon = props => (
 )
 
 CloseIcon.defaultProps = {
-  width: '0.4rem',
-  height: '0.4rem',
   viewBox: '0 0 58 59',
   classes: { svgIcon: '' }
 }
@@ -35,8 +33,6 @@ export const MinimizeIcon = props => (
 
 MinimizeIcon.defaultProps = {
   viewBox: '0 0 73 10',
-  width: '0.4rem',
-  height: '0.4rem',
   classes: { svgIcon: '' }
 }
 
@@ -54,7 +50,5 @@ export const MaximizeIcon = props => (
 
 MaximizeIcon.defaultProps = {
   viewBox: '0 0 52 52',
-  width: '0.4rem',
-  height: '0.4rem',
   classes: { svgIcon: '' }
 }

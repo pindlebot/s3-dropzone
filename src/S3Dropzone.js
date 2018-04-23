@@ -122,6 +122,7 @@ class S3Dropzone extends React.Component {
 
   handleSubmit = async value => {
     let [_, key] = value.match(/.*\/([^?]+)/)
+    key = decodeURIComponent(key).replace(/(\.(?=[^.]*\.))|[\\^`><{}[\]#%"'+~\s|]/g, '')
     let buff = await fetch(value)
       .then(resp => resp.arrayBuffer())
     let type = fileType(buff)

@@ -4741,9 +4741,9 @@ react-html-attributes@^1.4.1:
   dependencies:
     html-element-attributes "^1.0.0"
 
-react-subscriptions@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/react-subscriptions/-/react-subscriptions-0.0.6.tgz#01b95f07827c5f14e8cffb0378cd2ce284731f4e"
+react-subscriptions@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/react-subscriptions/-/react-subscriptions-0.0.7.tgz#ed0e98589985dbe1d5259faf60560cc563c160f1"
 
 react-valid-attributes@^0.0.1:
   version "0.0.1"

@@ -40,7 +40,14 @@ function DefaultToolbar (props) {
         </React.Fragment>}
       </div>
       <div className='dz-thumbnail-overlay-row'>
-        <div style={{fontSize: '10px'}}>
+        <div style={{
+          fontSize: '10px',
+          //backgroundColor: '#e5eef4',
+          padding: '5px',
+          //color: '#4c6072',
+          width: '100%',
+          boxSizing: 'border-box'
+        }}>
           {props.id}
         </div>
       </div>
@@ -51,65 +58,74 @@ function DefaultToolbar (props) {
 const ThumbnailOverlayWrapper = props => (
   <div
     className={props.classes.thumbnailOverlay}
+    style={props.dimensions}
   >
     {props.children}
   </div>
 )
 
-const ThumbnailOverlay = props => {
-  const {
-    classes,
-    loading,
-    error,
-    hover,
-    theme,
-    view
-  } = props
-  const styles = theme.thumbnailOverlay
-  const className = classNames(
-    classes.thumbnailOverlay
-  )
-  const isExpanded = !!view
-  switch (true) {
-    case isExpanded:
-      return hover
-        ? (<IconButton
-          {...props}
-          onClick={props.onClick}
-          index={props.index}
-          name='close'>
-          <CloseIcon classes={classes} />
-        </IconButton>) : false
-    case hover:
-      return (
-        <DefaultToolbar
-          {...props}
-          onClick={props.onClick}
-          index={props.index}
-          fill={error ? '#fff' : '#fff'}
-        />
-      )
-    case error:
-      return (
-        <ErrorIcon
-          classes={classes}
-          fill={'#e4567b'}
-        />
-      )
-    case loading:
-      return (
-        <Spinner
-          theme={props.theme}
-          show={props.loading}
-        />
-      )
-    default:
-      return false
+export default class ThumbnailOverlay extends React.Component {
+  renderOverlay () {
+    const {
+      classes,
+      loading,
+      error,
+      hover,
+      theme,
+      view
+    } = this.props
+    const styles = theme.thumbnailOverlay
+    const className = classNames(
+      classes.thumbnailOverlay
+    )
+    const isExpanded = !!view
+    switch (true) {
+      case isExpanded:
+        return hover
+          ? (<IconButton
+            {...this.props}
+            onClick={this.props.onClick}
+            index={this.props.index}
+            name='close'>
+            <CloseIcon classes={classes} />
+          </IconButton>)
+          : false
+      case hover:
+        return (
+          <DefaultToolbar
+            {...this.props}
+            onClick={this.props.onClick}
+            index={this.props.index}
+            fill={error ? '#fff' : '#fff'}
+          />
+        )
+      case error:
+        return (
+          <ErrorIcon
+            classes={classes}
+            fill={'#e4567b'}
+          />
+        )
+      case loading:
+        return (
+          <Spinner
+            theme={this.props.theme}
+            show={this.props.loading}
+          />
+        )
+      default:
+        return false
+    }
+  }
+
+  render () {
+    const dimensions = !!this.props.view
+      ? { width: '100%', height: '100%' }
+      : this.props.dimensions
+    return (
+      <ThumbnailOverlayWrapper {...this.props} dimensions={dimensions}>
+        {this.renderOverlay()}
+      </ThumbnailOverlayWrapper>
+    )
   }
 }
-
-export default props => (
-  <ThumbnailOverlayWrapper {...props}>
-    <ThumbnailOverlay {...props} />
-  </ThumbnailOverlayWrapper>
-)

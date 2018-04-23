@@ -76,6 +76,10 @@
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
+  svg {
+    width: 50%;
+    height: 50%;
+  }
   &:hover {
     svg {
       visibility: unset;

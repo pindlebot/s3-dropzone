@@ -18,6 +18,7 @@ function Image (props) {
       onLoad={props.onLoad}
       onError={props.onError}
       src={props.data || props.src}
+      ref={props.refCallback}
     />
   )
 }
@@ -31,7 +32,9 @@ class Thumbnail extends React.Component {
   state = {
     hover: false,
     loading: true,
-    className: ''
+    className: '',
+    dimensions: {},
+    aspectRatio: 1
   }
 
   preventBubbles = (evt) => {
@@ -47,6 +50,16 @@ class Thumbnail extends React.Component {
       [key]: value
     }
     this.props.store.update('uploads', uploads)
+  }
+
+  refCallback = ref => {
+    if (ref) {
+      let dimensions = {
+        width: ref.clientWidth,
+        height: ref.clientHeight
+      }
+      this.setState({ dimensions })
+    }
   }
 
   render () {
@@ -73,7 +86,6 @@ class Thumbnail extends React.Component {
         }}
       >
         <Image
-          classes={this.props.classes}
           onLoad={(evt) => {
             if (this.state.loading) {
               this.setState({ loading: false })
@@ -82,17 +94,14 @@ class Thumbnail extends React.Component {
           onError={(evt) => {
             this.updateStore('error', true)
           }}
+          refCallback={this.refCallback}
           {...this.props}
         />
         <ThumbnailOverlay
           error={error}
           loading={loading}
           hover={this.state.hover}
-          onClick={this.props.onClick}
-          index={this.props.index}
-          theme={this.props.theme}
-          view={this.props.view}
-          classes={this.props.classes}
+          dimensions={this.state.dimensions}
           {...this.props}
         />
       </figure>
