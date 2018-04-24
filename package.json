@@ -23,7 +23,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.uniqby": "^4.7.0",
     "react-dropzone": "^4.2.9",
-    "react-subscriptions": "^0.0.7",
+    "react-subscriptions": "^0.0.8",
     "react-valid-attributes": "^0.0.1",
     "whatwg-fetch": "^2.0.3"
   },

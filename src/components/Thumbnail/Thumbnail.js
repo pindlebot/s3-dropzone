@@ -54,11 +54,8 @@ class Thumbnail extends React.Component {
 
   refCallback = ref => {
     if (ref) {
-      let dimensions = {
-        width: ref.clientWidth,
-        height: ref.clientHeight
-      }
-      this.setState({ dimensions })
+      let { width, height } = ref.getBoundingClientRect()
+      this.setState({ dimensions: { width, height } })
     }
   }
 

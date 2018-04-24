@@ -1,7 +1,6 @@
 import React from 'react'
 import IconButton from './IconButton'
 import DeleteIcon from '../icons/Delete'
-import PageViewIcon from '../icons/PageView'
 import CloseIcon from '../icons/Close'
 import AddIcon from '../icons/Add'
 import Spinner from './SpinnerComponent'
@@ -42,9 +41,7 @@ function DefaultToolbar (props) {
       <div className='dz-thumbnail-overlay-row'>
         <div style={{
           fontSize: '10px',
-          //backgroundColor: '#e5eef4',
-          padding: '5px',
-          //color: '#4c6072',
+          padding: '8px 5px',
           width: '100%',
           boxSizing: 'border-box'
         }}>
@@ -57,7 +54,7 @@ function DefaultToolbar (props) {
 
 const ThumbnailOverlayWrapper = props => (
   <div
-    className={props.classes.thumbnailOverlay}
+    className={props.className}
     style={props.dimensions}
   >
     {props.children}
@@ -71,13 +68,8 @@ export default class ThumbnailOverlay extends React.Component {
       loading,
       error,
       hover,
-      theme,
       view
     } = this.props
-    const styles = theme.thumbnailOverlay
-    const className = classNames(
-      classes.thumbnailOverlay
-    )
     const isExpanded = !!view
     switch (true) {
       case isExpanded:
@@ -101,17 +93,21 @@ export default class ThumbnailOverlay extends React.Component {
         )
       case error:
         return (
-          <ErrorIcon
-            classes={classes}
-            fill={'#e4567b'}
-          />
+          <div className='dz-thumbnail-overlay-column'>
+            <ErrorIcon
+              classes={classes}
+              fill={'#e4567b'}
+            />
+          </div>
         )
       case loading:
         return (
-          <Spinner
-            theme={this.props.theme}
-            show={this.props.loading}
-          />
+          <div className='dz-thumbnail-overlay-column'>
+            <Spinner
+              theme={this.props.theme}
+              show={this.props.loading}
+            />
+          </div>
         )
       default:
         return false
@@ -123,7 +119,11 @@ export default class ThumbnailOverlay extends React.Component {
       ? { width: '100%', height: '100%' }
       : this.props.dimensions
     return (
-      <ThumbnailOverlayWrapper {...this.props} dimensions={dimensions}>
+      <ThumbnailOverlayWrapper
+        {...this.props}
+        dimensions={dimensions}
+        className={this.props.classes.thumbnailOverlay}
+      >
         {this.renderOverlay()}
       </ThumbnailOverlayWrapper>
     )

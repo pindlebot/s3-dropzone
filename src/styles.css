@@ -408,6 +408,13 @@
     transform: scale(0.8); }
   .dz-thumbnail-overlay .dz-thumbnail-overlay-row:nth-child(3) {
     align-items: flex-end; }
+  .dz-thumbnail-overlay .dz-thumbnail-overlay-column {
+    flex-basis: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%; }
 
 .dz-thumbnail:hover .dz-thumbnail-overlay {
   justify-content: space-between; }
