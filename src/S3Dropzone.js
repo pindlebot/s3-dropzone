@@ -2,100 +2,46 @@ import React from 'react'
 import ModalDropzone from './components/BaseDropzone'
 import Grid from './components/Grid'
 import * as theme from './theme'
-import createClient from './createClient'
 import Modal, { ModalFooter, ModalHeader } from './components/Modal'
-import { withStore } from 'react-subscriptions'
-import uniqBy from 'lodash.uniqby'
-import debounce from 'lodash.debounce'
-import * as util from './util'
+import { createDropHandler } from './util'
 import fileType from 'file-type'
+import withResize from './withResize'
+import withMergedProps from './withMergedProps'
+import withAWS from './withAWS'
 
 class S3Dropzone extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      drag: false,
-      view: undefined,
-      modal: window.innerWidth > 568 ? undefined : 'maximized',
-      gridSize: window.innerWidth > 568 ? 6 : 1
-    }
-
-    this.client = createClient(props)
+  state = {
+    view: undefined,
+    modal: undefined,
+    gridSize: 6
   }
 
-  componentDidMount = () => {
-    setTimeout(() => { window.addEventListener('click', this.onWindowClick) })
-    setTimeout(() => { window.addEventListener('resize', debounce(this.onWindowResize, 200)) })
-  }
+  static getDerivedStateFromProps (nextProps, prevState) {
+    const gridSize = nextProps.width >= 568 ? 6 : 1
+    const modal = gridSize > 1 ? undefined : 'maximized'
+    const view = nextProps.windowClick && prevState.view
+      ? undefined
+      : prevState.view
 
-  componentWillUnmount = () => {
-    window.removeEventListener('click', this.onWindowClick)
-    window.removeEventListener('resize', this.onWindowResize)
-  }
-
-  onWindowClick = evt => {
-    if (this.state.view) {
-      this.setState({ view: undefined })
-    }
-  }
-
-  onWindowResize = evt => {
-    let state = {}
-    let width = evt.srcElement.innerWidth
-    state.gridSize = width >= 568 ? 6 : 1
-    if (this.state.gridSize !== state.gridSize) {
-      let modal
-      switch (state.gridSize) {
-        case 6:
-          modal = undefined
-          break
-        case 1:
-          modal = 'maximized'
-      }
-      state.modal = modal
-      this.setState(state)
-    }
-  }
-
-  handleDelete = (upload) => {
-    const { bucketName } = this.props
-    return this.s3.deleteObject({
-      Bucket: bucketName,
-      Key: upload.id || upload.key
-    }).promise()
+    return { gridSize, modal, view }
   }
 
   onClick = async (evt, type, index) => {
     let upload = {...this.props.uploads[index]}
     evt.preventDefault()
-    switch (type) {
-      case 'delete':
-        if (!upload.error) {
-          this.client.remove(upload.id || upload.key)
-        }
-        let uploads = [...this.props.uploads]
-        uploads.splice(index, 1)
-        this.props.store.update('uploads', uploads)
-        break
-      case 'view':
-        this.setState({ view: upload })
-        break
-      case 'close':
-        this.setState({ view: undefined })
-        break
-      case 'insert':
-      default:
+    if (type === 'delete') {
+      if (!upload.error) {
+        this.props.client.remove(upload.id || upload.key)
+      }
+      let uploads = [...this.props.uploads]
+      uploads.splice(index, 1)
+      this.props.dispatch(() => ({ uploads }))
+    } else if (type === 'view') {
+      this.setState({ view: upload })
+    } else if (type === 'close') {
+      this.setState({ view: undefined })
     }
     this.props.handleClick(evt, type, upload)
-  }
-
-  onDragEnter = (evt) => {
-    this.setState({ drag: true })
-  }
-
-  onDragLeave = (evt) => {
-    this.setState({ drag: false })
   }
 
   renderGrid = () => {
@@ -104,7 +50,6 @@ class S3Dropzone extends React.Component {
         {...this.props}
         onClick={this.onClick}
         uploads={this.props.uploads}
-        drag={this.state.drag}
         view={this.state.view}
         modal={this.state.modal}
         gridSize={this.state.gridSize}
@@ -131,8 +76,9 @@ class S3Dropzone extends React.Component {
   }
 
   onDrop = async files => {
-    this.onDragLeave()
-    let { uploads, errors } = await util.handleDrop(this.props, this.client, files)
+    this.props.onDragLeave()
+    const handleDrop = createDropHandler(this.props)
+    const { uploads, errors } = await handleDrop(files)
     this.props.done(errors, uploads)
   }
 
@@ -144,6 +90,7 @@ class S3Dropzone extends React.Component {
       uploads,
       ...rest
     } = this.props
+    console.log(this.props)
     if (!visible) return false
     return (
       <Modal
@@ -152,13 +99,14 @@ class S3Dropzone extends React.Component {
         view={this.state.view}
       >
         <ModalDropzone
-          onDragEnter={this.onDragEnter}
-          onDragLeave={this.onDragLeave}
+          onDragEnter={this.props.onDragEnter}
+          onDragLeave={this.props.onDragLeave}
           onDrop={this.onDrop}
-          className={this.state.drag ? 'drag' : undefined}
+          className={this.props.drag ? 'drag' : undefined}
           draggable='true'
           theme={theme}
           classes={classes}
+          dispatch={this.props.dispatch}
         >
           <ModalHeader
             setModalState={this.setModalState}
@@ -193,18 +141,17 @@ S3Dropzone.defaultProps = {
     }
   }),
   region: 'us-east-1',
-  requestParams: {}
+  requestParams: {},
+  uploads: []
 }
-
-const S3DropzoneWithUnique = props =>
-  <S3Dropzone
-    {...props}
-    uploads={uniqBy(props.uploads, upload => upload.id || upload.key)}
-  />
 
 const initialState = {
   uploads: [],
   visible: true
 }
 
-export default withStore(initialState)(S3DropzoneWithUnique)
+export default withMergedProps(initialState)(
+  withAWS(
+    withResize(S3Dropzone)
+  )
+)

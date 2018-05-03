@@ -7,6 +7,7 @@ function BaseDropzone (props) {
     theme,
     classes,
     className: classNameProp,
+    dispatch,
     ...rest
   } = props
   const className = classNames(

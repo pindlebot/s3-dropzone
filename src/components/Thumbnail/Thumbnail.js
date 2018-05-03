@@ -49,7 +49,7 @@ class Thumbnail extends React.Component {
       ...uploads[index],
       [key]: value
     }
-    this.props.store.update('uploads', uploads)
+    this.props.dispatch(() => ({ uploads }))
   }
 
   refCallback = ref => {

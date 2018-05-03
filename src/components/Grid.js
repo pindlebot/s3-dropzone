@@ -52,12 +52,7 @@ class Grid extends React.Component {
       .slice(index, index + this.props.gridSize)
 
     return uploads.map((upload, index) => (
-      <Thumbnail
-        index={index}
-        key={index}
-        {...upload}
-        {...this.props}
-      />)
+      <Thumbnail index={index} key={index} {...upload} {...this.props} />)
     )
   }
 
@@ -72,9 +67,7 @@ class Grid extends React.Component {
     let { index } = this.state
     const minimized = modal === 'minimized'
     return (
-      <div className={
-        classNames('dz-modal-content', view ? 'full-width' : '')
-      }>
+      <div className={classNames('dz-modal-content', view ? 'full-width' : '')}>
         <PrevButton
           {...this.props}
           index={index}

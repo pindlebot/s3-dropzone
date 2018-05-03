@@ -28,14 +28,14 @@ class App extends React.Component {
   done = (err, data) => {
     console.log(data)
     if (err) {}
-    let uploads = data.map(d => ({ 
-      ...d, src: toUrl(d.key) 
+    let uploads = data.map(d => ({
+      ...d, src: toUrl(d.key)
     })).concat([...this.state.uploads])
     this.update(uploads)
   }
 
   update = uploads => {
-    this.setState({ 
+    this.setState({
       uploads
     }, () => {
       window.localStorage.setItem(
@@ -46,28 +46,29 @@ class App extends React.Component {
   }
 
   render () {
+    console.log(this.state.uploads)
     return (
-        <S3Dropzone
-          region='us-east-1'
-          identityPoolId={config.identityPoolId}
-          done={this.done}
-          uploads={this.state.uploads}
-          bucketName={config.bucketName}
-          handleClick={(evt, type, upload) => {
-            if (type !== 'delete') return
-            let uploads = [...this.state.uploads].filter(u => u.id !== upload.id)
-            this.update(uploads)
-          }}
-          tap={file => {
-            let key = `static/${Math.round(Date.now() / 1000)}-${file.name}`
-            return {
-              Fields: {
-                key: key,
-                'Content-Type': file.type,
-              }
+      <S3Dropzone
+        region='us-east-1'
+        identityPoolId={config.identityPoolId}
+        done={this.done}
+        uploads={this.state.uploads}
+        bucketName={config.bucketName}
+        handleClick={(evt, type, upload) => {
+          if (type !== 'delete') return
+          let uploads = [...this.state.uploads].filter(u => u.id !== upload.id)
+          this.update(uploads)
+        }}
+        tap={file => {
+          let key = `static/${Math.round(Date.now() / 1000)}-${file.name}`
+          return {
+            Fields: {
+              key: key,
+              'Content-Type': file.type
             }
-          }}
-        />
+          }
+        }}
+      />
     )
   }
 }

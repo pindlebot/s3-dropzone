@@ -13,7 +13,7 @@ export const ModalHeader = props => (
         className='dz-oval'
         onClick={evt => {
           evt.stopPropagation()
-          props.store.update('visible', false)
+          props.dispatch(() => ({ visible: false }))
           props.onClose(evt)
         }}
       >

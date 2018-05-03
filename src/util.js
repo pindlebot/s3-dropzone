@@ -1,4 +1,4 @@
-export async function loadPreview (key, file, store) {
+export const loadPreview = ({ uploads, dispatch }) => async (key, file) => {
   const readAsDataURL = (file) => new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.addEventListener('load', function () {
@@ -16,44 +16,39 @@ export async function loadPreview (key, file, store) {
   })
 
   const preview = await readAsDataURL(file)
-  const uploads = [...store.get('uploads')]
-  uploads.unshift(preview)
-  store.update('uploads', uploads)
+  const _uploads = [...uploads]
+  _uploads.unshift(preview)
+  dispatch(() => ({ uploads: _uploads }))
 }
 
-export async function handleDrop (props, client, files) {
+export const createDropHandler = ({
+  tap,
+  uploads,
+  requestParams,
+  dispatch,
+  client
+}) => async files => {
   let errors = []
-  let uploads = []
+  let nextUploads = []
   let index = 0
   while (files.length > index) {
     let file = files.shift()
-    let { type } = file
-    let params = props.tap(file)
+    let params = tap(file)
     let { Fields: { key } } = params
-    await loadPreview(key, file, props.store)
+    await loadPreview({ dispatch, uploads })(key, file)
     let payload
     try {
-      payload = await client.presign(
-        params
-      )
+      payload = await client.presign(params)
     } catch (error) {
-      errors.push({error, key})
+      errors.push({ error, key })
     }
     try {
-      let upload = await client.post(
-        file,
-        payload,
-        props.requestParams
-      )
-      uploads.push({
-        ...upload,
-        id: key,
-        key: key
-      })
+      let upload = await client.post(file, payload, requestParams)
+      nextUploads.push({ ...upload, id: key, key: key })
     } catch (error) {
       errors.push({ error, key })
     }
     index++
   }
-  return { uploads, errors }
+  return { uploads: nextUploads, errors }
 }
