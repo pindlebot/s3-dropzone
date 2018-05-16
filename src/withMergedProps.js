@@ -22,7 +22,6 @@ const withMergedProps = initialState => Component => class extends React.Compone
   }
 
   dispatch = state => {
-    console.log('dispatch', state)
     this.setState(state)
   }
 

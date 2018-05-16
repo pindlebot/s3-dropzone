@@ -90,7 +90,6 @@ class S3Dropzone extends React.Component {
       uploads,
       ...rest
     } = this.props
-    console.log(this.props)
     if (!visible) return false
     return (
       <Modal
