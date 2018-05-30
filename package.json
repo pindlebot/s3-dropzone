@@ -12,7 +12,7 @@
     "dev": "parcel example/index.html",
     "build": "babel src -d lib --copy-files",
     "build:example": "NODE_ENV=production parcel build example/index.html --no-minify --public-url / --no-cache",
-    "prestart": "yarn add pushstate-server",
+    "prestart": "yarn add pushstate-server --ignore-engines",
     "start": "NODE_ENV=production pushstate-server dist",
     "clean": "rimraf dist && rimraf .cache && rimraf lib",
     "lint": "standard \"src/**/*.js\" --verbose --fix | snazzy"
