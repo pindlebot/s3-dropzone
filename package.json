@@ -2,9 +2,6 @@
   "name": "s3-dropzone",
   "version": "0.0.17",
   "main": "lib/index.js",
-  "engines": {
-    "node": ">= 9.x"
-  },
   "license": "MIT",
   "scripts": {
     "sass": "node-sass src/styles/main.scss --output node-sass src/styles.css",
@@ -47,8 +44,8 @@
     "standard": "^11.0.1"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-dom": "*"
+    "react": "16.x",
+    "react-dom": "16.x"
   },
   "standard": {
     "parser": "babel-eslint"
