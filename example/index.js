@@ -46,7 +46,6 @@ class App extends React.Component {
   }
 
   render () {
-    console.log(this.state.uploads)
     return (
       <S3Dropzone
         region='us-east-1'

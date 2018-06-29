@@ -17,7 +17,10 @@ function DefaultToolbar (props) {
           index={props.index}
           name='delete'
         >
-          <DeleteIcon classes={props.classes} fill={props.fill} />
+          <DeleteIcon
+            classes={props.classes}
+            fill={props.fill}
+          />
         </IconButton>
         {!props.error && <React.Fragment>
           <IconButton
@@ -25,14 +28,20 @@ function DefaultToolbar (props) {
             onClick={props.onClick}
             index={props.index}
             name='view'>
-            <ZoomOutMap classes={props.classes} fill={props.fill} />
+            <ZoomOutMap
+              classes={props.classes}
+              fill={props.fill}
+            />
           </IconButton>
           <IconButton
             {...props}
             onClick={props.onClick}
             index={props.index}
             name='insert'>
-            <AddIcon classes={props.classes} fill={props.fill} />
+            <AddIcon
+              classes={props.classes}
+              fill={props.fill}
+            />
           </IconButton>
         </React.Fragment>}
       </div>
@@ -61,13 +70,15 @@ export default class ThumbnailOverlay extends React.Component {
     const isExpanded = !!view
     if (isExpanded) {
       return hover
-        ? (<IconButton
+        ? (
+        <IconButton
           {...this.props}
           onClick={this.props.onClick}
           index={this.props.index}
           name='close'>
           <CloseIcon classes={classes} />
-        </IconButton>)
+        </IconButton>
+        )
         : false
     } else if (hover) {
       return (

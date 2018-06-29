@@ -4,23 +4,27 @@ import KeyboardArrowRight from './icons/KeyboardArrowRight'
 import KeyboardArrowLeft from './icons/KeyboardArrowLeft'
 import classNames from 'classnames'
 
-const PrevButton = props => (props.modal === 'minimized' || props.view) ? false : (
+const PrevButton = props => (props.modal === 'minimized' || props.view)
+  ? false
+  : (
   <button
     className='before'
     onClick={props.onClick}
     role='button'
-    disabled={props.index <= 0}
+    disabled={props.page <= 0}
   >
     <KeyboardArrowLeft classes={props.classes} />
   </button>
 )
 
-const NextButton = props => (props.modal === 'minimized' || props.view) ? false : (
+const NextButton = props => (props.modal === 'minimized' || props.view)
+  ? false
+  : (
   <button
     className='after'
     onClick={props.onClick}
     role='button'
-    disabled={(props.index + props.gridSize) >= props.uploads.length}
+    disabled={props.page * props.gridSize >= props.uploads.length}
   >
     <KeyboardArrowRight classes={props.classes} />
   </button>
@@ -28,31 +32,40 @@ const NextButton = props => (props.modal === 'minimized' || props.view) ? false 
 
 class Grid extends React.Component {
   state = {
-    index: 0
+    page: 0
   }
 
   onClickPrev = evt => {
-    let { index } = this.state
     evt.preventDefault()
     evt.stopPropagation()
-    this.setState({ index: Math.abs(index - this.props.gridSize) })
+    this.setState(prevState => ({
+      page: prevState.page - 1
+    }))
   }
 
   onClickNext = evt => {
-    let { index } = this.state
     evt.preventDefault()
     evt.stopPropagation()
-    this.setState({ index: index + this.props.gridSize })
+    this.setState(prevState => ({
+      page: prevState.page + 1
+    }))
   }
 
   renderGridBody = () => {
-    const { index } = this.state
-    const { view } = this.props
+    const { page } = this.state
+    const { view, gridSize } = this.props
+    const startIndex = page * gridSize
     const uploads = view ? [view] : [...this.props.uploads]
-      .slice(index, index + this.props.gridSize)
+      .slice(startIndex, startIndex + gridSize)
 
     return uploads.map((upload, index) => (
-      <Thumbnail index={index} key={index} {...upload} {...this.props} />)
+      <Thumbnail
+        index={index * page}
+        key={index}
+        page={page}
+        {...upload}
+        {...this.props}
+      />)
     )
   }
 
@@ -62,15 +75,16 @@ class Grid extends React.Component {
       view,
       classes,
       modal,
-      className
+      className: classNameProp
     } = this.props
-    let { index } = this.state
+    let { page } = this.state
     const minimized = modal === 'minimized'
+    const className = classNames('dz-modal-content', view ? 'full-width' : '')
     return (
-      <div className={classNames('dz-modal-content', view ? 'full-width' : '')}>
+      <div className={className}>
         <PrevButton
           {...this.props}
-          index={index}
+          page={page}
           onClick={this.onClickPrev}
         />
         <div
@@ -84,7 +98,7 @@ class Grid extends React.Component {
         </div>
         <NextButton
           {...this.props}
-          index={index}
+          page={page}
           onClick={this.onClickNext}
         />
       </div>
