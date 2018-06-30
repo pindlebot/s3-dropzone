@@ -1,5 +1,5 @@
 import React from 'react'
-import URL_REGEX from '../../url'
+import URL_REGEX from '../../lib/url'
 
 const Button = props => (
   <button

@@ -4,3 +4,7 @@ test
 .babelrc
 .DS_Store
 .env
+screenshot.png
+example
+.vscode
+Procfile

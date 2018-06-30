@@ -3,8 +3,8 @@ import {
   CloseIcon,
   MaximizeIcon,
   MinimizeIcon
-} from './WindowIcons'
-import ButtonWithInput from './ButtonWithInput'
+} from '../WindowIcons'
+import ButtonWithInput from '../ButtonWithInput'
 
 export const ModalHeader = props => (
   <div className='dz-modal-header'>

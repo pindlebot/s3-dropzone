@@ -1,16 +1,5 @@
-import S3Dropzone from './S3Dropzone'
-import Thumbnail from './components/Thumbnail'
-import SpinnerComponent from './components/Thumbnail/SpinnerComponent'
-import BaseDropzone from './components/BaseDropzone'
+import { Dropzone } from './components/Dropzone'
+export { default as Dropzone } from './components/Dropzone'
+export { default as Thumbnail } from './components/Thumbnail'
 
-exports.S3Dropzone = S3Dropzone
-exports.Thumbnail = Thumbnail
-exports.SpinnerComponent = SpinnerComponent
-exports.BaseDropzone = BaseDropzone
-
-export default {
-  S3Dropzone,
-  Thumbnail,
-  SpinnerComponent,
-  BaseDropzone
-}
+export default Dropzone

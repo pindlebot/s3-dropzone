@@ -71,13 +71,13 @@ export default class ThumbnailOverlay extends React.Component {
     if (isExpanded) {
       return hover
         ? (
-        <IconButton
-          {...this.props}
-          onClick={this.props.onClick}
-          index={this.props.index}
-          name='close'>
-          <CloseIcon classes={classes} />
-        </IconButton>
+          <IconButton
+            {...this.props}
+            onClick={this.props.onClick}
+            index={this.props.index}
+            name='close'>
+            <CloseIcon classes={classes} />
+          </IconButton>
         )
         : false
     } else if (hover) {

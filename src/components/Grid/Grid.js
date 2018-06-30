@@ -1,34 +1,34 @@
 import React from 'react'
-import Thumbnail from './Thumbnail'
-import KeyboardArrowRight from './icons/KeyboardArrowRight'
-import KeyboardArrowLeft from './icons/KeyboardArrowLeft'
+import Thumbnail from '../Thumbnail'
+import KeyboardArrowRight from '../icons/KeyboardArrowRight'
+import KeyboardArrowLeft from '../icons/KeyboardArrowLeft'
 import classNames from 'classnames'
 
 const PrevButton = props => (props.modal === 'minimized' || props.view)
   ? false
   : (
-  <button
-    className='before'
-    onClick={props.onClick}
-    role='button'
-    disabled={props.page <= 0}
-  >
-    <KeyboardArrowLeft classes={props.classes} />
-  </button>
-)
+    <button
+      className='before'
+      onClick={props.onClick}
+      role='button'
+      disabled={props.page <= 0}
+    >
+      <KeyboardArrowLeft classes={props.classes} />
+    </button>
+  )
 
 const NextButton = props => (props.modal === 'minimized' || props.view)
   ? false
   : (
-  <button
-    className='after'
-    onClick={props.onClick}
-    role='button'
-    disabled={props.page * props.gridSize >= props.uploads.length}
-  >
-    <KeyboardArrowRight classes={props.classes} />
-  </button>
-)
+    <button
+      className='after'
+      onClick={props.onClick}
+      role='button'
+      disabled={props.page * props.gridSize >= props.uploads.length}
+    >
+      <KeyboardArrowRight classes={props.classes} />
+    </button>
+  )
 
 class Grid extends React.Component {
   state = {

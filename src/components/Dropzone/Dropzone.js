@@ -1,13 +1,13 @@
 import React from 'react'
-import ModalDropzone from './components/BaseDropzone'
-import Grid from './components/Grid/Grid'
-import * as theme from './lib/theme'
-import Modal, { ModalFooter, ModalHeader } from './components/Modal/Modal'
-import { createDropHandler } from './lib/createDropHandler'
 import fileType from 'file-type'
-import withResize from './lib/withResize'
-import withMergedProps from './lib/withMergedProps'
-import withAWS from './lib/withAWS'
+import ModalDropzone from '../BaseDropzone'
+import Grid from '../Grid/Grid'
+import * as theme from '../../lib/theme'
+import Modal, { ModalFooter, ModalHeader } from '../Modal/Modal'
+import { createDropHandler } from '../../lib/createDropHandler'
+import withResize from '../../lib/withResize'
+import withMergedProps from '../../lib/withMergedProps'
+import withAWS from '../../lib/withAWS'
 
 class S3Dropzone extends React.Component {
   state = {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { S3Dropzone } from '../src'
+import { Dropzone } from '../src'
 import 'whatwg-fetch'
 import '../src/styles/main.scss'
 import config from './config'
@@ -48,7 +48,7 @@ class App extends React.Component {
 
   render () {
     return (
-      <S3Dropzone
+      <Dropzone
         region='us-east-1'
         identityPoolId={config.identityPoolId}
         done={this.done}
