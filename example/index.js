@@ -4,6 +4,7 @@ import { S3Dropzone } from '../src'
 import 'whatwg-fetch'
 import '../src/styles/main.scss'
 import config from './config'
+import './ribbon.css'
 
 function getInitialState () {
   let uploads = config.uploads

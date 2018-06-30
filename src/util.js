@@ -1,5 +1,5 @@
-export const loadPreview = ({ uploads, dispatch }) => async (key, file) => {
-  const readAsDataURL = (file) => new Promise((resolve, reject) => {
+const readAsDataURL = (key, file) =>
+  new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.addEventListener('load', function () {
       resolve({
@@ -15,10 +15,27 @@ export const loadPreview = ({ uploads, dispatch }) => async (key, file) => {
     }
   })
 
-  const preview = await readAsDataURL(file)
-  const _uploads = [...uploads]
-  _uploads.unshift(preview)
-  dispatch(() => ({ uploads: _uploads }))
+const createPreviews = (files, {
+  uploads,
+  tap,
+  dispatch
+}) => {
+  let copy = [...uploads]
+  const createPreview = file => {
+    let params = tap(file)
+    let { Fields: { key } } = params
+    return readAsDataURL(key, file)
+      .then(result => {
+        copy.unshift(result)
+        return [file, params]
+      })
+  }
+
+  return Promise.all(files.map(createPreview))
+    .then(result => {
+      dispatch(() => ({ uploads: copy }))
+      return result
+    })
 }
 
 export const createDropHandler = ({
@@ -28,27 +45,37 @@ export const createDropHandler = ({
   dispatch,
   client
 }) => async files => {
+  let previews = await createPreviews(files, {
+    uploads,
+    tap,
+    dispatch
+  })
   let errors = []
   let nextUploads = []
-  let index = 0
-  while (files.length > index) {
-    let file = files.shift()
-    let params = tap(file)
+
+  while (previews.length) {
+    let [file, params] = previews.shift()
     let { Fields: { key } } = params
-    await loadPreview({ dispatch, uploads })(key, file)
     let payload
     try {
       payload = await client.presign(params)
     } catch (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error(error)
+      }
       errors.push({ error, key })
     }
+
     try {
       let upload = await client.post(file, payload, requestParams)
       nextUploads.push({ ...upload, id: key, key: key })
     } catch (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error(error)
+      }
       errors.push({ error, key })
     }
-    index++
   }
+  
   return { uploads: nextUploads, errors }
 }
