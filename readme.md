@@ -35,7 +35,7 @@ render(
     bucketName={AWS_S3_BUCKET_NAME}
     mapFileToParams={mapFileToParams}
   />,
-  document.getElementById('root)
+  document.getElementById('root')
 )
 
 ````
