@@ -49,7 +49,10 @@ class Thumbnail extends React.Component {
       ...uploads[index],
       [key]: value
     }
-    this.props.dispatch(() => ({ uploads }))
+    this.props.dispatch({
+      type: 'SET_UPLOADS',
+      payload: uploads
+    })
   }
 
   refCallback = ref => {

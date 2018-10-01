@@ -29,7 +29,7 @@ const mapFileToParams = file => {
 }
 
 render(
-   <Dropzone
+  <Dropzone
     region={AWS_REGION}
     identityPoolId={AWS_IDENTITY_POOL_ID}
     bucketName={AWS_S3_BUCKET_NAME}

@@ -13,7 +13,7 @@ function getInitialState () {
     try {
       uploads = JSON.parse(data)
     } catch (err) {
-      console.error (err)
+      console.error(err)
     }
   }
   return uploads

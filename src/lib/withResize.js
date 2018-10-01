@@ -1,19 +1,10 @@
 import React from 'react'
 import debounce from 'lodash.debounce'
 
-const getInitialState = () => typeof window !== 'undefined' ? ({
-  width: window.innerWidth,
-  height: window.innerHeight,
-  windowClick: false,
-  drag: false
-}) : ({ windowClick: false, height: 0, width: 0, drag: false })
-
 const withResize = Component => class extends React.Component {
-  state = getInitialState()
-
   componentDidMount = () => {
-    setTimeout(() => { window.addEventListener('click', this.onWindowClick) })
-    setTimeout(() => { window.addEventListener('resize', debounce(this.onWindowResize, 200)) })
+    setTimeout(() => window.addEventListener('click', this.onWindowClick))
+    setTimeout(() => window.addEventListener('resize', debounce(this.onWindowResize, 200)))
   }
 
   componentWillUnmount = () => {
@@ -22,28 +13,39 @@ const withResize = Component => class extends React.Component {
   }
 
   onWindowClick = evt => {
-    this.setState({ windowClick: true })
+    this.props.dispatch({
+      type: 'SET_WINDOW_CLICK',
+      payload: true
+    })
   }
 
   onWindowResize = ({ srcElement }) => {
     const width = srcElement.innerWidth
     const height = srcElement.innerHeight
-    this.setState({ width, height })
+    this.props.dispatch({
+      type: 'SET_DIMENSIONS',
+      payload: { width, height }
+    })
   }
 
   onDragEnter = (evt) => {
-    this.setState({ drag: true })
+    this.props.dispatch({
+      type: 'SET_DRAG',
+      payload: true
+    })
   }
 
   onDragLeave = (evt) => {
-    this.setState({ drag: false })
+    this.props.dispatch({
+      type: 'SET_DRAG',
+      payload: false
+    })
   }
 
   render () {
     return (
       <Component
         {...this.props}
-        {...this.state}
         onDragEnter={this.onDragEnter}
         onDragLeave={this.onDragLeave}
       />

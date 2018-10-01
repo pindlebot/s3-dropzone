@@ -1,7 +1,7 @@
 const readAsDataURL = (key, file) =>
   new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.addEventListener('load', function () {
+    const reader = new window.FileReader()
+    reader.addEventListener('load', () => {
       resolve({
         data: reader.result,
         key: key,
@@ -33,7 +33,7 @@ const createPreviews = (files, {
 
   return Promise.all(files.map(createPreview))
     .then(result => {
-      dispatch(() => ({ uploads: copy }))
+      dispatch({ type: 'SET_UPLOADS', payload: copy })
       return result
     })
 }

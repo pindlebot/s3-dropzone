@@ -1,7 +1,11 @@
 import React from 'react'
 import AWS from 'aws-sdk'
 
-const createClient = ({ region, identityPoolId, bucketName }) => {
+const createClient = ({
+  region,
+  identityPoolId,
+  bucketName
+}) => {
   AWS.config.region = region
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: identityPoolId
@@ -36,7 +40,10 @@ const createClient = ({ region, identityPoolId, bucketName }) => {
     })
   }
 
-  const putObject = params => s3.putObject({ Bucket: bucketName, ...params }).promise()
+  const putObject = params => s3.putObject({
+    Bucket: bucketName,
+    ...params
+  }).promise()
 
   return {
     remove,

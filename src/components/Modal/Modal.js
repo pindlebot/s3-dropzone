@@ -5,6 +5,7 @@ import {
   MinimizeIcon
 } from '../WindowIcons'
 import ButtonWithInput from '../ButtonWithInput'
+import PropTypes from 'prop-types'
 
 export const ModalHeader = props => (
   <div className='dz-modal-header'>
@@ -13,7 +14,7 @@ export const ModalHeader = props => (
         className='dz-oval'
         onClick={evt => {
           evt.stopPropagation()
-          props.dispatch(() => ({ visible: false }))
+          props.dispatch({ type: 'SET_VISIBLE', payload: false })
           props.onClose(evt)
         }}
       >
@@ -78,5 +79,22 @@ const Modal = props => (
     </div>
   </div>
 )
+
+Modal.propTypes = {
+  classes: PropTypes.object,
+  modal: PropTypes.string
+}
+
+ModalHeader.propTypes = {
+  setModalState: PropTypes.func,
+  dispatch: PropTypes.func,
+  onClose: PropTypes.func
+}
+
+ModalFooter.propTypes = {
+  modal: PropTypes.string,
+  view: PropTypes.object,
+  classes: PropTypes.object
+}
 
 export default Modal

@@ -16,6 +16,7 @@ function DefaultToolbar (props) {
           onClick={props.onClick}
           index={props.index}
           name='delete'
+          src={props.src}
         >
           <DeleteIcon
             classes={props.classes}
@@ -27,6 +28,7 @@ function DefaultToolbar (props) {
             {...props}
             onClick={props.onClick}
             index={props.index}
+            src={props.src}
             name='view'>
             <ZoomOutMap
               classes={props.classes}
@@ -37,6 +39,7 @@ function DefaultToolbar (props) {
             {...props}
             onClick={props.onClick}
             index={props.index}
+            src={props.src}
             name='insert'>
             <AddIcon
               classes={props.classes}
@@ -75,6 +78,7 @@ export default class ThumbnailOverlay extends React.Component {
             {...this.props}
             onClick={this.props.onClick}
             index={this.props.index}
+            src={this.props.src}
             name='close'>
             <CloseIcon classes={classes} />
           </IconButton>
@@ -85,6 +89,7 @@ export default class ThumbnailOverlay extends React.Component {
         <DefaultToolbar
           {...this.props}
           onClick={this.props.onClick}
+          src={this.props.src}
           index={this.props.index}
           fill={error ? '#fff' : '#fff'}
         />
@@ -113,6 +118,7 @@ export default class ThumbnailOverlay extends React.Component {
   }
 
   render () {
+    console.log('overlay', this.props)
     const dimensions = this.props.view
       ? { width: '100%', height: '100%' }
       : this.props.dimensions

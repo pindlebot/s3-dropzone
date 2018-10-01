@@ -61,7 +61,7 @@ class Grid extends React.Component {
     return uploads.map((upload, index) => (
       <Thumbnail
         index={index * page}
-        key={index}
+        key={upload.id}
         page={page}
         {...upload}
         {...this.props}
@@ -77,6 +77,7 @@ class Grid extends React.Component {
       modal,
       className: classNameProp
     } = this.props
+    console.log('grid', this.props)
     let { page } = this.state
     const minimized = modal === 'minimized'
     const className = classNames('dz-modal-content', view ? 'full-width' : '')
