@@ -77,7 +77,6 @@ class Grid extends React.Component {
       modal,
       className: classNameProp
     } = this.props
-    console.log('grid', this.props)
     let { page } = this.state
     const minimized = modal === 'minimized'
     const className = classNames('dz-modal-content', view ? 'full-width' : '')

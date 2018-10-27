@@ -51,7 +51,6 @@ class S3Dropzone extends React.Component {
   }
 
   onClick = async (evt, type, key) => {
-    console.log({ type, key })
     let upload = this.props.redux.uploads.find(({ src }) => src === key)
     evt.preventDefault()
     if (type === 'delete') {
