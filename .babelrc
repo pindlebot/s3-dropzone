@@ -1,15 +1,16 @@
 {
   "presets": [
-    ["env", {
-      "targest": {
-        "browsers": "last 2 Chrome versions"
-      }
+    ["@babel/preset-env", {
+      "targets": "> 0.25%, not dead"
     }],
-    "react"
+    "@babel/preset-react",
+    "@babel/preset-flow"
   ],
   "plugins": [
-    "transform-runtime",
-    "transform-object-rest-spread",
-    "transform-class-properties"
+    ["@babel/plugin-transform-flow-strip-types", {}, "strip-types"],
+    ["@babel/plugin-transform-runtime", {}, "transform-runtime"],
+    ["@babel/plugin-proposal-object-rest-spread", {}, "rest-spread"],
+    ["@babel/plugin-proposal-class-properties", {}, "class-properties"],
+    ["@babel/plugin-proposal-optional-chaining", {}, "optional-chaining"]
   ]
 }
