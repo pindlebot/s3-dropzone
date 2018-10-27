@@ -63,6 +63,8 @@ class Thumbnail extends React.Component {
   }
 
   render () {
+    console.log(this.state)
+    console.log(this.props)
     const { view, classes, error } = this.props
     const loading = this.state.loading
     const className = classNames(
@@ -99,10 +101,10 @@ class Thumbnail extends React.Component {
         />
         <ThumbnailOverlay
           error={error}
-          loading={loading}
           hover={this.state.hover}
           dimensions={this.state.dimensions}
           {...this.props}
+          loading={loading}
         />
       </figure>
     )

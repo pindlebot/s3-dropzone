@@ -32,8 +32,6 @@ class S3Dropzone extends React.Component {
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    // const gridSize = nextProps.redux.dimensions.width >= 568 ? 6 : 1
-    // const modal = gridSize > 1 ? undefined : 'maximized'
     const view = nextProps.redux.windowClick && prevState.view
       ? undefined
       : prevState.view
@@ -58,7 +56,10 @@ class S3Dropzone extends React.Component {
         this.props.client.remove(upload.id || upload.key)
       }
       let uploads = [...this.props.redux.uploads].filter(({ src }) => src !== key)
-      this.props.dispatch({ type: 'SET_UPLOADS', payload: uploads })
+      this.props.dispatch({
+        type: 'SET_UPLOADS',
+        payload: uploads
+      })
     } else if (type === 'view') {
       this.props.dispatch({
         type: 'SET_VIEW',
@@ -118,7 +119,6 @@ class S3Dropzone extends React.Component {
       uploads,
       ...rest
     } = this.props
-    console.log(this.props)
     let visible = this.props.visible || this.props.redux.visible
     if (!visible) return false
     return (
@@ -129,14 +129,12 @@ class S3Dropzone extends React.Component {
         dispatch={this.props.dispatch}
       >
         <ModalDropzone
-          onDragEnter={this.props.onDragEnter}
-          onDragLeave={this.props.onDragLeave}
           onDrop={this.onDrop}
-          className={this.props.redux.drag ? 'drag' : undefined}
           draggable='true'
           theme={theme}
           classes={classes}
           dispatch={this.props.dispatch}
+          className={this.props.redux.drag ? 'drag' : ''}
         >
           <ModalHeader
             setModalState={this.setModalState}

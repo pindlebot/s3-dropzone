@@ -24,7 +24,7 @@ const NextButton = props => (props.modal === 'minimized' || props.view)
       className='after'
       onClick={props.onClick}
       role='button'
-      disabled={props.page * props.gridSize >= props.uploads.length}
+      disabled={(props.page + 1) * props.gridSize >= props.uploads.length}
     >
       <KeyboardArrowRight classes={props.classes} />
     </button>
@@ -39,7 +39,7 @@ class Grid extends React.Component {
     evt.preventDefault()
     evt.stopPropagation()
     this.setState(prevState => ({
-      page: prevState.page - 1
+      page: Math.max(0, prevState.page - 1)
     }))
   }
 

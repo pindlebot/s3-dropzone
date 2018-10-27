@@ -27,7 +27,6 @@
     "file-type": "^10.1.0",
     "lodash.debounce": "^4.0.8",
     "lodash.uniqby": "^4.7.0",
-    "react-dropzone": "^7.0.1",
     "react-redux": "^5.1.0",
     "react-subscriptions": "^0.0.10",
     "react-valid-attributes": "^0.0.1",
