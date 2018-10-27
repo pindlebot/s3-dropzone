@@ -1,0 +1,73 @@
+.dz-button-content {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  line-height: 18px;
+}
+
+.dz-button {
+  font-size: 14px;
+  color: #fff;
+  background-image: linear-gradient(0deg, #4ba8ff 0, #6cb8ff 100%);
+  box-shadow: 0 1px 1px 0 rgba(109,133,158,0.5);
+  align-items: center;
+  border: 1px solid #3b99f0;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Tahoma', 'Geneva', 'Arial', sans-serif;
+  font-weight: 600;
+  justify-content: center;
+  letter-spacing: 0;
+  text-align: center;
+  user-select: none;
+  padding: 2px 20px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 40px;
+}
+
+.dz-button:disabled {
+  cursor: unset;
+  opacity: 0.4;
+}
+
+.dz-button:hover {
+  background-image: linear-gradient(0deg, #6cb8ff 0, #6cb8ff 100%);
+  box-shadow: 0 2px 1px 0 rgba(155,172,191,0.5);
+}
+
+.dz-button-input {
+  height: 100%;
+  margin: 0 -2px 0 0;
+  padding-left: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  color: #4c6072;
+  display: inline-block;
+  font-family: 'Helvetica Neue', 'Helvetica', 'Tahoma', 'Geneva', 'Arial', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 8px;
+  transition: border-color 150ms ease-out;
+  height: 40px;
+  border-left: 1px solid #d8e0ea;
+  border-top: 1px solid #d8e0ea;
+  border-bottom: 1px solid #d8e0ea;
+  border-right: 0;
+  border-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 0;
+  &:focus {
+    outline: 0;
+  }
+}
+
+.dz-input-group {
+  align-items: center;
+  display: inline-flex;
+  flex-basis: 60%;
+}

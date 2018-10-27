@@ -118,7 +118,6 @@ export default class ThumbnailOverlay extends React.Component {
   }
 
   render () {
-    console.log('overlay', this.props)
     const dimensions = this.props.view
       ? { width: '100%', height: '100%' }
       : this.props.dimensions
