@@ -1,6 +1,6 @@
 {
   "name": "s3-dropzone",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "main": "lib/index.js",
   "license": "MIT",
   "repository": {
