@@ -45,7 +45,7 @@ export function createDropHandler ({
   setUploads,
   client
 }) {
-  return async function () {
+  return async function (files) {
     const previews = await createPreviews(files, {
       uploads,
       mapFileToParams,
