@@ -18,12 +18,12 @@ const readAsDataURL = (key, file) =>
 const createPreviews = (files, {
   uploads,
   mapFileToParams,
-  dispatch
+  setUploads
 }) => {
-  let copy = [...uploads]
+  const copy = [...uploads]
   const createPreview = file => {
-    let params = mapFileToParams(file)
-    let { Fields: { key } } = params
+    const params = mapFileToParams(file)
+    const { Fields: { key } } = params
     return readAsDataURL(key, file)
       .then(result => {
         copy.unshift(result)
@@ -33,51 +33,54 @@ const createPreviews = (files, {
 
   return Promise.all(files.map(createPreview))
     .then(result => {
-      dispatch({ type: 'SET_UPLOADS', payload: copy })
+      setUploads(copy)
       return result
     })
 }
 
-export const createDropHandler = ({
+export function createDropHandler ({
   mapFileToParams,
   uploads,
   requestParams,
-  dispatch,
+  setUploads,
   client
-}) => async files => {
-  let previews = await createPreviews(files, {
-    uploads,
-    mapFileToParams,
-    dispatch
-  })
-  let errors = []
-  let nextUploads = []
-
-  while (previews.length) {
-    let [file, params] = previews.shift()
-    let { Fields: { key } } = params
-    let payload
-    try {
-      payload = await client.presign(params)
-    } catch (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error(error)
+}) {
+  return async function () {
+    const previews = await createPreviews(files, {
+      uploads,
+      mapFileToParams,
+      setUploads
+    })
+    const errors = []
+    const nextUploads = []
+  
+    while (previews.length) {
+      const [file, params] = previews.shift()
+      const { Fields: { key } } = params
+      let payload
+      try {
+        payload = await client.presign(params)
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(error)
+        }
+        errors.push({ error, key })
+        continue
       }
-      errors.push({ error, key })
-    }
-
-    try {
-      let upload = await client.post(file, payload, requestParams)
-      nextUploads.push({ ...upload, id: key, key: key })
-    } catch (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error(error)
+  
+      try {
+        const upload = await client.post(file, payload, requestParams)
+        nextUploads.push({ ...upload, id: key, key: key })
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.error(error)
+        }
+        errors.push({ error, key })
       }
-      errors.push({ error, key })
     }
+  
+    return { uploads: nextUploads, errors }
   }
-
-  return { uploads: nextUploads, errors }
 }
 
 export default createDropHandler

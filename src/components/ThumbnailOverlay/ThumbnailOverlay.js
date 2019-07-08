@@ -1,9 +1,9 @@
 import React from 'react'
-import IconButton from './IconButton'
+import IconButton from '../ThumbnailIconButton'
 import DeleteIcon from '../icons/Delete'
 import CloseIcon from '../icons/Close'
 import AddIcon from '../icons/Add'
-import Spinner from './SpinnerComponent'
+import Spinner from '../ThumbnailSpinner'
 import ErrorIcon from '../icons/Error'
 import ZoomOutMap from '../icons/ZoomOutMap'
 
@@ -61,7 +61,7 @@ const ThumbnailOverlayWrapper = props => (
   </div>
 )
 
-export default class ThumbnailOverlay extends React.Component {
+class ThumbnailOverlay extends React.Component {
   renderOverlay () {
     const {
       classes,
@@ -132,3 +132,5 @@ export default class ThumbnailOverlay extends React.Component {
     )
   }
 }
+
+export default ThumbnailOverlay

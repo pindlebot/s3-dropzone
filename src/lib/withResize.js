@@ -13,33 +13,23 @@ const withResize = Component => class extends React.Component {
   }
 
   onWindowClick = evt => {
-    this.props.dispatch({
-      type: 'SET_WINDOW_CLICK',
-      payload: true
-    })
+    if (this.props.view) {
+      this.props.setView(undefined)
+    }
   }
 
   onWindowResize = ({ srcElement }) => {
     const width = srcElement.innerWidth
     const height = srcElement.innerHeight
-    this.props.dispatch({
-      type: 'SET_DIMENSIONS',
-      payload: { width, height }
-    })
+    this.props.setDimensions({ width, height })
   }
 
   onDragEnter = (evt) => {
-    this.props.dispatch({
-      type: 'SET_DRAG',
-      payload: true
-    })
+    this.props.setDrag(true)
   }
 
   onDragLeave = (evt) => {
-    this.props.dispatch({
-      type: 'SET_DRAG',
-      payload: false
-    })
+    this.props.setDrag(false)
   }
 
   render () {

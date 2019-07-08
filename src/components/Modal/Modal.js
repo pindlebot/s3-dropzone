@@ -14,7 +14,7 @@ export const ModalHeader = props => (
         className='dz-oval'
         onClick={evt => {
           evt.stopPropagation()
-          props.dispatch({ type: 'SET_VISIBLE', payload: false })
+          props.props.setVisible(false)
           props.onClose(evt)
         }}
       >
@@ -87,7 +87,6 @@ Modal.propTypes = {
 
 ModalHeader.propTypes = {
   setModalState: PropTypes.func,
-  dispatch: PropTypes.func,
   onClose: PropTypes.func
 }
 

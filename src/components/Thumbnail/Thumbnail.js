@@ -1,5 +1,5 @@
 import React from 'react'
-import ThumbnailOverlay from './ThumbnailOverlay'
+import ThumbnailOverlay from '../ThumbnailOverlay'
 import classNames from 'classnames'
 import { pick } from 'react-valid-attributes'
 
@@ -49,10 +49,7 @@ class Thumbnail extends React.Component {
       ...uploads[index],
       [key]: value
     }
-    this.props.dispatch({
-      type: 'SET_UPLOADS',
-      payload: uploads
-    })
+    this.props.setUploads(uploads)
   }
 
   refCallback = ref => {
@@ -63,8 +60,6 @@ class Thumbnail extends React.Component {
   }
 
   render () {
-    console.log(this.state)
-    console.log(this.props)
     const { view, classes, error } = this.props
     const loading = this.state.loading
     const className = classNames(
