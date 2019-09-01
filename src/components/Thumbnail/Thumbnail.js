@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ThumbnailOverlay from '../ThumbnailOverlay'
 import classNames from 'classnames'
 import { pick } from 'react-valid-attributes'
@@ -6,8 +7,7 @@ import { pick } from 'react-valid-attributes'
 function Image (props) {
   const className = classNames([
     props.classes.image,
-    props.className,
-    ...props.classNames
+    props.className
   ])
   const elementProps = pick(props, 'img')
   return (
@@ -17,26 +17,26 @@ function Image (props) {
       className={className}
       onLoad={props.onLoad}
       onError={props.onError}
-      src={props.data || props.src}
-      ref={props.refCallback}
+      src={props.src}
     />
   )
 }
 
+Image.propTypes = {
+  classes: PropTypes.object,
+  className: PropTypes.string,
+  onLoad: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  src: PropTypes.string.isRequired,
+  style: PropTypes.object
+}
+
 Image.defaultProps = {
   className: '',
-  classNames: []
+  style: {}
 }
 
 function Thumbnail (props) {
-
-  // state = {
-  //   hover: false,
-  //   loading: true,
-  //   className: '',
-  //   dimensions: {},
-  //   aspectRatio: 1
-  // }
   const [hover, setHover] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
 
@@ -62,7 +62,7 @@ function Thumbnail (props) {
   }
 
   const onError = (evt) => {
-    props.updateStore('error', true)
+    updateStore('error', true)
   }
 
   const onMouseEnter = () => setHover(true)
@@ -103,6 +103,14 @@ function Thumbnail (props) {
 Thumbnail.defaultProps = {
   img: {},
   loading: false
+}
+
+Thumbnail.propTypes = {
+  view: PropTypes.boolean,
+  classes: PropTypes.object,
+  error: PropTypes.boolean,
+  theme: PropTypes.object,
+  setUploads: PropTypes.func.isRequired
 }
 
 export default Thumbnail

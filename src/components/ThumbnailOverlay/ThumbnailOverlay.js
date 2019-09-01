@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import IconButton from '../ThumbnailIconButton'
 import DeleteIcon from '../icons/Delete'
 import CloseIcon from '../icons/Close'
@@ -29,7 +30,8 @@ function DefaultToolbar (props) {
             onClick={props.onClick}
             index={props.index}
             src={props.src}
-            name='view'>
+            name='view'
+          >
             <ZoomOutMap
               classes={props.classes}
               fill={props.fill}
@@ -40,7 +42,8 @@ function DefaultToolbar (props) {
             onClick={props.onClick}
             index={props.index}
             src={props.src}
-            name='insert'>
+            name='insert'
+          >
             <AddIcon
               classes={props.classes}
               fill={props.fill}
@@ -60,75 +63,97 @@ function ThumbnailOverlayWrapper (props) {
   )
 }
 
-class ThumbnailOverlay extends React.Component {
-  renderOverlay () {
+function ThumbnailOverlay (props) {
+  const { error } = props
+
+  function renderToolbar () {
+    return (
+      <DefaultToolbar
+        {...props}
+        onClick={props.onClick}
+        src={props.src}
+        index={props.index}
+        fill={error ? '#fff' : '#fff'}
+      />
+    )
+  }
+
+  function renderLoading () {
+    return (
+      <div className='dz-thumbnail-overlay-column'>
+        <Spinner
+          theme={props.theme}
+          show={props.loading}
+        />
+      </div>
+    )
+  }
+
+  function renderError () {
+    return (
+      <div className='dz-thumbnail-overlay-column'>
+        <ErrorIcon
+          classes={props.classes}
+          fill={'#e4567b'}
+        />
+      </div>
+    )
+  }
+
+  function renderClose () {
+    return (
+      <IconButton
+        {...props}
+        onClick={props.onClick}
+        index={props.index}
+        src={props.src}
+        name='close'
+      >
+        <CloseIcon classes={props.classes} />
+      </IconButton>
+    )
+  }
+
+  const renderOverlay = () => {
     const {
-      classes,
       loading,
       error,
       hover,
       view
-    } = this.props
-    const isExpanded = !!view
-    if (isExpanded) {
-      return hover
-        ? (
-          <IconButton
-            {...this.props}
-            onClick={this.props.onClick}
-            index={this.props.index}
-            src={this.props.src}
-            name='close'>
-            <CloseIcon classes={classes} />
-          </IconButton>
-        )
-        : false
-    } else if (hover) {
-      return (
-        <DefaultToolbar
-          {...this.props}
-          onClick={this.props.onClick}
-          src={this.props.src}
-          index={this.props.index}
-          fill={error ? '#fff' : '#fff'}
-        />
-      )
-    } else if (error) {
-      return (
-        <div className='dz-thumbnail-overlay-column'>
-          <ErrorIcon
-            classes={classes}
-            fill={'#e4567b'}
-          />
-        </div>
-      )
-    } else if (loading) {
-      return (
-        <div className='dz-thumbnail-overlay-column'>
-          <Spinner
-            theme={this.props.theme}
-            show={this.props.loading}
-          />
-        </div>
-      )
-    } else {
-      return false
-    }
+    } = props
+    const isExpanded = Boolean(view)
+    return isExpanded && hover
+      ? renderClose()
+      : isExpanded
+        ? null
+        : hover
+          ? renderToolbar()
+          : error
+            ? renderError()
+            : loading
+              ? renderLoading()
+              : null
   }
 
-  render () {
-    const dimensions = this.props.view
-      ? { width: '100%', height: '100%' }
-      : this.props.dimensions
-    return (
-      <ThumbnailOverlayWrapper
-        {...this.props}
-        className={this.props.classes.thumbnailOverlay}
-      >
-        {this.renderOverlay()}
-      </ThumbnailOverlayWrapper>
-    )
-  }
+  return (
+    <ThumbnailOverlayWrapper
+      {...props}
+      className={props.classes.thumbnailOverlay}
+    >
+      {renderOverlay()}
+    </ThumbnailOverlayWrapper>
+  )
+}
+
+ThumbnailOverlayWrapper.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.bool,
+  hover: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
+  src: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired
 }
 
 export default ThumbnailOverlay

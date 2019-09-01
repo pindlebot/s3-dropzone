@@ -1,50 +1,58 @@
 import React from 'react'
 import URL_REGEX from '../../lib/url'
 
-const Button = props => (
-  <button
-    className='dz-button'
-    style={props.theme.button}
-    onClick={props.onClick}
-    disabled={props.disabled}
-  >
-    {props.children}
-  </button>
-)
+function Button (props) {
+  return (
+    <button
+      className='dz-button'
+      style={props.theme.button}
+      onClick={props.onClick}
+      disabled={props.disabled}
+    >
+      {props.children}
+    </button>
+  )
+}
 
-class ButtonWithInput extends React.Component {
-  state = {
-    value: ''
+function ButtonWithInput (props) {
+  const [value, setValue] = React.useState('')
+  const [disabled, setDisabled] = React.useState(false)
+
+  const onChange = evt => {
+    const { target: { value } } = evt
+    setValue(value)
+
+    if (!disabled) {
+      if (URL_REGEX.test(value)) {
+        setDisabled(true)
+      }
+    }
   }
 
-  onChange = evt => this.setState({ value: evt.target.value })
-
-  handleClick = (evt) => {
+  const handleClick = (evt) => {
     evt.preventDefault()
     evt.stopPropagation()
-    this.props.onClick(this.state.value)
+    props.onClick(value)
   }
 
-  render () {
-    return (
-      <div
-        className='dz-input-group'
+  return (
+    <div
+      className='dz-input-group'
+    >
+      <input
+        value={value}
+        onChange={onChange}
+        className='dz-button-input'
+      />
+      <Button
+        {...props}
+        disabled={disabled}
+        onClick={handleClick}
       >
-        <input
-          value={this.state.value}
-          onChange={this.onChange}
-          className='dz-button-input'
-        />
-        <Button
-          {...this.props}
-          disabled={!(this.state.value && URL_REGEX.test(this.state.value))}
-          onClick={this.handleClick}
-        >
-          Upload
-        </Button>
-      </div>
-    )
-  }
+        Upload
+      </Button>
+    </div>
+  )
 }
 
 export default ButtonWithInput
