@@ -28,82 +28,76 @@ Image.defaultProps = {
   classNames: []
 }
 
-class Thumbnail extends React.Component {
-  state = {
-    hover: false,
-    loading: true,
-    className: '',
-    dimensions: {},
-    aspectRatio: 1
-  }
+function Thumbnail (props) {
 
-  preventBubbles = (evt) => {
+  // state = {
+  //   hover: false,
+  //   loading: true,
+  //   className: '',
+  //   dimensions: {},
+  //   aspectRatio: 1
+  // }
+  const [hover, setHover] = React.useState(false)
+  const [loading, setLoading] = React.useState(true)
+
+  const preventBubbles = (evt) => {
     evt.preventDefault()
     evt.stopPropagation()
   }
 
-  updateStore = (key, value) => {
-    let { index } = this.props
-    let uploads = [...this.props.uploads]
+  const updateStore = (key, value) => {
+    const { index } = props
+    const uploads = [...props.uploads]
     uploads[index] = {
       ...uploads[index],
       [key]: value
     }
-    this.props.setUploads(uploads)
+    props.setUploads(uploads)
   }
 
-  refCallback = ref => {
-    if (ref) {
-      let { width, height } = ref.getBoundingClientRect()
-      this.setState({ dimensions: { width, height } })
+  const onLoad = (evt) => {
+    if (loading) {
+      setLoading(false)
     }
   }
 
-  render () {
-    const { view, classes, error } = this.props
-    const loading = this.state.loading
-    const className = classNames(
-      classes.thumbnail,
-      error
-        ? 'dz-thumbnail-error'
-        : loading
-          ? 'dz-thumbnail-loading'
-          : undefined
-    )
-    return (
-      <figure
-        style={this.props.theme.figure}
-        onClick={this.preventBubbles}
-        className={className}
-        onMouseEnter={() => {
-          this.setState({ hover: true })
-        }}
-        onMouseLeave={() => {
-          this.setState({ hover: false })
-        }}
-      >
-        <Image
-          onLoad={(evt) => {
-            if (this.state.loading) {
-              this.setState({ loading: false })
-            }
-          }}
-          onError={(evt) => {
-            this.updateStore('error', true)
-          }}
-          refCallback={this.refCallback}
-          {...this.props}
-        />
-        <ThumbnailOverlay
-          error={error}
-          hover={this.state.hover}
-          dimensions={this.state.dimensions}
-          {...this.props}
-          loading={loading}
-        />
-      </figure>
-    )
+  const onError = (evt) => {
+    props.updateStore('error', true)
   }
+
+  const onMouseEnter = () => setHover(true)
+  const onMouseLeave = () => setHover(false)
+
+  const { view, classes, error, theme } = props
+  const className = classNames(
+    classes.thumbnail,
+    error
+      ? 'dz-thumbnail-error'
+      : loading
+        ? 'dz-thumbnail-loading'
+        : undefined
+  )
+  return (
+    <figure
+      style={theme.figure}
+      onClick={preventBubbles}
+      className={className}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <Image
+        onLoad={onLoad}
+        onError={onError}
+        {...props}
+      />
+      <ThumbnailOverlay
+        error={error}
+        hover={hover}
+        {...props}
+        loading={loading}
+      />
+    </figure>
+  )
 }
 
 Thumbnail.defaultProps = {

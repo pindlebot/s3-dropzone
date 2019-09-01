@@ -4,9 +4,12 @@ import KeyboardArrowRight from '../icons/KeyboardArrowRight'
 import KeyboardArrowLeft from '../icons/KeyboardArrowLeft'
 import classNames from 'classnames'
 
-const PrevButton = props => (props.modal === 'minimized' || props.view)
-  ? false
-  : (
+function PrevButton (props) {
+  if (props.modal === 'minimized' || props.view) {
+    return null
+  }
+
+  return (
     <button
       className='before'
       onClick={props.onClick}
@@ -16,10 +19,14 @@ const PrevButton = props => (props.modal === 'minimized' || props.view)
       <KeyboardArrowLeft classes={props.classes} />
     </button>
   )
+}
 
-const NextButton = props => (props.modal === 'minimized' || props.view)
-  ? false
-  : (
+function NextButton (props) {
+  if (props.modal === 'minimized' || props.view) {
+    return null
+  }
+
+  return (
     <button
       className='after'
       onClick={props.onClick}
@@ -29,6 +36,7 @@ const NextButton = props => (props.modal === 'minimized' || props.view)
       <KeyboardArrowRight classes={props.classes} />
     </button>
   )
+}
 
 class Grid extends React.Component {
   state = {
@@ -77,7 +85,7 @@ class Grid extends React.Component {
       modal,
       className: classNameProp
     } = this.props
-    let { page } = this.state
+    const { page } = this.state
     const minimized = modal === 'minimized'
     const className = classNames('dz-modal-content', view ? 'full-width' : '')
     return (

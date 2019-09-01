@@ -7,51 +7,65 @@ import {
 import ButtonWithInput from '../ButtonWithInput'
 import PropTypes from 'prop-types'
 
-export const ModalHeader = props => (
-  <div className='dz-modal-header'>
-    <div className='dz-modal-header-inner' style={{}}>
-      <button
-        className='dz-oval'
-        onClick={evt => {
-          evt.stopPropagation()
-          props.props.setVisible(false)
-          props.onClose(evt)
-        }}
-      >
-        <CloseIcon />
-      </button>
-      <button
-        className='dz-oval'
-        onClick={evt => {
-          evt.stopPropagation()
-          props.setModalState('minimized')
-        }}
-      >
-        <MinimizeIcon />
-      </button>
-      <button
-        className='dz-oval'
-        onClick={evt => {
-          evt.stopPropagation()
-          props.setModalState('maximized')
-        }}
-      >
-        <MaximizeIcon />
-      </button>
+export function ModalHeader (props) {
+  return (
+    <div className='dz-modal-header'>
+      <div className='dz-modal-header-inner' style={{}}>
+        <button
+          className='dz-oval'
+          onClick={evt => {
+            evt.stopPropagation()
+            props.setVisible(false)
+            props.onClose(evt)
+          }}
+        >
+          <CloseIcon />
+        </button>
+        <button
+          className='dz-oval'
+          onClick={evt => {
+            evt.stopPropagation()
+            props.setModalState('minimized')
+          }}
+        >
+          <MinimizeIcon />
+        </button>
+        <button
+          className='dz-oval'
+          onClick={evt => {
+            evt.stopPropagation()
+            props.setModalState('maximized')
+          }}
+        >
+          <MaximizeIcon />
+        </button>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
-export const ModalFooter = props => props.modal === 'minimized' || props.view ? false : (
-  <div
-    onClick={evt => {
-      evt.preventDefault()
-      evt.stopPropagation()
-    }}
-    className={props.classes.modalFooter}>
-    <ButtonWithInput {...props} />
-  </div>
-)
+export function ModalFooter (props) {
+  function onClick (evt) {
+    evt.preventDefault()
+    evt.stopPropagation()
+  }
+
+  if (
+    props.modal === 'minimized' ||
+    props.view
+  ) {
+    return false
+  }
+
+  return (
+    <div
+      onClick={onClick}
+      className={props.classes.modalFooter}
+    >
+      <ButtonWithInput {...props} />
+    </div>
+  )
+}
 
 const createStyles = props => ({
   width: props.modal === 'maximized'

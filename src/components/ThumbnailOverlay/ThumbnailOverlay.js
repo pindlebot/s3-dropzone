@@ -9,7 +9,7 @@ import ZoomOutMap from '../icons/ZoomOutMap'
 
 function DefaultToolbar (props) {
   return (
-    <React.Fragment>
+    <>
       <div className='dz-thumbnail-overlay-row'>
         <IconButton
           {...props}
@@ -48,18 +48,17 @@ function DefaultToolbar (props) {
           </IconButton>
         </React.Fragment>}
       </div>
-    </React.Fragment>
+    </>
   )
 }
 
-const ThumbnailOverlayWrapper = props => (
-  <div
-    className={props.className}
-    style={props.dimensions}
-  >
-    {props.children}
-  </div>
-)
+function ThumbnailOverlayWrapper (props) {
+  return (
+    <div className={props.className}>
+      {props.children}
+    </div>
+  )
+}
 
 class ThumbnailOverlay extends React.Component {
   renderOverlay () {
@@ -124,7 +123,6 @@ class ThumbnailOverlay extends React.Component {
     return (
       <ThumbnailOverlayWrapper
         {...this.props}
-        dimensions={dimensions}
         className={this.props.classes.thumbnailOverlay}
       >
         {this.renderOverlay()}
